@@ -1,0 +1,131 @@
+insert into ProductCategory (id, name, description) values (1, 'Retaining Wall and Brick Pavers', 'nullam varius nulla');
+insert into ProductCategory (id, name, description) values (2, 'Drywall & Acoustical (MOB)', 'et ultrices posuere cubilia');
+insert into ProductCategory (id, name, description) values (3, 'Elevator', 'aenean lectus pellentesque');
+insert into ProductCategory (id, name, description) values (4, 'EIFS', 'donec ut dolor morbi');
+insert into ProductCategory (id, name, description) values (5, 'Temp Fencing, Decorative Fencing and Gates', 'volutpat in congue');
+insert into ProductCategory (id, name, description) values (6, 'RF Shielding', 'quisque porta volutpat erat');
+insert into ProductCategory (id, name, description) values (7, 'Framing (Wood)', 'elit proin risus');
+insert into ProductCategory (id, name, description) values (8, 'EIFS', 'augue vestibulum rutrum rutrum');
+insert into ProductCategory (id, name, description) values (9, 'Termite Control', 'orci luctus et ultrices');
+insert into ProductCategory (id, name, description) values (10, 'Sitework & Site Utilities', 'neque aenean auctor gravida');
+
+insert into Supplier (id, name) values (1, 'Fisher-Huels');
+insert into Supplier (id, name) values (2, 'D''Amore, Torp and Kuvalis');
+insert into Supplier (id, name) values (3, 'Williamson-Marvin');
+insert into Supplier (id, name) values (4, 'Rippin, Hilpert and Muller');
+insert into Supplier (id, name) values (5, 'Zboncak and Sons');
+insert into Supplier (id, name) values (6, 'Upton, Prosacco and Grimes');
+insert into Supplier (id, name) values (7, 'Jerde Inc');
+insert into Supplier (id, name) values (8, 'Labadie, Schmitt and Schamberger');
+insert into Supplier (id, name) values (9, 'Bednar-Homenick');
+insert into Supplier (id, name) values (10, 'Runte and Sons');
+
+insert into Customer (id, first_name, last_name, username, password, email_address) values (1, 'Cliff', 'Guerrieri', 'cguerrieri0', 'GSxlFi1MPR', 'cguerrieri0@dropbox.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (2, 'Teador', 'Killimister', 'tkillimister1', '7nyGik58A', 'tkillimister1@kickstarter.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (3, 'Paola', 'Don', 'pdon2', 'dD2YgY9xTN5', 'pdon2@parallels.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (4, 'Lyon', 'Slowly', 'lslowly3', 'aycVxb', 'lslowly3@vkontakte.ru');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (5, 'Dill', 'Tretwell', 'dtretwell4', '76HboYtg', 'dtretwell4@hugedomains.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (6, 'Vincent', 'Bizley', 'vbizley5', 'a3o1ygD5wKaN', 'vbizley5@artisteer.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (7, 'Ralf', 'Kairns', 'rkairns6', 'zOC8xT', 'rkairns6@merriam-webster.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (8, 'Arv', 'Fullylove', 'afullylove7', 'T99zUDdxDa', 'afullylove7@t.co');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (9, 'Milli', 'Whistlecroft', 'mwhistlecroft8', 'ERgaU09j', 'mwhistlecroft8@istockphoto.com');
+insert into Customer (id, first_name, last_name, username, password, email_address) values (10, 'Tamarah', 'Coogan', 'tcoogan9', 'j05aBBs', 'tcoogan9@fastcompany.com');
+
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (1, 'Fimbristylis vahlii (Lam.) Link', 'quis orci', 7.58, 779, 1, 1, 'http://dummyimage.com/223x100.png/ff4444/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (2, 'Mahonia Nutt.', 'pulvinar', 21.96, 97, 2, 2, 'http://dummyimage.com/104x100.png/ff4444/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (3, 'Chrysopsis gossypina (Michx.) Elliott', 'praesent', 51.04, 73, 3, 3, 'http://dummyimage.com/215x100.png/5fa2dd/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (4, 'Draba murrayi G. Mulligan', 'lacus', 50.07, 530, 4, 4, 'http://dummyimage.com/172x100.png/5fa2dd/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (5, 'Kalinia obtusiflora (E. Fourn.) H.L. Bell & Columbus', 'porta volutpat', 41.62, 147, 5, 5, 'http://dummyimage.com/206x100.png/cc0000/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (6, 'Solanum bahamense L. var. rugelii D''Arcy', 'sit', 2.93, 346, 6, 6, 'http://dummyimage.com/214x100.png/ff4444/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (7, 'Abies grandis (Douglas ex D. Don) Lindl.', 'eu pede', 69.26, 692, 7, 7, 'http://dummyimage.com/117x100.png/ff4444/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (8, 'Camissonia brevipes (A. Gray) P.H. Raven ssp. arizonica (P.H. Raven) P.H. Raven', 'justo sit', 37.71, 553, 8, 8, 'http://dummyimage.com/138x100.png/ff4444/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (9, 'Carex caroliniana Schwein.', 'interdum', 58.56, 457, 9, 9, 'http://dummyimage.com/192x100.png/cc0000/ffffff');
+insert into Product (id, name, description, price, weight, category, supplier, image_url) values (10, 'Scleria eggersiana Boeckeler', 'vel', 83.02, 975, 10, 10, 'http://dummyimage.com/117x100.png/cc0000/ffffff');
+
+insert into Address (id,country, city, county, street_address) values (1,'United States', 'Rochester', 'New York', '440 Merry Drive');
+insert into Address (id,country, city, county, street_address) values (2,'Romania', 'Bronx', 'Alabama', '93 Drewry Junction');
+insert into Address (id,country, city, county, street_address) values (3,'China', 'Pasadena', 'Texas', '0986 Spaight Parkway');
+
+--insert into Address (country, city, county, street_address) values ('United States', 'Rochester', 'New York', '440 Merry Drive');
+--insert into Address (country, city, county, street_address) values ('United States', 'Bronx', 'New York', '93 Drewry Junction');
+--insert into Address (country, city, county, street_address) values ('United States', 'Pasadena', 'Texas', '0986 Spaight Parkway');
+--insert into Address (country, city, county, street_address) values ('United States', 'Fresno', 'California', '839 Loftsgordon Pass');
+--insert into Address (country, city, county, street_address) values ('United States', 'Carol Stream', 'Illinois', '68122 Elka Alley');
+--insert into Address (country, city, county, street_address) values ('United States', 'Philadelphia', 'Pennsylvania', '6 Scott Road');
+--insert into Address (country, city, county, street_address) values ('United States', 'Orlando', 'Florida', '4426 Independence Terrace');
+--insert into Address (country, city, county, street_address) values ('United States', 'Charlotte', 'North Carolina', '03 Eagan Avenue');
+--insert into Address (country, city, county, street_address) values ('United States', 'Cincinnati', 'Ohio', '5769 Lyons Terrace');
+--insert into Address (country, city, county, street_address) values ('United States', 'Colorado Springs', 'Colorado', '0728 Moland Center');
+
+insert into Location (id, name, address) values (1, 'cbslocal.com',1);
+insert into Location (id, name, address) values (2, 'msn.com',2);
+insert into Location (id, name, address) values (3, 'howstuffworks.com',3);
+
+--insert into Location (id, name, address) values (1, 'cbslocal.com','United States Rochester New York 440 Merry Drive');
+--insert into Location (id, name, address) values (2, 'msn.com', 'United States', 'Bronx', 'New York', '93 Drewry Junction');
+--insert into Location (id, name, address) values (3, 'howstuffworks.com', 'United States', 'Pasadena', 'Texas', '0986 Spaight Parkway');
+--insert into Location (id, name, address) values (4, 'homestead.com', 'donec');
+--insert into Location (id, name, address) values (5, 'comsenz.com', 'lacus');
+--insert into Location (id, name, address) values (6, 'dyndns.org', 'vivamus');
+--insert into Location (id, name, address) values (7, 'a8.net', 'ut');
+--insert into Location (id, name, address) values (8, 'fastcompany.com', 'tortor');
+--insert into Location (id, name, address) values (9, 'msn.com', 'proin');
+--insert into Location (id, name, address) values (10, 'sphinn.com', 'orci');
+
+insert into Stock (product, location, quantity) values (1, 1, 95);
+insert into Stock (product, location, quantity) values (2, 2, 47);
+insert into Stock (product, location, quantity) values (3, 3, 30);
+--insert into Stock (product, location, quantity) values (4, 4, 91);
+--insert into Stock (product, location, quantity) values (5, 5, 70);
+--insert into Stock (product, location, quantity) values (6, 6, 11);
+--insert into Stock (product, location, quantity) values (7, 7, 35);
+--insert into Stock (product, location, quantity) values (8, 8, 91);
+--insert into Stock (product, location, quantity) values (9, 9, 74);
+--insert into Stock (product, location, quantity) values (10, 10, 62);
+--insert into Stock (product, location, quantity) values (11, 11, 14);
+--insert into Stock (product, location, quantity) values (12, 12, 93);
+--insert into Stock (product, location, quantity) values (13, 13, 52);
+--insert into Stock (product, location, quantity) values (14, 14, 13);
+--insert into Stock (product, location, quantity) values (15, 15, 65);
+--insert into Stock (product, location, quantity) values (16, 16, 31);
+--insert into Stock (product, location, quantity) values (17, 17, 8);
+--insert into Stock (product, location, quantity) values (18, 18, 34);
+--insert into Stock (product, location, quantity) values (19, 19, 97);
+--insert into Stock (product, location, quantity) values (20, 20, 66);
+
+insert into Orders (id, shipped_from, customer, created_at, address) values (1, 7, 1, '2021-02-21 12:30:00.000', 1);
+insert into Orders (id, shipped_from, customer, created_at, address) values (2, 5, 6, '2021-03-13 13:40:00.000', 2);
+insert into Orders (id, shipped_from, customer, created_at, address) values (3, 10, 10, '2021-04-14 15:50:00.000', 3);
+
+--insert into Orders (id, shipped_from, customer, created_at, address) values (1, 7, 1, '8/26/2021', 'United States', 'Rochester', 'New York', '440 Merry Drive');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (2, 5, 6, '6/28/2021', United States', 'Bronx', 'New York', '93 Drewry Junction'');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (3, 10, 10, '3/16/2021', 'nec');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (4, 9, 10, '11/9/2021', 'donec');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (5, 6, 5, '4/21/2021', 'nibh');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (6, 6, 7, '7/10/2021', 'lorem');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (7, 5, 3, '2/22/2021', 'sollicitudin');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (8, 1, 6, '5/27/2021', 'hac');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (9, 3, 4, '10/30/2021', 'odio');
+--insert into Orders (id, shipped_from, customer, created_at, address) values (10, 1, 5, '9/20/2021', 'amet');
+
+insert into OrderDetail (orders, product, quantity) values (1, 1, 3);
+insert into OrderDetail (orders, product, quantity) values (2, 2, 4);
+--insert into OrderDetail (orders, product, quantity) values (3, 3, 6);
+--insert into OrderDetail (orders, product, quantity) values (4, 4, 3);
+--insert into OrderDetail (orders, product, quantity) values (5, 5, 8);
+--insert into OrderDetail (orders, product, quantity) values (6, 6, 4);
+--insert into OrderDetail (orders, product, quantity) values (7, 7, 6);
+--insert into OrderDetail (orders, product, quantity) values (8, 8, 5);
+--insert into OrderDetail (orders, product, quantity) values (9, 9, 10);
+--insert into OrderDetail (orders, product, quantity) values (10, 10, 10);
+
+insert into Revenue (id, location, date, sum) values (1, 1, '2021-12-20', 775.62);
+--insert into Revenue (id, location, date, sum) values (2, 1, '6/10/2021', 853.37);
+--insert into Revenue (id, location, date, sum) values (3, 3, '11/29/2020', 864.22);
+--insert into Revenue (id, location, date, sum) values (4, 1, '2/27/2021', 612.64);
+--insert into Revenue (id, location, date, sum) values (5, 2, '12/1/2020', 441.36);
+--insert into Revenue (id, location, date, sum) values (6, 3, '3/15/2021', 911.21);
+--insert into Revenue (id, location, date, sum) values (7, 1, '4/23/2021', 565.65);
+--insert into Revenue (id, location, date, sum) values (8, 3, '8/29/2021', 493.1);
+--insert into Revenue (id, location, date, sum) values (9, 3, '6/12/2021', 89.88);
+--insert into Revenue (id, location, date, sum) values (10, 1, '10/24/2021', 275.36);

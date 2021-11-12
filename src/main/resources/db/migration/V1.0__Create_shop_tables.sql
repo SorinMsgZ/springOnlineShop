@@ -75,7 +75,7 @@ CONSTRAINT pk_product_location PRIMARY KEY (product,location)
 CREATE TABLE Orders(
 id INT PRIMARY KEY,
 shipped_from INT,
-customer INT,
+customer INT NOT NULL REFERENCES Customer(id),
 created_at DATETIME,
 --address VARCHAR(255) REFERENCES Address(pk_complete_address)
 address INT NOT NULL REFERENCES Address(id)

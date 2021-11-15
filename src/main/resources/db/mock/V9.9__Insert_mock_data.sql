@@ -93,9 +93,9 @@ insert into Stock (product, location, quantity) values (3, 3, 30);
 --insert into Stock (product, location, quantity) values (19, 19, 97);
 --insert into Stock (product, location, quantity) values (20, 20, 66);
 
-insert into Orders (id, shipped_from, customer, created_at, address) values (1, 7, 1, '2021-02-21 12:30:00.000', 1);
-insert into Orders (id, shipped_from, customer, created_at, address) values (2, 5, 6, '2021-03-13 13:40:00.000', 2);
-insert into Orders (id, shipped_from, customer, created_at, address) values (3, 10, 10, '2021-04-14 15:50:00.000', 3);
+insert into Orders (id, shipped_from, customer, created_at, address) values (1, 1, 1, '2021-02-21 12:30:00.000', 1);
+insert into Orders (id, shipped_from, customer, created_at, address) values (2, 2, 6, '2021-03-13 13:40:00.000', 2);
+insert into Orders (id, shipped_from, customer, created_at, address) values (3, 3, 10, '2021-04-14 15:50:00.000', 3);
 
 --insert into Orders (id, shipped_from, customer, created_at, address) values (1, 7, 1, '8/26/2021', 'United States', 'Rochester', 'New York', '440 Merry Drive');
 --insert into Orders (id, shipped_from, customer, created_at, address) values (2, 5, 6, '6/28/2021', United States', 'Bronx', 'New York', '93 Drewry Junction'');

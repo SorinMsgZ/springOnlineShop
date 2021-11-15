@@ -13,7 +13,7 @@ public class Revenue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "location")
     private Location location;
     private Date localDate;
     private  BigDecimal sum;

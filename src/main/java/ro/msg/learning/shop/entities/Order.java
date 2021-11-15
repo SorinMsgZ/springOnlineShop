@@ -7,19 +7,20 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Table(name="orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "shippedFrom")
     private  Location shippedFrom;
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "customer")
     private  Customer customer;
     private  LocalDateTime createdAt;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "address")
     private  Address address;
    /* String addressCountry;
     String addressCity;

@@ -12,7 +12,7 @@ public class Location {
     private  int id;
     private  String name;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "address")
     private  Address address;
     /*String addressCountry;
     String addressCity;

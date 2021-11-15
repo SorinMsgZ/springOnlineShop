@@ -70,15 +70,15 @@ CONSTRAINT pk_product_location PRIMARY KEY (product,location)
 --foreign key (location) REFERENCES Location(id)
 );
 
---exists keyword "order"
---it does not work with alias?!
+
 CREATE TABLE Orders(
 id INT PRIMARY KEY,
-shipped_from INT,
+shipped_from INT NOT NULL REFERENCES Location(id),
 customer INT NOT NULL REFERENCES Customer(id),
 created_at DATETIME,
---address VARCHAR(255) REFERENCES Address(pk_complete_address)
 address INT NOT NULL REFERENCES Address(id)
+);
+--address VARCHAR(255) REFERENCES Address(pk_complete_address)
 --address_country VARCHAR(255) REFERENCES Address(country),
 --address_city VARCHAR(255) REFERENCES Address(city),
 --address_county VARCHAR(255) REFERENCES Address(county),
@@ -89,7 +89,7 @@ address INT NOT NULL REFERENCES Address(id)
 --FOREIGN KEY (address_city) REFERENCES Address(city),
 --FOREIGN KEY (address_county) REFERENCES Address(county),
 --FOREIGN KEY (address_street_address) REFERENCES Address(street_address)
-);
+
 
 CREATE TABLE OrderDetail(
 orders INT NOT NULL REFERENCES Orders(id),

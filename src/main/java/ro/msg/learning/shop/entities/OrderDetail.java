@@ -2,18 +2,36 @@ package ro.msg.learning.shop.entities;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Data
-@Entity
+@Entity(name="OrderDetail")
+@Table(name="orderDetail")
 public class OrderDetail {
+    @EmbeddedId
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private OrderDetailId idOrderProduct;
+    /*@ManyToOne
+    @JoinColumn(name = "orders")
+    private Order orders;
     @ManyToOne
-    @JoinColumn(name = "id")
-    private Order order;
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private  Product product;
-    private  int quantity;
+    @JoinColumn(name = "product")
+    private Product product;*/
+    private int quantity;
+
+    public OrderDetailId getIdOrderProduct() {
+        return idOrderProduct;
+    }
+
+    public void setIdOrderProduct(OrderDetailId idOrderProduct) {
+        this.idOrderProduct = idOrderProduct;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

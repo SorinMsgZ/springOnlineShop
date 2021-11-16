@@ -1,17 +1,17 @@
-CREATE TABLE ProductCategory(
+CREATE TABLE IF NOT EXISTS Product_Category(
 id INT PRIMARY KEY,
-name TEXT,
-description TEXT);
+name VARCHAR(255),
+description VARCHAR(255));
 
 CREATE TABLE Supplier(
 id INT PRIMARY KEY,
-name TEXT);
+name VARCHAR(255));
 
 CREATE TABLE Customer(
 id INT PRIMARY KEY,
 first_name VARCHAR(255),
 last_name VARCHAR(255),
-username VARCHAR(255),
+user_name VARCHAR(255),
 password VARCHAR(255),
 email_address VARCHAR(255)
 );
@@ -19,14 +19,14 @@ email_address VARCHAR(255)
 CREATE TABLE Product(
 id INT PRIMARY KEY,
 name VARCHAR(255),
-description TEXT,
+description VARCHAR(255),
 price DECIMAL,
 weight DOUBLE,
-category INT NOT NULL REFERENCES ProductCategory(id),
+category INT NOT NULL REFERENCES Product_Category(id),
 supplier INT NOT NULL REFERENCES Supplier(id),
 --FOREIGN KEY (category) REFERENCES ProductCategory(id),
 --FOREIGN KEY (supplier) REFERENCES Supplier(id),
-image_url TEXT
+image_url VARCHAR(255)
 );
 
 CREATE TABLE Address(
@@ -41,7 +41,7 @@ street_address VARCHAR(255) UNIQUE NOT NULL
 );
 --with TEXT TYPE and w/o UNIQUE didn t worked creating the table "Location"
 --DROP TABLE Address;
-
+--
 CREATE TABLE Location (
 id INT PRIMARY KEY,
 name VARCHAR(255),
@@ -52,10 +52,10 @@ address INT NOT NULL REFERENCES Address(id)
 --address_county VARCHAR(255) NOT NULL REFERENCES Address(county),
 --address_street_address VARCHAR(255) NOT NULL REFERENCES Address(street_address)
 
---FOREIGN KEY (address_country) REFERENCES Address(country),
---FOREIGN KEY (address_city) REFERENCES Address(city),
---FOREIGN KEY (address_County) REFERENCES Address(county),
---FOREIGN KEY (address_street_address) REFERENCES Address(street_address)
+----FOREIGN KEY (address_country) REFERENCES Address(country),
+----FOREIGN KEY (address_city) REFERENCES Address(city),
+----FOREIGN KEY (address_County) REFERENCES Address(county),
+----FOREIGN KEY (address_street_address) REFERENCES Address(street_address)
 );
 
 
@@ -78,20 +78,20 @@ customer INT NOT NULL REFERENCES Customer(id),
 created_at DATETIME,
 address INT NOT NULL REFERENCES Address(id)
 );
---address VARCHAR(255) REFERENCES Address(pk_complete_address)
---address_country VARCHAR(255) REFERENCES Address(country),
---address_city VARCHAR(255) REFERENCES Address(city),
---address_county VARCHAR(255) REFERENCES Address(county),
---address_street_address VARCHAR(255) REFERENCES Address(street_address)
+----address VARCHAR(255) REFERENCES Address(pk_complete_address)
+----address_country VARCHAR(255) REFERENCES Address(country),
+----address_city VARCHAR(255) REFERENCES Address(city),
+----address_county VARCHAR(255) REFERENCES Address(county),
+----address_street_address VARCHAR(255) REFERENCES Address(street_address)
+--
+----PRIMARY KEY (id),
+----FOREIGN KEY (address_country) REFERENCES Address(country),
+----FOREIGN KEY (address_city) REFERENCES Address(city),
+----FOREIGN KEY (address_county) REFERENCES Address(county),
+----FOREIGN KEY (address_street_address) REFERENCES Address(street_address)
+--
 
---PRIMARY KEY (id),
---FOREIGN KEY (address_country) REFERENCES Address(country),
---FOREIGN KEY (address_city) REFERENCES Address(city),
---FOREIGN KEY (address_county) REFERENCES Address(county),
---FOREIGN KEY (address_street_address) REFERENCES Address(street_address)
-
-
-CREATE TABLE OrderDetail(
+CREATE TABLE Order_Detail(
 orders INT NOT NULL REFERENCES Orders(id),
 product INT NOT NULL REFERENCES Product(id),
 quantity INT,
@@ -103,7 +103,7 @@ CONSTRAINT pk_order_product PRIMARY KEY (orders,product)
 CREATE TABLE Revenue(
 id INT PRIMARY KEY,
 location INT REFERENCES Location(id),
-date DATE,
+local_date DATE,
 sum DECIMAL
 --FOREIGN KEY (location) REFERENCES Location(id)
 );

@@ -4,26 +4,28 @@ package ro.msg.learning.shop.entities;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+
 @Embeddable
 public class OrderDetailId implements Serializable {
    @Column(name="orders")
-    private Order orders;
+    private int orderId;
    @Column(name="product")
-    private Product product;
+    private int productId;
     public OrderDetailId() {
 
     }
-    public OrderDetailId(Order orders, Product product) {
-        this.orders = orders;
-        this.product = product;
+
+    public int getOrderId() {
+        return orderId;
     }
 
-    public Order getOrders() {
-        return orders;
+    public OrderDetailId(int orderId, int productId) {
+        this.orderId = orderId;
+        this.productId = productId;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getProductId() {
+        return productId;
     }
 
     @Override

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -12,9 +13,9 @@ public class Revenue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "location")
     private Location location;
-    private Date localDate;
+    private LocalDate localDate;
     private  BigDecimal sum;
 }

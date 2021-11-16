@@ -2,14 +2,12 @@ package ro.msg.learning.shop.entities;
 
 import lombok.Data;
 
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 
 
 @Data
 @Entity
+@Table(name="Product_Category")
 public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,19 +4,22 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
-@Entity(name="OrderDetail")
-@Table(name="orderDetail")
+
+@Entity(name = "OrderDetail")
+@Table(name = "Order_Detail")
 public class OrderDetail {
     @EmbeddedId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private OrderDetailId idOrderProduct;
-    /*@ManyToOne
+    @ManyToOne
+    @MapsId("orderId")
     @JoinColumn(name = "orders")
     private Order orders;
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product")
-    private Product product;*/
+    private Product product;
+
     private int quantity;
 
     public OrderDetailId getIdOrderProduct() {

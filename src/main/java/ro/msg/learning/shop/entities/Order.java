@@ -22,8 +22,9 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "address")
     private  Address address;
-   /* String addressCountry;
+/*    String addressCountry;
     String addressCity;
     String addressCounty;
     String addressStreetAddress;*/
+
 }

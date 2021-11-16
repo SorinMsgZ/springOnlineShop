@@ -7,24 +7,25 @@ import java.io.Serializable;
 @Embeddable
 public class StockId implements Serializable {
     @Column(name="product")
-    private Product product;
+    private int productId;
     @Column(name="location")
-    private Location location;
+    private int locationId;
 
     public StockId() {
 
     }
-    public StockId(Product product, Location location) {
-        this.product = product;
-        this.location = location;
+
+    public StockId(int productID, int locationId) {
+        this.productId = productID;
+        this.locationId = locationId;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getProductId() {
+        return productId;
     }
 
-    public Location getLocation() {
-        return location;
+    public int getLocationId() {
+        return locationId;
     }
 
     @Override
@@ -36,4 +37,8 @@ public class StockId implements Serializable {
     public boolean equals(Object obj) {
         return super.equals(obj);
     }
+
+
 }
+
+

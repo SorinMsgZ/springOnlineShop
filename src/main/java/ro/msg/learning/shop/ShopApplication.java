@@ -17,20 +17,25 @@ public class ShopApplication {
     @Bean
     public CommandLineRunner onStart(SupplierRepository repository) {
         return args -> {
-/*			System.out.println("Find by FirstName: ");
+			/*System.out.println("Find by FirstName: ");
 			System.out.println(repository.findByName("Carex caroliniana Schwein."));*/
 
             System.out.println("Find all: ");
             System.out.println(repository.findAll());
 
            /* System.out.println("Find by id: ");
-            System.out.println(repository.findById(1,1));*/
+            System.out.println(repository.findById(1, 1));*/
 
-            Supplier furnizor = new Supplier();
+          /*  Supplier furnizor = new Supplier();
             furnizor.setName("Hercule3");
             System.out.println(repository.save(furnizor));
 
-            repository.deleteAll(repository.findByName("Hercule"));
+            repository.deleteAll(repository.findByName("Hercule2"));*/
+
+            Supplier flor = repository.findById(1).orElseThrow(RuntimeException::new);
+            flor.setName("Blax");
+            repository.save(flor);
+            System.out.println(repository.findById(1));
 
         };
     }

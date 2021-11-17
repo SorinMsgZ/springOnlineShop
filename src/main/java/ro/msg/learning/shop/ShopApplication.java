@@ -27,8 +27,10 @@ public class ShopApplication {
             System.out.println(repository.findById(1,1));*/
 
             Supplier furnizor = new Supplier();
-            furnizor.setName("Hercule2");
+            furnizor.setName("Hercule3");
             System.out.println(repository.save(furnizor));
+
+            repository.deleteAll(repository.findByName("Hercule"));
 
         };
     }

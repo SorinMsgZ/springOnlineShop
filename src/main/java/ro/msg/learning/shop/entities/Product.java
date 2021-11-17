@@ -26,7 +26,9 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy="product")
-    Set<Stock> stock;
+    Set<Stock> stocks;
+    @OneToMany(mappedBy="product")
+    Set<OrderDetail> orderDetail;
 }
 
 

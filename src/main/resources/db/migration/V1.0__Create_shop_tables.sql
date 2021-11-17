@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS Product_Category(
-id INT PRIMARY KEY,
+id  INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
 description VARCHAR(255));
 
 CREATE TABLE Supplier(
-id INT PRIMARY KEY,
+id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255));
 
 CREATE TABLE Customer(
-id INT PRIMARY KEY,
+id   INT AUTO_INCREMENT PRIMARY KEY,
 first_name VARCHAR(255),
 last_name VARCHAR(255),
 user_name VARCHAR(255),
@@ -17,7 +17,7 @@ email_address VARCHAR(255)
 );
 
 CREATE TABLE Product(
-id INT PRIMARY KEY,
+id   INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
 description VARCHAR(255),
 price DECIMAL,
@@ -31,7 +31,7 @@ image_url VARCHAR(255)
 
 CREATE TABLE Address(
 
-id INT PRIMARY KEY,
+id   INT AUTO_INCREMENT PRIMARY KEY,
 country VARCHAR(255) UNIQUE NOT NULL,
 city VARCHAR(255) UNIQUE NOT NULL,
 county VARCHAR(255) UNIQUE NOT NULL,
@@ -43,7 +43,7 @@ street_address VARCHAR(255) UNIQUE NOT NULL
 --DROP TABLE Address;
 --
 CREATE TABLE Location (
-id INT PRIMARY KEY,
+id   INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
 address INT NOT NULL REFERENCES Address(id)
 --address VARCHAR(255) NOT NULL REFERENCES Address(pk_complete_address)
@@ -72,7 +72,7 @@ CONSTRAINT pk_product_location PRIMARY KEY (product,location)
 
 
 CREATE TABLE Orders(
-id INT PRIMARY KEY,
+id   INT AUTO_INCREMENT PRIMARY KEY,
 shipped_from INT NOT NULL REFERENCES Location(id),
 customer INT NOT NULL REFERENCES Customer(id),
 created_at DATETIME,
@@ -101,7 +101,7 @@ CONSTRAINT pk_order_product PRIMARY KEY (orders,product)
 );
 
 CREATE TABLE Revenue(
-id INT PRIMARY KEY,
+id INT  AUTO_INCREMENT PRIMARY KEY,
 location INT REFERENCES Location(id),
 local_date DATE,
 sum DECIMAL

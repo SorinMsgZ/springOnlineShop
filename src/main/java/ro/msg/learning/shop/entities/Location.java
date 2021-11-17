@@ -21,6 +21,6 @@ public class Location {
     String addressStreetAddress;*/
 
     @OneToMany(mappedBy="location")
-    Set<Stock> stock;
+    Set<Stock> stocks;
 }
 

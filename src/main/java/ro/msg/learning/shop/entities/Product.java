@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Set;
+
 
 @Data
 @Entity
@@ -24,11 +24,6 @@ public class Product {
     @JoinColumn(name = "supplier")
     private Supplier supplier;
     private String imageUrl;
-
-    @OneToMany(mappedBy="product")
-    Set<Stock> stocks;
-    @OneToMany(mappedBy="product")
-    Set<OrderDetail> orderDetail;
 }
 
 

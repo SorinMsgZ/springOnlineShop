@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+
 
 @Data
 @Entity
@@ -23,12 +23,5 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "address")
     private Address address;
-    /*    String addressCountry;
-        String addressCity;
-        String addressCounty;
-        String addressStreetAddress;*/
-
-    @OneToMany(mappedBy = "orders")
-    Set<OrderDetail> orderDetail;
 }
 

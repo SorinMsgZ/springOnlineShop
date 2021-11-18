@@ -1,11 +1,9 @@
 package ro.msg.learning.shop.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ro.msg.learning.shop.entities.Address;
-import ro.msg.learning.shop.entities.Customer;
 
-import java.util.List;
 
-public interface AddressRepository extends CrudRepository<Address, Integer> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
 
 }

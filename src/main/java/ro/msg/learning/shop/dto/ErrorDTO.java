@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.dto;
 
 import lombok.AllArgsConstructor;
@@ -15,3 +16,4 @@ public static ErrorDTO of(NotFoundException exception){
     return new ErrorDTO("not_found", exception.getMessage());
 }
 }
+*/

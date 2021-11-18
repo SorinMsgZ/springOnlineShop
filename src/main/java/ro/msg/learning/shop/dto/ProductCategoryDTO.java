@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.dto;
 
 import lombok.Builder;
@@ -12,8 +13,10 @@ public class ProductCategoryDTO {
 
     public ProductCategory toEntity() {
         ProductCategory result = new ProductCategory();
-       /*result.setName(name);
-       result.setId(id);*/
+       */
+/*result.setName(name);
+       result.setId(id);*//*
+
         this.copyToEntity(result);
         return result;
     }
@@ -32,3 +35,4 @@ public class ProductCategoryDTO {
 
 
 }
+*/

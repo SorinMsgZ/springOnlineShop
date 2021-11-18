@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.exceptions;
 
 public class NotFoundException extends RuntimeException {
@@ -5,3 +6,4 @@ public class NotFoundException extends RuntimeException {
         super("The requested entity was not found!");
     }
 }
+*/

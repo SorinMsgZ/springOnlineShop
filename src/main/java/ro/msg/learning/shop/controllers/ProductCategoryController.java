@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.controllers;
 
 import lombok.RequiredArgsConstructor;
@@ -38,3 +39,4 @@ public ProductCategoryDTO updateSingle(@PathVariable int id, @RequestBody Produc
         return service.updateProductCategory(id,body);
     }
 }
+*/

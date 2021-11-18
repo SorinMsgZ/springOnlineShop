@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.controllers;
 
 import org.springframework.http.HttpStatus;
@@ -16,3 +17,4 @@ public class ErrorHandlingAdvice {
         return ErrorDTO.of(exception);
     }
 }
+*/

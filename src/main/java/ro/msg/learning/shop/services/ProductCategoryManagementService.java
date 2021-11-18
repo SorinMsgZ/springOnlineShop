@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
@@ -45,3 +46,4 @@ public class ProductCategoryManagementService {
         return ProductCategoryDTO.of(productCategory);
     }
 }
+*/

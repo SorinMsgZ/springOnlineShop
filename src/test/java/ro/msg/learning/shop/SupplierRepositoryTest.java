@@ -18,8 +18,8 @@ import java.util.Optional;
 
 public class SupplierRepositoryTest {
 
-  /*  @Autowired
-    private TestEntityManager entityManager;*/
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     SupplierRepository repository;
@@ -29,8 +29,10 @@ public class SupplierRepositoryTest {
 //        clearDataBase();
         Supplier supplierTest = new Supplier();
         supplierTest.setName("OtherSupplier");
-        repository.save(supplierTest);
-        System.out.println(repository.findAll());
+        entityManager.persist(supplierTest);
+        entityManager.flush();
+        //repository.save(supplierTest);
+        //System.out.println(repository.findAll());
         Assert.assertNotNull(lookForSupplierByName("OtherSupplier"));
 //       Assert.assertNotNull(lookForSupplierByName("X"));
 //         clearDataBase();

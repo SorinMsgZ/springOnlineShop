@@ -1,4 +1,3 @@
-/*
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import java.util.stream.StreamSupport;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProductCategoryManagementService {
+public class ProductCategoryService {
     private final ProductCategoryRepository repository;
 
     public List<ProductCategoryDTO> listProductCategories() {
@@ -46,4 +45,3 @@ public class ProductCategoryManagementService {
         return ProductCategoryDTO.of(productCategory);
     }
 }
-*/

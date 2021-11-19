@@ -1,10 +1,9 @@
-/*
 package ro.msg.learning.shop.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.ProductCategoryDTO;
-import ro.msg.learning.shop.services.ProductCategoryManagementService;
+import ro.msg.learning.shop.services.ProductCategoryService;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProductCategoryController {
-    private final ProductCategoryManagementService service;
+    private final ProductCategoryService service;
 
     @GetMapping("/productcategories")
     public List<ProductCategoryDTO> listProductCategories() {
@@ -25,18 +24,17 @@ public class ProductCategoryController {
     }
 
     @PostMapping("/productcategories")
-    public ProductCategoryDTO create(@RequestBody ProductCategoryDTO body){
+    public ProductCategoryDTO create(@RequestBody ProductCategoryDTO body) {
         return service.createProductCategory(body);
     }
 
     @DeleteMapping("/productcategories/{id}")
-    public void deleteSingle(@PathVariable int id){
+    public void deleteSingle(@PathVariable int id) {
         service.deleteProductCategory(id);
     }
 
     @PutMapping("/productcategories/{id}")
-public ProductCategoryDTO updateSingle(@PathVariable int id, @RequestBody ProductCategoryDTO body){
-        return service.updateProductCategory(id,body);
+    public ProductCategoryDTO updateSingle(@PathVariable int id, @RequestBody ProductCategoryDTO body) {
+        return service.updateProductCategory(id, body);
     }
 }
-*/

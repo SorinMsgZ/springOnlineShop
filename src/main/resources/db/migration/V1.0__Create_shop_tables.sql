@@ -44,7 +44,7 @@ address INT NOT NULL REFERENCES Address(id)
 );
 
 CREATE TABLE Stock(
-product INT NOT NULL REFERENCES Product(id),
+product INT  NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
 location INT NOT NULL REFERENCES Location(id),
 quantity INT,
 CONSTRAINT pk_product_location PRIMARY KEY (product,location)
@@ -60,7 +60,7 @@ address INT NOT NULL REFERENCES Address(id)
 
 CREATE TABLE Order_Detail(
 orders INT NOT NULL REFERENCES Orders(id),
-product INT NOT NULL REFERENCES Product(id),
+product INT NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
 quantity INT,
 CONSTRAINT pk_order_product PRIMARY KEY (orders,product)
 );

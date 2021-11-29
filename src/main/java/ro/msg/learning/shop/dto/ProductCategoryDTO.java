@@ -10,6 +10,11 @@ public class ProductCategoryDTO {
     int id;
     String name;
 
+    public ProductCategoryDTO(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public ProductCategory toEntity() {
         ProductCategory result = new ProductCategory();
         result.setName(name);

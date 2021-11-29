@@ -1,6 +1,8 @@
 package ro.msg.learning.shop.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,6 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
+
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +20,15 @@ public class Product {
     private String description;
     private BigDecimal price;
     private double weight;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category")
     private ProductCategory category;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier")
     private Supplier supplier;
     private String imageUrl;
+
+
 }
 
 

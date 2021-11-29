@@ -12,6 +12,7 @@ import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.repositories.SupplierRepository;
 
 import java.util.Optional;
+/*
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -34,6 +35,7 @@ public class SupplierRepositoryTest {
         //repository.save(supplierTest);
         //System.out.println(repository.findAll());
         Assert.assertNotNull(lookForSupplierByName("OtherSupplier"));
+
 //       Assert.assertNotNull(lookForSupplierByName("X"));
 //         clearDataBase();
     }
@@ -44,9 +46,11 @@ public class SupplierRepositoryTest {
         return supplierFound.get();
     }
 
-  /*  public void clearDataBase() {
+  public void clearDataBase() {
         entityManager.clear();
 
-    }*/
+    }
+
 
 }
+*/

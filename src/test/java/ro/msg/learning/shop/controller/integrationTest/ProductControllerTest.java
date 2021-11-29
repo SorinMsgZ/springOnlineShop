@@ -80,22 +80,23 @@ class ProductControllerTest {
         String supplierName = "2TestNameSupplier";
         String imageUrl = "www.2TestUrl.com";
 
-        Assert.assertEquals(1, productService.listProduct().size());
+        int initialProductNb= productService.listProduct().size();
         ProductDTO secondProductDTO =
                 new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);
 
         controller.createProduct(secondProductDTO);
 
-        Assert.assertEquals(2, productService.listProduct().size());
+        Assert.assertEquals(initialProductNb+1, productService.listProduct().size());
         Assert.assertEquals(secondProductDTO, productService.readSingleProduct(id));
 
     }
 
     @Test
     void testDeleteSingleProduct() {
-        Assert.assertEquals(1, productService.listProduct().size());
-        controller.deleteSingleProduct(1);
-        Assert.assertEquals(0, productService.listProduct().size());
+        int initialProductNb= productService.listProduct().size();
+        int productId = 1;
+        controller.deleteSingleProduct(productId);
+        Assert.assertEquals(initialProductNb-1, productService.listProduct().size());
     }
 
     @Test
@@ -112,7 +113,6 @@ class ProductControllerTest {
         String supplierName = "3TestNameSupplier";
         String imageUrl = "www.3TestUrl.com";
 
-        Assert.assertEquals(1, productService.listProduct().size());
         ProductDTO updateProductDTO =
                 new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);
         controller.updateSingleProduct(1, updateProductDTO);

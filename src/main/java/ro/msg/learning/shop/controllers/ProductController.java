@@ -9,32 +9,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
+
 public class ProductController {
     private final ProductService service;
 
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
+
     @GetMapping("/products")
-    public List<ProductDTO> listProducts() {
+    public List<ProductDTO> listAllProducts() {
         return service.listProduct();
     }
 
     @GetMapping("/products/{id}")
-    public ProductDTO readSingle(@PathVariable int id) {
+    public ProductDTO readSingleProduct(@PathVariable int id) {
         return service.readSingleProduct(id);
     }
 
     @PostMapping("/products")
-    public ProductDTO create(@RequestBody ProductDTO body) {
+    public ProductDTO createProduct(@RequestBody ProductDTO body) {
         return service.createProduct(body);
     }
 
     @DeleteMapping("/products/{id}")
-    public void deleteSingle(@PathVariable int id) {
+    public void deleteSingleProduct(@PathVariable int id) {
         service.deleteProduct(id);
     }
 
     @PutMapping("/products/{id}")
-    public ProductDTO updateSingle(@PathVariable int id, @RequestBody ProductDTO body) {
+    public ProductDTO updateSingleProduct(@PathVariable int id, @RequestBody ProductDTO body) {
         return service.updateProduct(id, body);
     }
 

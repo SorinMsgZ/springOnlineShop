@@ -1,12 +1,16 @@
 package ro.msg.learning.shop.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,5 +19,11 @@ public class Location {
     @OneToOne
     @JoinColumn(name = "address")
     private Address address;
+
+    public Location(int id, String name, Address address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
 }
 

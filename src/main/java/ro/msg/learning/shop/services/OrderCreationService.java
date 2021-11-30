@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,13 @@ import ro.msg.learning.shop.entities.Order;
 import ro.msg.learning.shop.entities.OrderDetail;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.exceptions.NotFoundException;
+import ro.msg.learning.shop.exceptions.StockNotFound;
 import ro.msg.learning.shop.repositories.OrderDetailRepository;
 import ro.msg.learning.shop.repositories.OrderRepository;
 
 
 import javax.transaction.Transactional;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +28,14 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 
-public class OrderCreationService {
+public class OrderCreationService  {
     private final OrderRepository orderRepository;
+    private final Context context;
 
-    private FindLocationStrategy strategy;
 
-    public OrderCreationDTO createOrder(OrderCreationDTO input) {
+    public void createOrder(OrderCreationDTO input) {
 
         List<ProdOrdCreationDTO> listProducts = input.getProduct();
-//        int i=listProducts.forEach(product->context.executeStrategy(product.getProductID(), product.getProductQty()));
 
         class ObjectStructure {
 
@@ -46,11 +48,20 @@ public class OrderCreationService {
                 this.prodId = prodId;
                 this.qty = qty;
             }
+
+            @Override
+            public String toString() {
+                return "ObjectStructure{" +
+                        "loc=" + loc +
+                        ", prodId=" + prodId +
+                        ", qty=" + qty +
+                        '}';
+            }
         }
 
         List<ObjectStructure> objectStructureList = new ArrayList<>();
 
-        Context context = new Context(strategy);
+//        Context context = new Context();
         for (ProdOrdCreationDTO product : listProducts) {
             try {
                 Location location = context.executeStrategy(product.getProductID(), product.getProductQty());
@@ -58,8 +69,13 @@ public class OrderCreationService {
                 objectStructureList.add(object);
             } catch (Exception exception) {
 
+                System.out.println(exception.getMessage());
+                System.out.println(product.toString());
             }
+
         }
+        System.out.println("Nr. obiectelor gasite in stock: " + objectStructureList.size());
+        System.out.println("Obiectele sunt:" + objectStructureList.toString());
 
         //strategy=> method: findLocationAndTakeProducts()
         //select strategy based on @Configuration
@@ -69,8 +85,8 @@ public class OrderCreationService {
 
         //if false => Exception else ...
 
-        Order order = input.toEntity();
-        return OrderCreationDTO.of(orderRepository.save(order));
+       /* Order order = input.toEntity();
+        return OrderCreationDTO.of(orderRepository.save(order));*/
     }
 }
 

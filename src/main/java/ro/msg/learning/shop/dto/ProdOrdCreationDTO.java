@@ -1,14 +1,20 @@
 package ro.msg.learning.shop.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import ro.msg.learning.shop.entities.OrderDetail;
 import ro.msg.learning.shop.entities.Product;
 
 @Data
-
+@Builder
 public class ProdOrdCreationDTO {
     private int productID;
     private int productQty;
+
+    public ProdOrdCreationDTO(int productID, int productQty) {
+        this.productID = productID;
+        this.productQty = productQty;
+    }
 
     public OrderDetail toEntity() {
         OrderDetail result = new OrderDetail();
@@ -31,10 +37,10 @@ public class ProdOrdCreationDTO {
     }
 
     //  (product ID and quantity) contained in the order.
-    public static ProdOrdCreationDTO of (OrderDetail entity) {
+   /* public static ProdOrdCreationDTO of (OrderDetail entity) {
         ProdOrdCreationDTO result = new ProdOrdCreationDTO();
         result.setProductID(entity.getProduct().getId());
         result.setProductQty(entity.getQuantity());
        return result;
-    }
+    }*/
 }

@@ -49,10 +49,13 @@ insert into Address (id,country, city, county, street_address) values (3,'China'
 insert into Location (id, name, address) values (1, 'cbslocal.com',1);
 insert into Location (id, name, address) values (2, 'msn.com',2);
 insert into Location (id, name, address) values (3, 'howstuffworks.com',3);
+insert into Location (id, name, address) values (4, 'asdgasfga.com',3);
 
-insert into Stock (product, location, quantity) values (1, 1, 95);
-insert into Stock (product, location, quantity) values (2, 2, 47);
-insert into Stock (product, location, quantity) values (3, 3, 30);
+insert into Stock (product, location, quantity) values (1, 3, 12);
+insert into Stock (product, location, quantity) values (2, 4, 13);
+insert into Stock (product, location, quantity) values (3, 3, 14);
+insert into Stock (product, location, quantity) values (1, 1, 15);
+insert into Stock (product, location, quantity) values (2, 2, 16);
 
 
 insert into Orders (id, shipped_from, customer, created_at, address) values (1, 1, 1, '2021-02-21 12:30:00.000', 1);

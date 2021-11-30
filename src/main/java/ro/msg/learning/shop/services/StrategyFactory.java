@@ -1,22 +1,24 @@
 package ro.msg.learning.shop.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
 
+
 public class StrategyFactory {
 
-    @Value("${strategy.findLocation:SingleLocationStrategy}")
-    private String strategyFindLocation;
-
+    private final String strategyFindLocation;
     private final SingleLocationStrategy singleLocationStrategy;
     private final MoreAbundantStrategy moreAbundantStrategy;
 
-    public StrategyFactory(String strategyFindLocation,
+@Autowired
+    public StrategyFactory(@Value("${strategy.findLocation:SingleLocationStrategy}") String strategyFindLocation,
                            SingleLocationStrategy singleLocationStrategy,
                            MoreAbundantStrategy moreAbundantStrategy) {
         this.strategyFindLocation = strategyFindLocation;
@@ -24,13 +26,16 @@ public class StrategyFactory {
         this.moreAbundantStrategy = moreAbundantStrategy;
     }
 
+
     @Bean
-    public FindLocationStrategy getStrategy(String strategyFindLocation) {
+    @Primary
+    public FindLocationStrategy getStrategy() {
         if ("SingleLocationStrategy".equals(strategyFindLocation)) {
             return singleLocationStrategy;
-        } else {
+        } else if ("MoreAbundantStrategy".equals(strategyFindLocation)) {
             return moreAbundantStrategy;
         }
+        return singleLocationStrategy;
     }
 
 }

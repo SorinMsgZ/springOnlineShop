@@ -17,10 +17,10 @@ public class LocationDTO {
     private Address address;
 
     public Location toEntity() {
-        Location result = new Location();
-        result.setId(id);
-        result.setName(name);
-        result.setAddress(address);
+        Location result = new Location(id,name,address);
+//        result.setId(id);
+//        result.setName(name);
+//        result.setAddress(address);
         this.copyToEntity(result);
         return result;
     }

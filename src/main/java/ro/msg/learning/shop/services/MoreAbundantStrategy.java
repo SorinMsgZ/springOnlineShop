@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Product;
+import ro.msg.learning.shop.exceptions.NotFoundException;
 
 
 import java.util.*;
@@ -20,15 +21,14 @@ public class MoreAbundantStrategy implements FindLocationStrategy{
     @Override
     public Location findLocationAndTakeProducts(int productId, int productQty) {
         Product searchProduct = productService.readSingleProduct(productId).toEntity();
-
         List<StockDTO> listStocks = stockService.listStock();
-        Optional<StockDTO> listStocksFound =
-                listStocks.stream().filter(stock -> stock.getProduct().equals(searchProduct)).findAny();
-        Optional<StockDTO> listStocksFoundMatchQty = listStocksFound.stream()
-                .filter(stockQty -> stockQty.getQuantity()>productQty).findAny();
-        StockDTO matchStock=listStocksFoundMatchQty.stream().sorted(Comparator.comparing(StockDTO::getQuantity).reversed()).collect(Collectors
-                .toList()).get(0);
-        return matchStock.getLocation();
+
+        return listStocks
+                .stream()
+                .filter(stock -> (stock.getProduct().equals(searchProduct)) && (stock.getQuantity()>=productQty))
+                .max(Comparator.comparing(StockDTO::getQuantity))
+                .orElseThrow(NotFoundException::new)
+                .getLocation();
     }
 }
 

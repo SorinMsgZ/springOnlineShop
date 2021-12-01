@@ -2,7 +2,10 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.dto.StockDTO;
+import ro.msg.learning.shop.entities.Product;
+import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.StockRepository;
@@ -28,5 +31,13 @@ public class StockService {
         return stockRepository.findById(id)
                 .map(StockDTO::of)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public StockDTO updateStock(StockId id, StockDTO input) {
+        Stock stock = stockRepository.findById(id).orElseThrow(NotFoundException::new);
+        input.copyToEntity(stock);
+        stockRepository.save(stock);
+        return StockDTO.of(stock);
+
     }
 }

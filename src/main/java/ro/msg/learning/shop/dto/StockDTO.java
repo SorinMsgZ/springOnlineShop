@@ -16,6 +16,13 @@ public class StockDTO {
     private Location location;
     private int quantity;
 
+    public StockDTO(StockId idProductLocation, Product product, Location location, int quantity) {
+        this.idProductLocation = idProductLocation;
+        this.product = product;
+        this.location = location;
+        this.quantity = quantity;
+    }
+
     public Stock toEntity() {
         Stock result = new Stock();
         result.setIdProductLocation(idProductLocation);

@@ -42,7 +42,7 @@ public class ShopApplication {
                 }
             };
     }*/
-    @Bean
+    /*@Bean
     public CommandLineRunner commandLineRunner(OrderCreationService orderCreationService) {
         return args -> {
             Address deliveryAddress = new Address();
@@ -53,12 +53,12 @@ public class ShopApplication {
             deliveryAddress.setStreetAddress("440 Merry Drive");
 
             ProdOrdCreationDTO prod1 = new ProdOrdCreationDTO(1,95);
-           /* prod1.setProductID(1);
-            prod1.setProductQty(10);*/
+           *//* prod1.setProductID(1);
+            prod1.setProductQty(10);*//*
 
             ProdOrdCreationDTO prod2 = new ProdOrdCreationDTO(2,47);
-           /* prod1.setProductID(2);
-            prod1.setProductQty(1);*/
+           *//* prod1.setProductID(2);
+            prod1.setProductQty(1);*//*
 
             List<ProdOrdCreationDTO> listProduct=new ArrayList<>();
             listProduct.add(prod1);
@@ -71,7 +71,7 @@ public class ShopApplication {
             orderCreationService.createOrder(orderCreationDTO);
 
         };
-    }
+    }*/
 
     ;
 //}

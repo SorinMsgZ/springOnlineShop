@@ -4,20 +4,24 @@ package ro.msg.learning.shop.controller.integrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.msg.learning.shop.controllers.ProductController;
 import ro.msg.learning.shop.dto.ProductDTO;
+import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.services.ProductService;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
+
 class ProductRestControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -36,11 +41,16 @@ class ProductRestControllerTest {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     private ProductDTO productDTO;
     private ProductController controller;
 
+
     @BeforeEach
     public void createProductDTO() {
+
         int id = 1;
         String name = "1TestNameDTO";
         String description = "1 Test Product Description";
@@ -64,6 +74,13 @@ class ProductRestControllerTest {
         Assert.assertEquals(1, productService.listProduct().size());
     }
 
+    @AfterEach
+    public void clearDataBase(){
+        int i=productRepository.findAll().size();
+        productRepository.deleteAll();
+       int j= productRepository.findAll().size();
+    }
+
     @Test
     void testListProducts() throws Exception {
         List<ProductDTO> dtoListExpected = productService.listProduct();
@@ -76,6 +93,7 @@ class ProductRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .string(equalTo(productAsStringDTO)));
+
     }
 
     @Test

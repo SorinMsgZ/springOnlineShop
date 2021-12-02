@@ -7,11 +7,11 @@ import ro.msg.learning.shop.entities.Product;
 
 @Data
 @Builder
-public class ProdOrdCreationDTO {
+public class ProdOrdCreatorDTO {
     private int productID;
     private int productQty;
 
-    public ProdOrdCreationDTO(int productID, int productQty) {
+    public ProdOrdCreatorDTO(int productID, int productQty) {
         this.productID = productID;
         this.productQty = productQty;
     }

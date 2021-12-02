@@ -15,7 +15,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 
-public class OrderCreationService {
+public class OrderCreatorService {
     private final OrderRepository orderRepository;
     private final Context context;
     private final StockService stockService;
@@ -23,12 +23,13 @@ public class OrderCreationService {
     private final OrderService orderService;
 
     List<OrderObject> objectStructureList = new ArrayList<>();
+    List<OrderDTO> orderDTOList=new ArrayList<>();
 
-    public void createOrder(OrderCreationDTO input) {
+    public List<OrderDTO> createOrder(OrderObjectInputDTO input) {
 
-        List<ProdOrdCreationDTO> listProducts = input.getProduct();
+        List<ProdOrdCreatorDTO> listProducts = input.getProduct();
 
-        for (ProdOrdCreationDTO product : listProducts) {
+        for (ProdOrdCreatorDTO product : listProducts) {
             try {
                 Location location = context.executeStrategy(product.getProductID(), product.getProductQty());
                 OrderObject object =
@@ -42,6 +43,8 @@ public class OrderCreationService {
                 Address addressDTO = input.getDeliveryAddress();
                 OrderDTO newOrderDTO = new OrderDTO(location, createdAtDTO, addressDTO);
                 orderService.createOrder(newOrderDTO);
+                orderDTOList.add(newOrderDTO);
+
                 Order theOrder = orderRepository
                         .findAll()
                         .stream()
@@ -55,9 +58,10 @@ public class OrderCreationService {
 
             }
         }
+        return orderDTOList;
     }
 
-    public boolean availableStockForEachProduct(OrderCreationDTO input) {
+    public boolean availableStockForEachProduct(OrderObjectInputDTO input) {
         return (objectStructureList.size() == input.getProduct().size());
     }
 

@@ -1,26 +1,7 @@
 package ro.msg.learning.shop;
 
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import ro.msg.learning.shop.dto.OrderCreationDTO;
-import ro.msg.learning.shop.dto.ProdOrdCreationDTO;
-import ro.msg.learning.shop.dto.ProductDTO;
-import ro.msg.learning.shop.entities.*;
-import ro.msg.learning.shop.repositories.*;
-import ro.msg.learning.shop.services.OrderCreationService;
-import ro.msg.learning.shop.services.ProductService;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class ShopApplication {

@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.entities.Product;
@@ -14,13 +13,14 @@ import ro.msg.learning.shop.entities.ProductCategory;
 import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.repositories.ProductRepository;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource("classpath:test.properties")
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -29,7 +29,8 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    public void testFindByProductName() {
+    @Transactional
+    void testFindByProductName() {
 
         ProductCategory prodCat = new ProductCategory();
         prodCat.setId(24);
@@ -42,19 +43,20 @@ public class ProductRepositoryTest {
 
         Product prod = new Product();
         prod.setId(33);
-        prod.setName("ProductNameTest");
+        String nameOfProduct = "ProductNameTest";
+        prod.setName(nameOfProduct);
         prod.setDescription("disgusts");
         prod.setPrice(new BigDecimal("0.01"));
         prod.setWeight(3535);
         prod.setCategory(prodCat);
         prod.setSupplier(supplier);
         prod.setImageUrl("serfs");
-        entityManager.persist(prod);
-
-        Optional<Product> product = productRepository.findByName("ProductNameTest").stream()
-                .filter(p -> p.getName().equals("ProductNameTest")).findFirst();
-        Assert.assertEquals("ProductNameTest", product.get().getName());
-
-
+//        TODO: research reason for ERROR using entityManager
+//        entityManager.persist(prod);
+        productRepository.save(prod);
+//        TODO: Why used also stream?
+        Optional<Product> product = productRepository.findByName("nameOfProduct").stream()
+                .filter(p -> p.getName().equals("nameOfProduct")).findFirst();
+        Assert.assertEquals("nameOfProduct", product.get().getName());
     }
 }

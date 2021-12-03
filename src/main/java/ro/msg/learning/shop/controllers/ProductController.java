@@ -1,6 +1,5 @@
 package ro.msg.learning.shop.controllers;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.services.ProductService;

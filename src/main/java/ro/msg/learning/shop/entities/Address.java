@@ -1,9 +1,7 @@
 package ro.msg.learning.shop.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +14,17 @@ import javax.persistence.Id;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id;
-    private  String country;
-    private   String city;
-    private  String county;
+    private int id;
+    private String country;
+    private String city;
+    private String county;
     private String streetAddress;
 
+    public Address(int id, String country, String city, String county, String streetAddress) {
+        this.id = id;
+        this.country = country;
+        this.city = city;
+        this.county = county;
+        this.streetAddress = streetAddress;
+    }
 }

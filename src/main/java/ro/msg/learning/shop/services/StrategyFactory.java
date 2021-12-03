@@ -1,15 +1,12 @@
 package ro.msg.learning.shop.services;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
-
 
 public class StrategyFactory {
 
@@ -17,7 +14,7 @@ public class StrategyFactory {
     private final SingleLocationStrategy singleLocationStrategy;
     private final MoreAbundantStrategy moreAbundantStrategy;
 
-@Autowired
+    @Autowired
     public StrategyFactory(@Value("${strategy.findLocation:SingleLocationStrategy}") String strategyFindLocation,
                            SingleLocationStrategy singleLocationStrategy,
                            MoreAbundantStrategy moreAbundantStrategy) {
@@ -25,7 +22,6 @@ public class StrategyFactory {
         this.singleLocationStrategy = singleLocationStrategy;
         this.moreAbundantStrategy = moreAbundantStrategy;
     }
-
 
     @Bean
     @Primary

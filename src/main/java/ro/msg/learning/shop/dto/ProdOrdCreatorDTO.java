@@ -31,16 +31,7 @@ public class ProdOrdCreatorDTO {
         Product product = new Product();
         orderDetail.setProduct(product);
         product.setId(productID);
-
         orderDetail.setQuantity(productQty);
-
     }
-
-    //  (product ID and quantity) contained in the order.
-   /* public static ProdOrdCreationDTO of (OrderDetail entity) {
-        ProdOrdCreationDTO result = new ProdOrdCreationDTO();
-        result.setProductID(entity.getProduct().getId());
-        result.setProductQty(entity.getQuantity());
-       return result;
-    }*/
+//    TODO is the of() method needed here??
 }

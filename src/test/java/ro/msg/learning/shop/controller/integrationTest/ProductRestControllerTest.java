@@ -1,10 +1,8 @@
 
 package ro.msg.learning.shop.controller.integrationTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.msg.learning.shop.controllers.ProductController;
 import ro.msg.learning.shop.dto.ProductDTO;
-import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.services.ProductService;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -40,9 +35,6 @@ class ProductRestControllerTest {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     private ProductDTO productDTO;
     private ProductController controller;
@@ -74,12 +66,7 @@ class ProductRestControllerTest {
         Assert.assertEquals(1, productService.listProduct().size());
     }
 
-    @AfterEach
-    public void clearDataBase(){
-        int i=productRepository.findAll().size();
-        productRepository.deleteAll();
-       int j= productRepository.findAll().size();
-    }
+    //@TODO: research alternative for @DirtiesContext as clearDB to be inserted as e.g. @AfterEach
 
     @Test
     void testListProducts() throws Exception {
@@ -178,7 +165,7 @@ class ProductRestControllerTest {
         String supplierName = "3TestNameSupplier";
         String imageUrl = "www.3TestUrl.com";
 
-        int intProduct=1;
+        int intProduct = 1;
 
         ProductDTO updateProductDTO =
                 new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);

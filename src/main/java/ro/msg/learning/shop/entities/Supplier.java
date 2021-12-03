@@ -1,6 +1,5 @@
 package ro.msg.learning.shop.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,6 +12,4 @@ public class Supplier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-
-
 }

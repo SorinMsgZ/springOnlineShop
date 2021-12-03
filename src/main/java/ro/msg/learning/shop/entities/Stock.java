@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Table(name = "stock")
 public class Stock {
     @EmbeddedId
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private StockId idProductLocation;
     @ManyToOne
     @MapsId("productId")
@@ -20,6 +19,7 @@ public class Stock {
     @JoinColumn(name = "location")
     private Location location;
     private int quantity;
+
 
 }
 

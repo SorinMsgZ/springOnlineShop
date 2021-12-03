@@ -1,15 +1,12 @@
 package ro.msg.learning.shop.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
-
 @Data
 @Entity
-@Table(name="Product_Category")
+@Table(name = "Product_Category")
 
 public class ProductCategory {
     @Id
@@ -17,5 +14,6 @@ public class ProductCategory {
     int id;
     String name;
     String description;
+
 
 }

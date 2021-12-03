@@ -9,9 +9,10 @@ import ro.msg.learning.shop.exceptions.NotFoundException;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorDTO {
-private String type;
-private String message;
-public static ErrorDTO of(NotFoundException exception){
-    return new ErrorDTO("not_found", exception.getMessage());
-}
+    private String type;
+    private String message;
+
+    public static ErrorDTO of(NotFoundException exception) {
+        return new ErrorDTO("not_found", exception.getMessage());
+    }
 }

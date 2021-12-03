@@ -5,8 +5,6 @@ import lombok.Data;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Order;
-import ro.msg.learning.shop.entities.Supplier;
-
 
 import java.time.LocalDateTime;
 
@@ -18,7 +16,7 @@ public class OrderDTO {
     private LocalDateTime createdAt;
     private Address address;
 
-    public OrderDTO( Location shippedFrom, LocalDateTime createdAt, Address address) {
+    public OrderDTO(Location shippedFrom, LocalDateTime createdAt, Address address) {
 
         this.shippedFrom = shippedFrom;
         this.createdAt = createdAt;

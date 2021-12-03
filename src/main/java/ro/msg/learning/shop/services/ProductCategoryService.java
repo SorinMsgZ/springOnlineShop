@@ -35,10 +35,12 @@ public class ProductCategoryService {
         ProductCategory created = repository.save(input.toEntity());
         return ProductCategoryDTO.of(created);
     }
-    public void deleteProductCategory(int id){
+
+    public void deleteProductCategory(int id) {
         repository.deleteById(id);
     }
-    public ProductCategoryDTO updateProductCategory(int id, ProductCategoryDTO input){
+
+    public ProductCategoryDTO updateProductCategory(int id, ProductCategoryDTO input) {
         ProductCategory productCategory = repository.findById(id).orElseThrow(NotFoundException::new);
         input.copyToEntity(productCategory);
         repository.save(productCategory);

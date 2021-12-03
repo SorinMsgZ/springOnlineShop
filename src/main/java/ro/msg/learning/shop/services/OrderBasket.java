@@ -21,6 +21,7 @@ public class OrderBasket implements SubjectOrderBasket {
 
     public void setOrderObject(OrderObject orderObject) {
         this.orderObject = orderObject;
+        notifyAllObservers();
     }
 
     @Override

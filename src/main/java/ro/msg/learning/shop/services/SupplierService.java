@@ -2,9 +2,7 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.dto.SupplierDTO;
-import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.SupplierRepository;

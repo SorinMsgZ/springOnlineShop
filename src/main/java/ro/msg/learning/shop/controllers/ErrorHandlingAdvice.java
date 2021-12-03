@@ -12,7 +12,7 @@ public class ErrorHandlingAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public  ErrorDTO handleNotFound(NotFoundException exception){
+    public ErrorDTO handleNotFound(NotFoundException exception) {
         return ErrorDTO.of(exception);
     }
 }

@@ -7,14 +7,12 @@ import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 
-public class MoreAbundantStrategy implements FindLocationStrategy{
+public class MoreAbundantStrategy implements FindLocationStrategy {
     private final StockService stockService;
     private final ProductService productService;
 
@@ -25,7 +23,7 @@ public class MoreAbundantStrategy implements FindLocationStrategy{
 
         return listStocks
                 .stream()
-                .filter(stock -> (stock.getProduct().equals(searchProduct)) && (stock.getQuantity()>=productQty))
+                .filter(stock -> (stock.getProduct().equals(searchProduct)) && (stock.getQuantity() >= productQty))
                 .max(Comparator.comparing(StockDTO::getQuantity))
                 .orElseThrow(NotFoundException::new)
                 .getLocation();

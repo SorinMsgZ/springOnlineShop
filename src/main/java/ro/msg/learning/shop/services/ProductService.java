@@ -6,7 +6,6 @@ import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.ProductRepository;
-import ro.msg.learning.shop.repositories.SupplierRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;

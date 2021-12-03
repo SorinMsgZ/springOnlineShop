@@ -1,18 +1,20 @@
 package ro.msg.learning.shop.entities;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Data
 @Embeddable
 public class StockId implements Serializable {
-    @Column(name="product")
+    @Column(name = "product")
     private int productId;
-    @Column(name="location")
+    @Column(name = "location")
     private int locationId;
 
     public StockId() {
-
     }
 
     public StockId(int productID, int locationId) {

@@ -22,6 +22,8 @@ public class ProductDTO {
     private int supplierId;
     private String supplierName;
     private String imageUrl;
+//TODO research solution alternative for constructor with fewer parameters
+//TODO check if the implementation from the comment are working (why not working?!) => see video Serban Petrescu mocking the object field IF NOT NULL Expected
 
     public ProductDTO(int id, String name, String description, BigDecimal price, double weight, int productCategoryId,
                       String productCategoryName, String productCategoryDescription, int supplierId,

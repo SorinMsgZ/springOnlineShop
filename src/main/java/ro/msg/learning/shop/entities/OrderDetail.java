@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-
 @Data
 @Entity(name = "OrderDetail")
 @Table(name = "Order_Detail")
@@ -21,6 +20,4 @@ public class OrderDetail {
     @JoinColumn(name = "product")
     private Product product;
     private int quantity;
-
-
 }

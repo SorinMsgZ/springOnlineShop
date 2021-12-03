@@ -1,7 +1,6 @@
 package ro.msg.learning.shop.services;
 
 import ro.msg.learning.shop.dto.OrderDetailDTO;
-import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.*;
 
 public class ObserverOrderDetail extends ObserverObject {

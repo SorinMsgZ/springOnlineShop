@@ -3,12 +3,8 @@ package ro.msg.learning.shop.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.OrderDetailDTO;
-import ro.msg.learning.shop.dto.ProductDTO;
-import ro.msg.learning.shop.dto.StockDTO;
-import ro.msg.learning.shop.dto.SupplierDTO;
 import ro.msg.learning.shop.entities.OrderDetail;
 import ro.msg.learning.shop.entities.OrderDetailId;
-import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.OrderDetailRepository;
 
@@ -28,6 +24,7 @@ public class OrderDetailService {
                 .map(OrderDetailDTO::of)
                 .collect(Collectors.toList());
     }
+
     public OrderDetailDTO readSingleOrderDetail(OrderDetailId id) {
         return orderDetailRepository.findById(id)
                 .map(OrderDetailDTO::of)

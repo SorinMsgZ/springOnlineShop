@@ -1,12 +1,9 @@
 package ro.msg.learning.shop.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-
 
 @Data
 @Entity

@@ -20,43 +20,39 @@ import java.util.Optional;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource("classpath:test.properties")
-class ProductRepositoryTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
+public class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
 
     @Test
     @Transactional
-    void testFindByProductName() {
+    public void testFindByProductId() {
 
         ProductCategory prodCat = new ProductCategory();
-        prodCat.setId(24);
-        prodCat.setName("sddgsg");
-        prodCat.setDescription("SffF");
+        prodCat.setName("NameOfProdCat");
+        prodCat.setDescription("Description on Prd Cat");
 
         Supplier supplier = new Supplier();
-        supplier.setId(24);
-        supplier.setName("sdgsg");
+        supplier.setName("SupplierNmae");
 
-        Product prod = new Product();
-        prod.setId(33);
-        String nameOfProduct = "ProductNameTest";
-        prod.setName(nameOfProduct);
-        prod.setDescription("disgusts");
-        prod.setPrice(new BigDecimal("0.01"));
-        prod.setWeight(3535);
-        prod.setCategory(prodCat);
-        prod.setSupplier(supplier);
-        prod.setImageUrl("serfs");
-//        TODO: research reason for ERROR using entityManager
-//        entityManager.persist(prod);
-        productRepository.save(prod);
-//        TODO: Why used also stream?
-        Optional<Product> product = productRepository.findByName("nameOfProduct").stream()
-                .filter(p -> p.getName().equals("nameOfProduct")).findFirst();
-        Assert.assertEquals("nameOfProduct", product.get().getName());
+        Product prodTest = new Product();
+
+        String nameOfProduct = "nameOfProduct";
+        prodTest.setName(nameOfProduct);
+        prodTest.setDescription("disgusts");
+        prodTest.setPrice(new BigDecimal("0.01"));
+        prodTest.setWeight(3535);
+        prodTest.setCategory(prodCat);
+        prodTest.setSupplier(supplier);
+        prodTest.setImageUrl("serfs");
+
+        productRepository.save(prodTest);
+
+        Optional<Product> product = productRepository.findById(1).stream().findFirst();
+
+        assert product.orElse(null) != null;
+        Assert.assertEquals("nameOfProduct", product.orElse(null).getName());
+
     }
 }

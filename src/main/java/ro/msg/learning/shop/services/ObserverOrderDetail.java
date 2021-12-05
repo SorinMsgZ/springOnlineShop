@@ -26,6 +26,6 @@ public class ObserverOrderDetail extends ObserverObject {
         int qty = subject.getOrderObject().qty;
 
         OrderDetailDTO orderDetailDTO = new OrderDetailDTO(order, product, qty);
-        orderDetailService.createOrderDetail(orderDetailDTO);
+        orderDetailService.create(orderDetailDTO);
     }
 }

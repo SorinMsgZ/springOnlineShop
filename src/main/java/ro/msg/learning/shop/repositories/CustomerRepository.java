@@ -5,6 +5,6 @@ import ro.msg.learning.shop.entities.Customer;
 
 import java.util.List;
 
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, String> {
     List<Customer> findByFirstName(String name);
 }

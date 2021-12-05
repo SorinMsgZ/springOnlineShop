@@ -14,27 +14,27 @@ public class SupplierController {
     private final SupplierService service;
 
     @GetMapping("/suppliers")
-    public List<SupplierDTO> listSuppliers() {
-        return service.listSupplier();
+    public List<SupplierDTO> listAll() {
+        return service.listAll();
     }
 
-    @GetMapping("/suppliers/{id}")
-    public SupplierDTO readSingle(@PathVariable int id) {
-        return service.readSingleSupplier(id);
+    @GetMapping("/suppliers/{name}")
+    public SupplierDTO readByName(@PathVariable String name) {
+        return service.readByName(name);
     }
 
     @PostMapping("/suppliers")
     public SupplierDTO create(@RequestBody SupplierDTO body) {
-        return service.createSupplier(body);
+        return service.create(body);
     }
 
-    @DeleteMapping("/suppliers/{id}")
-    public void deleteSingle(@PathVariable int id) {
-        service.deleteSupplier(id);
+    @DeleteMapping("/suppliers/{name}")
+    public void deleteByName(@PathVariable  String name) {
+        service.deleteByName(name);
     }
 
-    @PutMapping("/suppliers/{id}")
-    public SupplierDTO updateSingle(@PathVariable int id, @RequestBody SupplierDTO body) {
-        return service.updateSupplier(id, body);
+    @PutMapping("/suppliers/{name}")
+    public SupplierDTO updateByName(@PathVariable  String name, @RequestBody SupplierDTO body) {
+        return service.updateByName(name, body);
     }
 }

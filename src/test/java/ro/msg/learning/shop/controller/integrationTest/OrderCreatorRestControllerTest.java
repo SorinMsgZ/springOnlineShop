@@ -1,5 +1,7 @@
 package ro.msg.learning.shop.controller.integrationTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.weaver.ast.Or;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,11 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ro.msg.learning.shop.controllers.OrderCreatorController;
+import ro.msg.learning.shop.controllers.ProductController;
 import ro.msg.learning.shop.dto.*;
-import ro.msg.learning.shop.entities.*;
+import ro.msg.learning.shop.entities.Address;
+import ro.msg.learning.shop.entities.Location;
+import ro.msg.learning.shop.entities.StockId;
+import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
@@ -20,16 +30,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderCreatorControllerTest {
+class OrderCreatorRestControllerTest {
+    @Autowired
+    private MockMvc mvc;
 
     @Autowired
-    private OrderCreatorController orderCreatorController;
+    private OrderCreatorService orderCreatorService;
     @Autowired
     ProductCategoryService productCategoryService;
     @Autowired
@@ -44,9 +58,11 @@ class OrderCreatorControllerTest {
     private OrderService orderService;
     @Autowired
     private StockService stockService;
+    @Autowired
+    private OrderCreatorController orderCreatorController;
 
     @BeforeEach
-    void createProductDTO() {
+    public void mockOneProductDTO() {
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -129,8 +145,7 @@ class OrderCreatorControllerTest {
     }
 
     @Test
-    void testCreateOrder(@Value("${strategy.findLocation}") String strategy) {
-
+    void testCreateOrder(@Value("${strategy.findLocation}") String strategy) throws Exception {
         StockId stockId1 = new StockId(1, 1);
         StockId stockId2 = new StockId(2, 2);
         StockId stockId3 = new StockId(1, 3);
@@ -159,38 +174,21 @@ class OrderCreatorControllerTest {
         orderObjectInputDTO.setDeliveryAddress(delAddressInput);
         orderObjectInputDTO.setProduct(listProductWanted);
 
-        int initialOrderNb = orderService.listAll().size();
 
-        List<OrderDTO> orderListCreatedDTO = orderCreatorController.create(orderObjectInputDTO);
-        List<Order> orderListCreated =
-                orderListCreatedDTO.stream().map(OrderDTO::toEntity).collect(Collectors.toList());
+        int initialOrderNb = orderCreatorController.listAll().size();
 
-        int actualOrderNb = orderService.listAll().size();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productAsStringDTO = objectMapper.writeValueAsString(orderObjectInputDTO);
 
-        if (strategy.equals("SingleLocationStrategy")) {
-            int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
-            int actualStock1Prod1Qty = stockService.readById(stockId1).getQuantity();
+        mvc.perform(MockMvcRequestBuilders.post("/api/orders/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(productAsStringDTO)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-            int expectUpdateStock2Prod2Qty = stock2Prod2Qty - testProd2Qty;
-            int actualStock2Prod2Qty = stockService.readById(stockId2).getQuantity();
+        int actualOrderNb = orderCreatorController.listAll().size();
+        Assert.assertEquals(initialOrderNb + 1, actualOrderNb);
 
-            Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
-            Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
-
-        } else if (strategy.equals("MoreAbundantStrategy")) {
-            int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
-            int actualStock3Prod1Qty = stockService.readById(stockId3).getQuantity();
-
-            int expectUpdateStock4Prod2Qty = stock4Prod2Qty - testProd2Qty;
-            int actualStock4Prod2Qty = stockService.readById(stockId4).getQuantity();
-
-            Assert.assertEquals(expectUpdateStock3Prod1Qty, actualStock3Prod1Qty);
-            Assert.assertEquals(expectUpdateStock4Prod2Qty, actualStock4Prod2Qty);
-        }
-
-        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
-        for (Order order : orderListCreated) {
-            System.out.println(order.toString());
-        }
     }
 }

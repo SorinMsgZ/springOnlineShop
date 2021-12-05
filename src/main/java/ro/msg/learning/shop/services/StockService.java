@@ -10,35 +10,34 @@ import ro.msg.learning.shop.repositories.StockRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class StockService {
     public final StockRepository stockRepository;
 
-    public List<StockDTO> listStock() {
-        return StreamSupport.stream(stockRepository.findAll().spliterator(), false)
+    public List<StockDTO> listAll() {
+        return stockRepository.findAll().stream()
                 .map(StockDTO::of)
                 .collect(Collectors.toList());
     }
 
-    public StockDTO readSingleStock(StockId id) {
+    public StockDTO readById(StockId id) {
         return stockRepository.findById(id)
                 .map(StockDTO::of)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public StockDTO createStock(StockDTO input) {
+    public StockDTO create(StockDTO input) {
         Stock stock = input.toEntity();
         return StockDTO.of(stockRepository.save(stock));
     }
 
-    public void deleteStock(StockId id) {
+    public void deleteById(StockId id) {
         stockRepository.deleteById(id);
     }
 
-    public StockDTO updateStock(StockId id, StockDTO input) {
+    public StockDTO updateById(StockId id, StockDTO input) {
         Stock stock = stockRepository.findById(id).orElseThrow(NotFoundException::new);
         input.copyToEntity(stock);
         stockRepository.save(stock);

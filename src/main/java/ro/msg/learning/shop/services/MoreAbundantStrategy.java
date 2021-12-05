@@ -18,8 +18,8 @@ public class MoreAbundantStrategy implements FindLocationStrategy {
 
     @Override
     public Location findLocationAndTakeProducts(int productId, int productQty) {
-        Product searchProduct = productService.readSingleProduct(productId).toEntity();
-        List<StockDTO> listStocks = stockService.listStock();
+        Product searchProduct = productService.readById(productId).toEntity();
+        List<StockDTO> listStocks = stockService.listAll();
 
         return listStocks
                 .stream()

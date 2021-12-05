@@ -2,19 +2,21 @@ package ro.msg.learning.shop.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.entities.Address;
 
 @Data
 @Builder
+@NoArgsConstructor
 public class AddressDTO {
-    private  int id;
+
     private  String country;
     private   String city;
     private  String county;
     private String streetAddress;
 
-    public AddressDTO(int id, String country, String city, String county, String streetAddress) {
-        this.id = id;
+    public AddressDTO( String country, String city, String county, String streetAddress) {
+
         this.country = country;
         this.city = city;
         this.county = county;
@@ -23,7 +25,7 @@ public class AddressDTO {
 
     public Address toEntity() {
         Address result = new Address();
-        result.setId(id);
+
         result.setCountry(country);
         result.setCity(city);
         result.setCounty(county);
@@ -33,7 +35,7 @@ public class AddressDTO {
     }
 
     public void copyToEntity(Address address) {
-        address.setId(id);
+
         address.setCountry(country);
         address.setCity(city);
         address.setCounty(county);
@@ -42,7 +44,7 @@ public class AddressDTO {
 
     public static AddressDTO of(Address entity) {
         return AddressDTO.builder()
-                .id(entity.getId())
+
                 .country(entity.getCountry())
                 .city(entity.getCity())
                 .county(entity.getCounty())

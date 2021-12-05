@@ -10,7 +10,6 @@ import ro.msg.learning.shop.repositories.OrderRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -18,28 +17,28 @@ import java.util.stream.StreamSupport;
 public class OrderService {
     private final OrderRepository orderRepository;
 
-    public List<OrderDTO> listOrder() {
-        return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+    public List<OrderDTO> listAll() {
+        return orderRepository.findAll().stream()
                 .map(OrderDTO::of)
                 .collect(Collectors.toList());
     }
 
-    public OrderDTO readSingleOrder(int id) {
+    public OrderDTO readById(int id) {
         return orderRepository.findById(id)
                 .map(OrderDTO::of)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public OrderDTO createOrder(OrderDTO input) {
+    public OrderDTO create(OrderDTO input) {
         Order order = input.toEntity();
         return OrderDTO.of(orderRepository.save(order));
     }
 
-    public void deleteOrder(int id) {
+    public void deleteById(int id) {
         orderRepository.deleteById(id);
     }
 
-    public OrderDTO updateOrder(int id, OrderDTO input) {
+    public OrderDTO updateById(int id, OrderDTO input) {
         Order order = orderRepository.findById(id).orElseThrow(NotFoundException::new);
         input.copyToEntity(order);
         orderRepository.save(order);

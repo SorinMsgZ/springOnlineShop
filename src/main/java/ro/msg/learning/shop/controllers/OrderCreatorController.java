@@ -1,5 +1,7 @@
 package ro.msg.learning.shop.controllers;
 
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.OrderDTO;
 import ro.msg.learning.shop.dto.OrderObjectInputDTO;
@@ -23,28 +25,28 @@ public class OrderCreatorController {
     }
 
     @GetMapping("/orders")
-    public List<OrderDTO> listAllOrders() {
-        return orderService.listOrder();
+    public List<OrderDTO> listAll() {
+        return orderService.listAll();
     }
 
     @GetMapping("/orders/{id}")
-    public OrderDTO readSingleOrder(@PathVariable int id) {
-        return orderService.readSingleOrder(id);
+    public OrderDTO readById(@PathVariable int id) {
+        return orderService.readById(id);
     }
 
     @PostMapping("/orders")
-    public List<OrderDTO> createOrder(@RequestBody OrderObjectInputDTO body) {
+    public List<OrderDTO> create(@RequestBody OrderObjectInputDTO body) {
         return orderCreatorService.createOrder(body);
     }
 
     @DeleteMapping("/orders/{id}")
-    public void deleteSingleOrder(@PathVariable int id) {
-        orderService.deleteOrder(id);
+    public void deleteById(@PathVariable int id) {
+        orderService.deleteById(id);
     }
 
     @PutMapping("/orders/{id}")
-    public OrderDTO updateSingleOrder(@PathVariable int id, @RequestBody OrderDTO body) {
-        return orderService.updateOrder(id, body);
+    public OrderDTO updateById(@PathVariable int id, @RequestBody OrderDTO body) {
+        return orderService.updateById(id, body);
     }
 
 }

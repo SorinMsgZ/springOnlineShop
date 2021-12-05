@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
- class StockServiceTest {
+class StockServiceTest {
 
     @Autowired
     private StockRepository stockRepository;
@@ -39,25 +39,21 @@ import java.util.stream.Collectors;
 
 
     @Test
-     void testUpdateStock() {
-
-        Stock stock1 = new Stock();
+    void testUpdateStock() {
 
         ProductCategory productCategory = new ProductCategory();
-        productCategory.setId(1);
         productCategory.setName("prdCat");
         productCategory.setDescription("description of ProdCat");
         productCategoryRepository.save(productCategory);
 
         Supplier supplier = new Supplier();
-        supplier.setId(1);
         supplier.setName("suppName");
         supplierRepository.save(supplier);
 
         Product product = new Product();
         product.setId(1);
         product.setName("prodname");
-        product.setDescription("predDescr");
+        product.setDescription("prodDescr");
         product.setPrice(new BigDecimal("1"));
         product.setWeight(2);
         product.setCategory(productCategory);
@@ -65,8 +61,7 @@ import java.util.stream.Collectors;
         product.setImageUrl("www.d.com");
         productRepository.save(product);
 
-        Address address=new Address();
-        address.setId(1);
+        Address address = new Address();
         address.setCountry("Romania");
         address.setCity("ClujNapoca");
         address.setCounty("Cluj");
@@ -75,36 +70,38 @@ import java.util.stream.Collectors;
 
 
         Location location = new Location();
-        location.setId(1);
         location.setName("LocName");
         location.setAddress(address);
         locationRepository.save(location);
 
-        int actualQty=10;
+        int actualQty = 10;
 
         StockId stockId = new StockId();
         stockId.setProductId(1);
         stockId.setLocationId(1);
 
+        Stock stock1 = new Stock();
         stock1.setIdProductLocation(stockId);
         stock1.setProduct(product);
         stock1.setLocation(location);
         stock1.setQuantity(actualQty);
         stockRepository.save(stock1);
 
-        int readQtyBeforeUpdate=stockService.readSingleStock(new StockId(1,1)).getQuantity();
-        Assert.assertEquals(actualQty,readQtyBeforeUpdate);
+        int readQtyBeforeUpdate = stockService.readById(new StockId(1, 1)).getQuantity();
+        Assert.assertEquals(actualQty, readQtyBeforeUpdate);
 
-        int expectedQty=0;
+        int expectedQty = 0;
 
-        StockDTO stock2=new StockDTO(1,1,product,location,expectedQty);
+        StockDTO stock2 = new StockDTO(product, location, expectedQty);
 
-        stockService.updateStock(new StockId(1,1),stock2);
+        stockService.updateById(new StockId(1, 1), stock2);
 
-        int readQtyAfterUpdate=stockRepository.findAll().stream().filter(stockX -> stockX.getIdProductLocation().toString().equals((new StockId(1,1)).toString())).collect(Collectors
-                .toList()).get(0).getQuantity();
+        int readQtyAfterUpdate = stockRepository.findAll().stream()
+                .filter(stockX -> stockX.getIdProductLocation().toString().equals((new StockId(1, 1)).toString()))
+                .collect(Collectors
+                        .toList()).get(0).getQuantity();
 
-        Assert.assertEquals(expectedQty,readQtyAfterUpdate);
+        Assert.assertEquals(expectedQty, readQtyAfterUpdate);
 
     }
 }

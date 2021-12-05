@@ -10,7 +10,6 @@ import ro.msg.learning.shop.repositories.LocationRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -18,34 +17,32 @@ import java.util.stream.StreamSupport;
 public class LocationService {
     public final LocationRepository locationRepository;
 
-    public List<LocationDTO> listLocation() {
+    public List<LocationDTO> listAll() {
 
-        return StreamSupport.stream(locationRepository.findAll().spliterator(), false)
+        return locationRepository.findAll().stream()
                 .map(LocationDTO::of)
                 .collect(Collectors.toList());
     }
 
-    public LocationDTO readSingleLocation(int id) {
-        return locationRepository.findById(id)
+    public LocationDTO readByName(String name) {
+        return locationRepository.findByName(name)
                 .map(LocationDTO::of)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public LocationDTO createLocation(LocationDTO input) {
+    public LocationDTO create(LocationDTO input) {
         Location location = input.toEntity();
-
         return LocationDTO.of(locationRepository.save(location));
     }
 
-    public void deleteLocation(int id) {
-        locationRepository.deleteById(id);
+    public void deleteByName(String name) {
+        locationRepository.deleteByName(name);
     }
 
-    public LocationDTO updateLocation(int id, LocationDTO input) {
-        Location location = locationRepository.findById(id).orElseThrow(NotFoundException::new);
+    public LocationDTO updateByName(String name, LocationDTO input) {
+        Location location = locationRepository.findByName(name).orElseThrow(NotFoundException::new);
         input.copyToEntity(location);
         locationRepository.save(location);
         return LocationDTO.of(location);
     }
-
 }

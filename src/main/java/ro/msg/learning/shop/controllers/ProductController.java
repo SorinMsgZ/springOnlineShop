@@ -17,28 +17,28 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<ProductDTO> listAllProducts() {
-        return service.listProduct();
+    public List<ProductDTO> listAll() {
+        return service.listAll();
     }
 
     @GetMapping("/products/{id}")
-    public ProductDTO readSingleProduct(@PathVariable int id) {
-        return service.readSingleProduct(id);
+    public ProductDTO readById(@PathVariable int id) {
+        return service.readById(id);
     }
 
     @PostMapping("/products")
-    public ProductDTO createProduct(@RequestBody ProductDTO body) {
-        return service.createProduct(body);
+    public ProductDTO create(@RequestBody ProductDTO body) {
+        return service.create(body);
     }
 
     @DeleteMapping("/products/{id}")
-    public void deleteSingleProduct(@PathVariable int id) {
-        service.deleteProduct(id);
+    public void deleteById(@PathVariable int id) {
+        service.deleteById(id);
     }
 
     @PutMapping("/products/{id}")
-    public ProductDTO updateSingleProduct(@PathVariable int id, @RequestBody ProductDTO body) {
-        return service.updateProduct(id, body);
+    public ProductDTO updateById(@PathVariable int id, @RequestBody ProductDTO body) {
+        return service.updateById(id, body);
     }
 
 }

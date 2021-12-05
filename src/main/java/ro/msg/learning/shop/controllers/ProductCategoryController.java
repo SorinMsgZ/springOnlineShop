@@ -14,27 +14,27 @@ public class ProductCategoryController {
     private final ProductCategoryService service;
 
     @GetMapping("/productcategories")
-    public List<ProductCategoryDTO> listProductCategories() {
-        return service.listProductCategories();
+    public List<ProductCategoryDTO> listAll() {
+        return service.listAll();
     }
 
-    @GetMapping("/productcategories/{id}")
-    public ProductCategoryDTO readSingle(@PathVariable int id) {
-        return service.readSingleProductCategory(id);
+    @GetMapping("/productcategories/{name}")
+    public ProductCategoryDTO readByName(@PathVariable String name) {
+        return service.readByName(name);
     }
 
     @PostMapping("/productcategories")
     public ProductCategoryDTO create(@RequestBody ProductCategoryDTO body) {
-        return service.createProductCategory(body);
+        return service.create(body);
     }
 
-    @DeleteMapping("/productcategories/{id}")
-    public void deleteSingle(@PathVariable int id) {
-        service.deleteProductCategory(id);
+    @DeleteMapping("/productcategories/{name}")
+    public void deleteByName(@PathVariable String name) {
+        service.deleteByName(name);
     }
 
-    @PutMapping("/productcategories/{id}")
-    public ProductCategoryDTO updateSingle(@PathVariable int id, @RequestBody ProductCategoryDTO body) {
-        return service.updateProductCategory(id, body);
+    @PutMapping("/productcategories/{name}")
+    public ProductCategoryDTO updateByName(@PathVariable String name, @RequestBody ProductCategoryDTO body) {
+        return service.updateByName(name, body);
     }
 }

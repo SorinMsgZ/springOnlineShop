@@ -10,7 +10,6 @@ import ro.msg.learning.shop.repositories.ProductRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -18,29 +17,28 @@ import java.util.stream.StreamSupport;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<ProductDTO> listProduct() {
-        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
+    public List<ProductDTO> listAll() {
+        return productRepository.findAll().stream()
                 .map(ProductDTO::of)
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO readSingleProduct(int id) {
+    public ProductDTO readById(int id) {
         return productRepository.findById(id)
                 .map(ProductDTO::of)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public ProductDTO createProduct(ProductDTO input) {
+    public ProductDTO create(ProductDTO input) {
         Product product = input.toEntity();
-
         return ProductDTO.of(productRepository.save(product));
     }
 
-    public void deleteProduct(int id) {
+    public void deleteById(int id) {
         productRepository.deleteById(id);
     }
 
-    public ProductDTO updateProduct(int id, ProductDTO input) {
+    public ProductDTO updateById(int id, ProductDTO input) {
         Product product = productRepository.findById(id).orElseThrow(NotFoundException::new);
         input.copyToEntity(product);
         productRepository.save(product);

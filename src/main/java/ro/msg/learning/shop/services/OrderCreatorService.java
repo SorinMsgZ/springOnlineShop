@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
+import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.OrderRepository;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class OrderCreatorService {
     List<OrderObject> objectStructureList = new ArrayList<>();
     List<OrderDTO> orderDTOList = new ArrayList<>();
 
-    public List<OrderDTO> createOrder(OrderObjectInputDTO input) {
+    public List<OrderDTO> createOrder(OrderObjectInputDTO input) throws NotFoundException {
 
         List<ProdOrdCreatorDTO> listProducts = input.getProduct();
 
@@ -35,7 +36,7 @@ public class OrderCreatorService {
             try {
                 Location location = context.executeStrategy(product.getProductID(), product.getProductQty());
 
-                Product allAttributeProduct = productService.readSingleProduct(product.getProductID()).toEntity();
+                Product allAttributeProduct = productService.readById(product.getProductID()).toEntity();
 
                 OrderObject object =
                         new OrderObject(location, allAttributeProduct, product.getProductQty());
@@ -45,10 +46,15 @@ public class OrderCreatorService {
 
                 LocalDateTime createdAtDTO = input.getCreatedAt();
                 Address addressDTO = input.getDeliveryAddress();
-                OrderDTO newOrderDTO = new OrderDTO(location, createdAtDTO, addressDTO);
-                orderService.createOrder(newOrderDTO);
+
+                OrderDTO newOrderDTO = new OrderDTO();
+                newOrderDTO.setShippedFrom(location);
+                newOrderDTO.setCreatedAt(createdAtDTO);
+                newOrderDTO.setAddress(addressDTO);
+
+                orderService.create(newOrderDTO);
                 orderDTOList.add(newOrderDTO);
-//TODO Why no orderID number has been automatically generated?
+
                 Order theOrder = orderRepository
                         .findAll().stream().filter(orders -> (orders.getCreatedAt().equals(createdAtDTO)) &&
                                 (orders.getAddress().getId() == addressDTO.getId())).collect(Collectors.toList())
@@ -57,9 +63,9 @@ public class OrderCreatorService {
                 new ObserverOrderDetail(orderBasket, theOrder, orderDetailService);
 
                 orderBasket.setOrderObject(object);
-//TODO "ignored" instead of "catch"?; should any exception message be printed?
+
             } catch (Exception exception) {
-                exception.getMessage();
+
             }
         }
         return orderDTOList;

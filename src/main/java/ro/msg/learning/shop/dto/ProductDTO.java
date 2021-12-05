@@ -2,6 +2,7 @@ package ro.msg.learning.shop.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.entities.ProductCategory;
 import ro.msg.learning.shop.entities.Supplier;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
+@NoArgsConstructor
 public class ProductDTO {
     private int id;
     private String name;
@@ -19,15 +21,12 @@ public class ProductDTO {
     private int productCategoryId;
     private String productCategoryName;
     private String productCategoryDescription;
-    private int supplierId;
-    private String supplierName;
+    private Supplier supplier;
     private String imageUrl;
-//TODO research solution alternative for constructor with fewer parameters
-//TODO check if the implementation from the comment are working (why not working?!) => see video Serban Petrescu mocking the object field IF NOT NULL Expected
 
     public ProductDTO(int id, String name, String description, BigDecimal price, double weight, int productCategoryId,
-                      String productCategoryName, String productCategoryDescription, int supplierId,
-                      String supplierName, String imageUrl) {
+                      String productCategoryName, String productCategoryDescription,
+                      Supplier supplier, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,8 +35,7 @@ public class ProductDTO {
         this.productCategoryId = productCategoryId;
         this.productCategoryName = productCategoryName;
         this.productCategoryDescription = productCategoryDescription;
-        this.supplierId = supplierId;
-        this.supplierName = supplierName;
+        this.supplier = supplier;
         this.imageUrl = imageUrl;
     }
 
@@ -48,21 +46,14 @@ public class ProductDTO {
         result.setDescription(description);
         result.setPrice(price);
         result.setWeight(weight);
-//        result.setCategory(category);
+
         ProductCategory cat = new ProductCategory();
         cat.setId(productCategoryId);
         cat.setName(productCategoryName);
         cat.setDescription(productCategoryDescription);
-
         result.setCategory(cat);
 
-//        result.setSupplier(supplier);
-        Supplier sup = new Supplier();
-        sup.setId(supplierId);
-        sup.setName(supplierName);
-
-        result.setSupplier(sup);
-
+        result.setSupplier(supplier);
         result.setImageUrl(imageUrl);
         this.copyToEntity(result);
         return result;
@@ -74,21 +65,14 @@ public class ProductDTO {
         product.setDescription(description);
         product.setPrice(price);
         product.setWeight(weight);
-//        product.setCategory(category);
+
         ProductCategory cat = new ProductCategory();
         cat.setId(productCategoryId);
         cat.setName(productCategoryName);
         cat.setDescription(productCategoryDescription);
-
         product.setCategory(cat);
-//        product.setSupplier(supplier);
 
-        Supplier sup = new Supplier();
-        sup.setId(supplierId);
-        sup.setName(supplierName);
-
-        product.setSupplier(sup);
-
+        product.setSupplier(supplier);
         product.setImageUrl(imageUrl);
     }
 
@@ -104,12 +88,8 @@ public class ProductDTO {
                 .productCategoryName(entity.getCategory().getName())
                 .productCategoryDescription(entity.getCategory().getDescription())
 
-                .supplierId(entity.getSupplier().getId())
-                .supplierName(entity.getSupplier().getName())
-
+                .supplier(entity.getSupplier())
                 .imageUrl(entity.getImageUrl())
                 .build();
     }
-
-
 }

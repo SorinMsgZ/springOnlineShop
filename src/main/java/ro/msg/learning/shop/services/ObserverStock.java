@@ -27,25 +27,22 @@ public class ObserverStock extends ObserverObject {
     public void updateStock() {
         int productId = subject.getOrderObject().prod.getId();
         int locId = subject.getOrderObject().loc.getId();
-//TODO Check if the commented code below  works as an alternative to the stream
-//        StockId stockIdX = new StockId(productId, locId);
-//        StockId stockId=stockService.readSingleStock(stockIdX).getIdProductLocation();
 
-        StockId stockId = stockService.listStock()
+        StockId stockId = stockService.listAll()
                 .stream()
-                .filter(stockDTO -> (stockDTO.getProductId() == productId) && (stockDTO.getLocationId() == locId))
+                .filter(stockDTO -> (stockDTO.getProduct().getId() == productId) &&
+                        (stockDTO.getLocation().getId() == locId))
                 .collect(Collectors
                         .toList()).get(0).toEntity().getIdProductLocation();
-
 
         Product product = subject.getOrderObject().prod;
         Location location = subject.getOrderObject().loc;
         int qty = subject.getOrderObject().qty;
 
-        int oldQty = stockService.readSingleStock(stockId).getQuantity();
+        int oldQty = stockService.readById(stockId).getQuantity();
         int newQty = oldQty - qty;
-        StockDTO stockDTO = new StockDTO(productId, locId, product, location, newQty);
 
-        stockService.updateStock(stockId, stockDTO);
+        StockDTO stockDTO = new StockDTO(product, location, newQty);
+        stockService.updateById(stockId, stockDTO);
     }
 }

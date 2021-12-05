@@ -10,7 +10,6 @@ import ro.msg.learning.shop.repositories.AddressRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -18,31 +17,28 @@ import java.util.stream.StreamSupport;
 public class AddressService {
     private final AddressRepository addressRepository;
 
-    public List<AddressDTO> listAddress() {
-        return StreamSupport.stream(addressRepository.findAll().spliterator(), false)
+    public List<AddressDTO> listAll() {
+        return addressRepository.findAll().stream()
                 .map(AddressDTO::of)
                 .collect(Collectors.toList());
     }
-
-    public AddressDTO readSingleAddress(int id) {
-        return addressRepository.findById(id)
+    public AddressDTO readByStreetAddress(String streetAddress) {
+        return addressRepository.findByStreetAddress(streetAddress)
                 .map(AddressDTO::of)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public AddressDTO createAddress(AddressDTO input) {
+    public AddressDTO create(AddressDTO input) {
         Address address = input.toEntity();
-
-
         return AddressDTO.of(addressRepository.save(address));
     }
 
-    public void deleteAddress(int id) {
-        addressRepository.deleteById(id);
+    public void deleteByStreetAddress(String streetAddress) {
+        addressRepository.deleteByStreetAddress(streetAddress);
     }
 
-    public AddressDTO updateAddress(int id, AddressDTO input) {
-        Address address = addressRepository.findById(id).orElseThrow(NotFoundException::new);
+    public AddressDTO updateByStreetAddress(String streetAddress, AddressDTO input) {
+        Address address = addressRepository.findByStreetAddress(streetAddress).orElseThrow(NotFoundException::new);
         input.copyToEntity(address);
         addressRepository.save(address);
         return AddressDTO.of(address);

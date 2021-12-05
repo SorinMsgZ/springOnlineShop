@@ -11,6 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import ro.msg.learning.shop.controllers.ProductController;
 import ro.msg.learning.shop.dto.ProductDTO;
+import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.ProductService;
 
 import java.math.BigDecimal;
@@ -30,6 +31,9 @@ class ProductControllerTest {
 
     @BeforeEach
     public void createProductDTO() {
+
+        Assert.assertEquals(0, productService.listAll().size());
+
         int id = 1;
         String name = "1TestNameDTO";
         String description = "1 Test Product Description";
@@ -38,32 +42,31 @@ class ProductControllerTest {
         int productCategoryId = 1;
         String productCategoryName = "1TestNameProdCat";
         String productCategoryDescription = "1 Test Product Category Description";
-        int supplierId = 1;
-        String supplierName = "1TestNameSupplier";
+        Supplier supplier1 = new Supplier();
+        supplier1.setId(1);
+        supplier1.setName("1TestNameSupplier");
         String imageUrl = "www.1TestUrl.com";
 
-        Assert.assertEquals(0, productService.listProduct().size());
-
         this.productDTO =
-                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);
+                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplier1, imageUrl);
 
-        productService.createProduct(productDTO);
+        productService.create(productDTO);
+        Assert.assertEquals(1, productService.listAll().size());
+
         controller = new ProductController(productService);
-
-        Assert.assertEquals(1, productService.listProduct().size());
     }
 
     @Test
     void testListProducts() {
-        List<ProductDTO> dtoListExpected = productService.listProduct();
-        List<ProductDTO> dtoListActual = controller.listAllProducts();
+        List<ProductDTO> dtoListExpected = productService.listAll();
+        List<ProductDTO> dtoListActual = controller.listAll();
         Assert.assertEquals(dtoListExpected.size(), dtoListActual.size());
     }
 
     @Test
     void testReadSingleProduct() {
         int productId = 1;
-        ProductDTO actualProductDTO = controller.readSingleProduct(productId);
+        ProductDTO actualProductDTO = controller.readById(productId);
         Assert.assertEquals(productDTO.toString(), actualProductDTO.toString());
     }
 
@@ -77,27 +80,28 @@ class ProductControllerTest {
         int productCategoryId = 2;
         String productCategoryName = "2TestNameProdCat";
         String productCategoryDescription = "2Test Product Category Description";
-        int supplierId = 2;
-        String supplierName = "2TestNameSupplier";
+        Supplier supplier2 = new Supplier();
+        supplier2.setId(2);
+        supplier2.setName("2TestNameSupplier");
         String imageUrl = "www.2TestUrl.com";
 
-        int initialProductNb = productService.listProduct().size();
+        int initialProductNb = productService.listAll().size();
         ProductDTO secondProductDTO =
-                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);
+                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplier2, imageUrl);
 
-        controller.createProduct(secondProductDTO);
+        controller.create(secondProductDTO);
 
-        Assert.assertEquals(initialProductNb + 1, productService.listProduct().size());
-        Assert.assertEquals(secondProductDTO, productService.readSingleProduct(id));
+        Assert.assertEquals(initialProductNb + 1, productService.listAll().size());
+        Assert.assertEquals(secondProductDTO, productService.readById(id));
 
     }
 
     @Test
     void testDeleteSingleProduct() {
-        int initialProductNb = productService.listProduct().size();
+        int initialProductNb = productService.listAll().size();
         int productId = 1;
-        controller.deleteSingleProduct(productId);
-        Assert.assertEquals(initialProductNb - 1, productService.listProduct().size());
+        controller.deleteById(productId);
+        Assert.assertEquals(initialProductNb - 1, productService.listAll().size());
     }
 
     @Test
@@ -110,16 +114,17 @@ class ProductControllerTest {
         int productCategoryId = 1;
         String productCategoryName = "3TestNameProdCat";
         String productCategoryDescription = "3Test Product Category Description";
-        int supplierId = 1;
-        String supplierName = "3TestNameSupplier";
+        Supplier supplier = new Supplier();
+        supplier.setId(2);
+        supplier.setName("3TestNameSupplier");
         String imageUrl = "www.3TestUrl.com";
 
         ProductDTO updateProductDTO =
-                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplierId, supplierName, imageUrl);
-        controller.updateSingleProduct(1, updateProductDTO);
+                new ProductDTO(id, name, description, price, weight, productCategoryId, productCategoryName, productCategoryDescription, supplier, imageUrl);
+        controller.updateById(1, updateProductDTO);
 
-        Assert.assertEquals(1, productService.listProduct().size());
-        Assert.assertEquals(updateProductDTO.toString(), productService.readSingleProduct(id).toString());
+        Assert.assertEquals(1, productService.listAll().size());
+        Assert.assertEquals(updateProductDTO.toString(), productService.readById(id).toString());
 
     }
 }

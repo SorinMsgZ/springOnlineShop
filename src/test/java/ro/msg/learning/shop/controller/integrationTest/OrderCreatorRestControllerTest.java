@@ -1,7 +1,10 @@
 package ro.msg.learning.shop.controller.integrationTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.weaver.ast.Or;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jayway.jsonpath.JsonPath;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ro.msg.learning.shop.controllers.OrderCreatorController;
-import ro.msg.learning.shop.controllers.ProductController;
+import ro.msg.learning.shop.controllers.*;
+
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
@@ -45,19 +49,17 @@ class OrderCreatorRestControllerTest {
     @Autowired
     private OrderCreatorService orderCreatorService;
     @Autowired
-    ProductCategoryService productCategoryService;
+    ProductCategoryController productCategoryController;
     @Autowired
-    SupplierService supplierService;
+    SupplierController supplierController;
     @Autowired
-    ProductService productService;
+    ProductController productController;
     @Autowired
-    AddressService addressService;
+    AddressController addressController;
     @Autowired
-    LocationService locationService;
+    LocationController locationController;
     @Autowired
-    private OrderService orderService;
-    @Autowired
-    private StockService stockService;
+    private StockController stockController;
     @Autowired
     private OrderCreatorController orderCreatorController;
 
@@ -67,13 +69,13 @@ class OrderCreatorRestControllerTest {
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
                 new ProductCategoryDTO("Drywall & Acoustical (MOB)", "ProdCatDescription2");
-        productCategoryService.create(productCategoryOne);
-        productCategoryService.create(productCategoryTwo);
+        productCategoryController.create(productCategoryOne);
+        productCategoryController.create(productCategoryTwo);
 
         SupplierDTO supplierOne = new SupplierDTO("Fisher-Huels");
         SupplierDTO supplierTwo = new SupplierDTO("D Amore, Torp and Kuvalis");
-        supplierService.create(supplierOne);
-        supplierService.create(supplierTwo);
+        supplierController.create(supplierOne);
+        supplierController.create(supplierTwo);
 
         ProductDTO productOne = new ProductDTO();
         productOne.setId(1);
@@ -103,12 +105,11 @@ class OrderCreatorRestControllerTest {
         productTwo.setSupplier(sup2);
         productTwo.setImageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff");
 
-
-        productService.create(productOne);
-        productService.create(productTwo);
+        productController.create(productOne);
+        productController.create(productTwo);
 
         AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
-        addressService.create(deliveryAddress);
+        addressController.create(deliveryAddress);
 
         Address delAddress = deliveryAddress.toEntity();
         delAddress.setId(1);
@@ -119,10 +120,10 @@ class OrderCreatorRestControllerTest {
         LocationDTO locationThree = new LocationDTO("sdgsg", delAddress);
         LocationDTO locationFour = new LocationDTO("jdjtzk", delAddress);
 
-        locationService.create(locationOne);
-        locationService.create(locationTwo);
-        locationService.create(locationThree);
-        locationService.create(locationFour);
+        locationController.create(locationOne);
+        locationController.create(locationTwo);
+        locationController.create(locationThree);
+        locationController.create(locationFour);
 
         Location locOne = locationOne.toEntity();
         locOne.setId(1);
@@ -138,10 +139,10 @@ class OrderCreatorRestControllerTest {
         StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 11);
         StockDTO stockFour = new StockDTO(productTwo.toEntity(), locFour, 21);
 
-        stockService.create(stockOne);
-        stockService.create(stockTwo);
-        stockService.create(stockThree);
-        stockService.create(stockFour);
+        stockController.create(stockOne);
+        stockController.create(stockTwo);
+        stockController.create(stockThree);
+        stockController.create(stockFour);
     }
 
     @Test
@@ -151,10 +152,10 @@ class OrderCreatorRestControllerTest {
         StockId stockId3 = new StockId(1, 3);
         StockId stockId4 = new StockId(2, 4);
 
-        int stock1Prod1Qty = stockService.readById(stockId1).getQuantity();
-        int stock2Prod2Qty = stockService.readById(stockId2).getQuantity();
-        int stock3Prod1Qty = stockService.readById(stockId3).getQuantity();
-        int stock4Prod2Qty = stockService.readById(stockId4).getQuantity();
+        int stock1Prod1Qty = stockController.readById(stockId1).getQuantity();
+        int stock2Prod2Qty = stockController.readById(stockId2).getQuantity();
+        int stock3Prod1Qty = stockController.readById(stockId3).getQuantity();
+        int stock4Prod2Qty = stockController.readById(stockId4).getQuantity();
 
         int testProd1Qty = 10;
         int testProd2Qty = 20;
@@ -168,7 +169,7 @@ class OrderCreatorRestControllerTest {
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
         orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
-        AddressDTO deliveryAddress = addressService.listAll().get(0);
+        AddressDTO deliveryAddress = addressController.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);
         orderObjectInputDTO.setDeliveryAddress(delAddressInput);
@@ -177,18 +178,63 @@ class OrderCreatorRestControllerTest {
 
         int initialOrderNb = orderCreatorController.listAll().size();
 
+        int expectedOrderLocationId1 = 0;
+        int expectedOrderLocationId2 = 0;
+
+        if (strategy.equals("SingleLocationStrategy")) {
+            expectedOrderLocationId1 = stockId1.getLocationId();
+            expectedOrderLocationId2 = stockId2.getLocationId();
+        } else if (strategy.equals("MoreAbundantStrategy")) {
+            expectedOrderLocationId1 = stockId3.getLocationId();
+            expectedOrderLocationId2 = stockId4.getLocationId();
+        }
+
+
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         String productAsStringDTO = objectMapper.writeValueAsString(orderObjectInputDTO);
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/orders/")
+        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/orders/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(productAsStringDTO)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0]shippedFrom.id").value(expectedOrderLocationId1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1]shippedFrom.id").value(expectedOrderLocationId2))
+                .andReturn();
+
+        int idOrderOne =
+                JsonPath.read(String.valueOf(result.getResponse().getContentAsString()), "$.[0]shippedFrom.id");
+        int idOrderTwo =
+                JsonPath.read(String.valueOf(result.getResponse().getContentAsString()), "$.[1]shippedFrom.id");
 
         int actualOrderNb = orderCreatorController.listAll().size();
-        Assert.assertEquals(initialOrderNb + 1, actualOrderNb);
 
+        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
+        Assert.assertEquals(expectedOrderLocationId1, idOrderOne);
+        Assert.assertEquals(expectedOrderLocationId2, idOrderTwo);
+
+        if (strategy.equals("SingleLocationStrategy")) {
+            int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
+            int actualStock1Prod1Qty = stockController.readById(stockId1).getQuantity();
+
+            int expectUpdateStock2Prod2Qty = stock2Prod2Qty - testProd2Qty;
+            int actualStock2Prod2Qty = stockController.readById(stockId2).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
+            Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
+
+        } else if (strategy.equals("MoreAbundantStrategy")) {
+            int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
+            int actualStock3Prod1Qty = stockController.readById(stockId3).getQuantity();
+
+            int expectUpdateStock4Prod2Qty = stock4Prod2Qty - testProd2Qty;
+            int actualStock4Prod2Qty = stockController.readById(stockId4).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock3Prod1Qty, actualStock3Prod1Qty);
+            Assert.assertEquals(expectUpdateStock4Prod2Qty, actualStock4Prod2Qty);
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ro.msg.learning.shop.controllers;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.OrderDTO;
 import ro.msg.learning.shop.dto.OrderObjectInputDTO;

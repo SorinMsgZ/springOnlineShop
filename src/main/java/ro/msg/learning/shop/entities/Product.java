@@ -25,7 +25,6 @@ public class Product {
     private Supplier supplier;
     private String imageUrl;
 
-
 }
 
 

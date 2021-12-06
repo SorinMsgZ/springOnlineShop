@@ -10,16 +10,15 @@ import javax.persistence.*;
 public class Stock {
     @EmbeddedId
     private StockId idProductLocation;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("productId")
     @JoinColumn(name = "product")
     private Product product;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("locationId")
     @JoinColumn(name = "location")
     private Location location;
     private int quantity;
-
 
 }
 

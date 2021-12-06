@@ -40,7 +40,6 @@ public class StockId implements Serializable {
         return super.equals(obj);
     }
 
-
 }
 
 

@@ -189,8 +189,6 @@ class OrderCreatorControllerTest {
         }
 
         Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
-        for (Order order : orderListCreated) {
-            System.out.println(order.toString());
-        }
+
     }
 }

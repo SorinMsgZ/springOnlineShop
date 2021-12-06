@@ -8,6 +8,7 @@ import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.StockRepository;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 

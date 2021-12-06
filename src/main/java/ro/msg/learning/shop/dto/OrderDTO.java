@@ -3,7 +3,6 @@ package ro.msg.learning.shop.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Order;

@@ -206,9 +206,9 @@ class OrderCreatorRestControllerTest {
                 .andReturn();
 
         int idOrderOne =
-                JsonPath.read(String.valueOf(result.getResponse().getContentAsString()), "$.[0]shippedFrom.id");
+                JsonPath.read(result.getResponse().getContentAsString(), "$.[0]shippedFrom.id");
         int idOrderTwo =
-                JsonPath.read(String.valueOf(result.getResponse().getContentAsString()), "$.[1]shippedFrom.id");
+                JsonPath.read(result.getResponse().getContentAsString(), "$.[1]shippedFrom.id");
 
         int actualOrderNb = orderCreatorController.listAll().size();
 

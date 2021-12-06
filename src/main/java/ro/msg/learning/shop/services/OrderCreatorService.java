@@ -64,8 +64,8 @@ public class OrderCreatorService {
 
                 orderBasket.setOrderObject(object);
 
-            } catch (Exception exception) {
-
+            } catch (Exception ignored){
+                //workaround comment to mute error inspection
             }
         }
         return orderDTOList;

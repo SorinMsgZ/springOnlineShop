@@ -1,13 +1,17 @@
 package ro.msg.learning.shop.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.entities.*;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
+@JsonPropertyOrder({"product", "location", "quantity"})
 public class StockDTO {
     private Product product;
     private Location location;

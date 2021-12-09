@@ -3,6 +3,7 @@ package ro.msg.learning.shop.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data

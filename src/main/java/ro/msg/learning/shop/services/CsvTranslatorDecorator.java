@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -21,6 +24,11 @@ import java.util.List;
 public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter {
 
     public final CsvTranslator csvTranslator;
+
+    public CsvTranslatorDecorator(){
+        super(new MediaType("text","csv"));
+        this.csvTranslator= new CsvTranslator<>();
+    }
 
     @Override
     protected void writeInternal(Object o, Type type,
@@ -32,8 +40,17 @@ public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter 
 //        => Object o -   trebuie cast-uit to List
 //        outputMessage => va fi Output stream
 //        CsvTranslatorDecorator => va fi un bean (=> @Component)
-        if ((type instanceof Class<?>)&&(o instanceof List<?>)) {
-            csvTranslator.toCsv((Class) type, (List<?>) o, (OutputStream) outputMessage);
+
+        List<Object> listO;
+        if(o instanceof List){
+            listO=new ArrayList<>((ArrayList<Object>)o);
+        }
+        else{
+//            creare lista cu un singur obiect
+            listO= Collections.singletonList(o);
+        }
+        if (!listO.isEmpty()){
+            csvTranslator.toCsv(listO.get(0).getClass(),listO,outputMessage.getBody());
         }
     }
 
@@ -43,7 +60,7 @@ public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter 
 //aici practic doar se apeleaza metoda fromCsv() din clasa mea utila "CsvTranslator"=> trebuie corelati parametrii din metoda "readInternal()" cu cei din metoda toCsv();
 
 
-        return csvTranslator.fromCsv(clazz, (InputStream) inputMessage);
+        return csvTranslator.fromCsv(clazz, inputMessage.getBody());
     }
 
     @Override
@@ -51,6 +68,6 @@ public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter 
                        HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 //se apeleaza metoda readInternal();
 
-        return readInternal((Class) type, inputMessage);
+        return readInternal(contextClass, inputMessage);
     }
 }

@@ -23,6 +23,8 @@ public class StockController {
         return service.readById(id);
     }
 
+//    stocks/export/id
+
     @PostMapping("/stocks")
     public StockDTO create(@RequestBody StockDTO body) {
         return service.create(body);

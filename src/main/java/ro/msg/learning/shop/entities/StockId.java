@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.entities;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 @Data
 @Embeddable
+@Getter
 public class StockId implements Serializable {
     @Column(name = "product")
     private int productId;

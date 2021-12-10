@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
 public class SingleLocationStrategy implements FindLocationStrategy {
     private final StockService stockService;
     private final ProductService productService;

@@ -7,31 +7,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
-
 public class StrategyFactory {
 
     private final String strategyFindLocation;
-    private final SingleLocationStrategy singleLocationStrategy;
-    private final MoreAbundantStrategy moreAbundantStrategy;
+    private final StockService stockService;
+    private final ProductService productService;
 
     @Autowired
-    public StrategyFactory(@Value("${strategy.findLocation:SingleLocationStrategy}") String strategyFindLocation,
-                           SingleLocationStrategy singleLocationStrategy,
-                           MoreAbundantStrategy moreAbundantStrategy) {
+    public StrategyFactory(@Value("${strategy.findLocation}") String strategyFindLocation,StockService stockService,ProductService productService) {
         this.strategyFindLocation = strategyFindLocation;
-        this.singleLocationStrategy = singleLocationStrategy;
-        this.moreAbundantStrategy = moreAbundantStrategy;
+        this.stockService=stockService;
+        this.productService=productService;
     }
 
     @Bean
     @Primary
     public FindLocationStrategy getStrategy() {
-        if ("SingleLocationStrategy".equals(strategyFindLocation)) {
-            return singleLocationStrategy;
-        } else if ("MoreAbundantStrategy".equals(strategyFindLocation)) {
-            return moreAbundantStrategy;
+        if (StrategyType.SINGLE_LOCATION_STRATEGY.toString().equals(strategyFindLocation)) {
+            return new SingleLocationStrategy(stockService,productService);
+        } else if (StrategyType.MOST_ABUNDANT_STRATEGY.toString().equals(strategyFindLocation)) {
+            return new MostAbundantStrategy(stockService,productService);
         }
-        return singleLocationStrategy;
+        return new SingleLocationStrategy(stockService,productService);
     }
 
 }

@@ -167,7 +167,7 @@ class OrderCreatorControllerTest {
 
         int actualOrderNb = orderService.listAll().size();
 
-        if (strategy.equals("SingleLocationStrategy")) {
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
             int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
             int actualStock1Prod1Qty = stockService.readById(stockId1).getQuantity();
 
@@ -177,7 +177,7 @@ class OrderCreatorControllerTest {
             Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
             Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
 
-        } else if (strategy.equals("MoreAbundantStrategy")) {
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
             int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
             int actualStock3Prod1Qty = stockService.readById(stockId3).getQuantity();
 

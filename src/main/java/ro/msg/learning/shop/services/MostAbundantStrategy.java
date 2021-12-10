@@ -11,8 +11,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-
-public class MoreAbundantStrategy implements FindLocationStrategy {
+public class MostAbundantStrategy implements FindLocationStrategy {
     private final StockService stockService;
     private final ProductService productService;
 

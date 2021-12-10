@@ -181,10 +181,10 @@ class OrderCreatorRestControllerTest {
         int expectedOrderLocationId1 = 0;
         int expectedOrderLocationId2 = 0;
 
-        if (strategy.equals("SingleLocationStrategy")) {
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
             expectedOrderLocationId1 = stockId1.getLocationId();
             expectedOrderLocationId2 = stockId2.getLocationId();
-        } else if (strategy.equals("MoreAbundantStrategy")) {
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
             expectedOrderLocationId1 = stockId3.getLocationId();
             expectedOrderLocationId2 = stockId4.getLocationId();
         }
@@ -216,7 +216,7 @@ class OrderCreatorRestControllerTest {
         Assert.assertEquals(expectedOrderLocationId1, idOrderOne);
         Assert.assertEquals(expectedOrderLocationId2, idOrderTwo);
 
-        if (strategy.equals("SingleLocationStrategy")) {
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
             int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
             int actualStock1Prod1Qty = stockController.readById(stockId1).getQuantity();
 
@@ -226,7 +226,7 @@ class OrderCreatorRestControllerTest {
             Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
             Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
 
-        } else if (strategy.equals("MoreAbundantStrategy")) {
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
             int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
             int actualStock3Prod1Qty = stockController.readById(stockId3).getQuantity();
 

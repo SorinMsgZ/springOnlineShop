@@ -25,9 +25,6 @@ public class RevenueDTO {
 
     public Revenue toEntity() {
         Revenue result = new Revenue();
-        result.setLocation(location);
-        result.setLocalDate(localDate);
-        result.setSum(sum);
         this.copyToEntity(result);
         return result;
     }

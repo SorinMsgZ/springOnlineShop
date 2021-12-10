@@ -22,19 +22,15 @@ public class StockDTO {
 
     public Stock toEntity() {
         Stock result = new Stock();
-        StockId stockId = new StockId();
-        stockId.setProductId(product.getId());
-        stockId.setLocationId(location.getId());
-        result.setIdProductLocation(stockId);
-
-        result.setProduct(product);
-        result.setLocation(location);
-        result.setQuantity(quantity);
         this.copyToEntity(result);
         return result;
     }
 
     public void copyToEntity(Stock stock) {
+        StockId stockId = new StockId();
+        stockId.setProductId(product.getId());
+        stockId.setLocationId(location.getId());
+        stock.setIdProductLocation(stockId);
 
         stock.setProduct(product);
         stock.setLocation(location);

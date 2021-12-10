@@ -83,7 +83,7 @@ class OrderCreatorControllerTest {
         productTwo.setProductCategoryName("Drywall & Acoustical (MOB)");
         productTwo.setProductCategoryDescription("ProdCatDescription2");
         Supplier sup2 = supplierTwo.toEntity();
-        sup1.setId(2);
+        sup2.setId(2);
         productTwo.setSupplier(sup2);
         productTwo.setImageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff");
 

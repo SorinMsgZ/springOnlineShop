@@ -21,10 +21,6 @@ public class OrderDetailDTO {
 
     public OrderDetail toEntity() {
         OrderDetail result = new OrderDetail();
-
-        result.setOrder(order);
-        result.setProduct(product);
-        result.setQuantity(quantity);
         this.copyToEntity(result);
         return result;
     }

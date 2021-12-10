@@ -17,7 +17,6 @@ public class SupplierDTO {
 
     public Supplier toEntity() {
         Supplier result = new Supplier();
-        result.setName(name);
         this.copyToEntity(result);
         return result;
     }

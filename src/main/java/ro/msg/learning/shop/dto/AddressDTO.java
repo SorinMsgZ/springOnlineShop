@@ -25,11 +25,6 @@ public class AddressDTO {
 
     public Address toEntity() {
         Address result = new Address();
-
-        result.setCountry(country);
-        result.setCity(city);
-        result.setCounty(county);
-        result.setStreetAddress(streetAddress);
         this.copyToEntity(result);
         return result;
     }

@@ -41,20 +41,6 @@ public class ProductDTO {
 
     public Product toEntity() {
         Product result = new Product();
-        result.setId(id);
-        result.setName(name);
-        result.setDescription(description);
-        result.setPrice(price);
-        result.setWeight(weight);
-
-        ProductCategory cat = new ProductCategory();
-        cat.setId(productCategoryId);
-        cat.setName(productCategoryName);
-        cat.setDescription(productCategoryDescription);
-        result.setCategory(cat);
-
-        result.setSupplier(supplier);
-        result.setImageUrl(imageUrl);
         this.copyToEntity(result);
         return result;
     }

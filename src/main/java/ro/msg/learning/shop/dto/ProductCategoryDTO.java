@@ -21,10 +21,6 @@ public class ProductCategoryDTO {
 
     public ProductCategory toEntity() {
         ProductCategory result = new ProductCategory();
-
-        result.setName(name);
-        result.setDescription(description);
-
         this.copyToEntity(result);
         return result;
     }

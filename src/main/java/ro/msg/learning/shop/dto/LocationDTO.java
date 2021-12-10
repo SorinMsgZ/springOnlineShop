@@ -18,8 +18,6 @@ public class LocationDTO {
 
     public Location toEntity() {
         Location result = new Location();
-        result.setName(name);
-        result.setAddress(address);
         this.copyToEntity(result);
         return result;
     }

@@ -27,10 +27,6 @@ public class OrderDTO {
 
     public Order toEntity() {
         Order result = new Order();
-
-        result.setShippedFrom(shippedFrom);
-        result.setCreatedAt(createdAt);
-        result.setAddress(address);
         this.copyToEntity(result);
         return result;
     }

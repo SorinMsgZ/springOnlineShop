@@ -17,8 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
+
 public final class CsvTranslator {
+
     private final CsvMapper mapper = new CsvMapper();
 
 //    private CsvTranslator() {

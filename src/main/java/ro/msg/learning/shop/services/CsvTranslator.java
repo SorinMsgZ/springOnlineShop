@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 
-public final class CsvTranslator {
+public final class CsvTranslator <T> {
 
     private final CsvMapper mapper = new CsvMapper();
 
@@ -39,7 +39,7 @@ public final class CsvTranslator {
         return it.readAll();*/
 
 
-        CsvSchema schema = mapper.schemaFor(type);
+        CsvSchema schema = mapper.schemaFor(type).withHeader();
         ObjectReader oReader = mapper.readerFor(type).with(schema);
         MappingIterator<T> it = oReader.readValues(inputCsvFile);
         return it.readAll();
@@ -63,9 +63,9 @@ public final class CsvTranslator {
           strW.toString();*/
 
         try {
-            CsvSchema schema = mapper.schemaFor(type);
-            ObjectWriter writer = mapper.writerFor(type).with(schema);
-            writer.writeValues(outputCsvFile).writeAll(list);
+            CsvSchema schema = mapper.schemaFor(type).withHeader();
+            ObjectWriter writer = mapper.writer(schema.withLineSeparator("\n"));
+            writer.writeValue(outputCsvFile,list);
         } catch (Exception e) {
         }
 

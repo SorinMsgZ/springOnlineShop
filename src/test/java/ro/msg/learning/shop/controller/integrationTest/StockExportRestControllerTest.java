@@ -27,6 +27,7 @@ import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -168,18 +169,13 @@ class StockExportRestControllerTest {
 
         int locationId = 1;
 
-        List<StockDTO> stockDTOListExpected =
-                stockExportController.exporting(locationId);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String productAsStringDTO = objectMapper.writeValueAsString(stockDTOListExpected);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String productAsStringDTO = objectMapper.writeValueAsString(stockDTOListExpected);
-
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.get("/api/goods/" + locationId))
-                .andDo(print());
-                /*.accept("text/csv"))
+        ResultActions result = mvc.perform(MockMvcRequestBuilders.get("/api/stocks/export/" + locationId))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("text/csv"))
+                .andExpect(status().isOk());
+              /*   .andExpect(content().contentType("text/csv"))
                 .andExpect(content()
                         .string(equalTo(productAsStringDTO)));*/
 

@@ -1,25 +1,18 @@
 package ro.msg.learning.shop.controller.integrationTest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
+import com.fasterxml.jackson.databind.SequenceWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.RestController;
 import ro.msg.learning.shop.controllers.*;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
@@ -27,21 +20,17 @@ import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.*;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@RunWith(SpringRunner.class)
-//@WebMvcTest(controllers = StockExportController.class)
 @SpringBootTest
-
-
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -63,12 +52,13 @@ class StockExportRestControllerTest {
     @Autowired
     CsvTranslatorDecorator csvTranslatorDecorator;
     @Autowired
-    CsvTranslator csvTranslator;
+    CsvTranslator<StockExportDTO> csvTranslator;
     @Autowired
     StockExportController stockExportController;
+    List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
 
     @BeforeEach
-    void createProductDTO() {
+    void createDataBaseForTest() {
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -162,22 +152,39 @@ class StockExportRestControllerTest {
         stockController.create(stockTwo);
         stockController.create(stockThree);
         stockController.create(stockFour);
+
+        StockExportDTO stockExport1 = StockExportDTO.of(stockOne.toEntity());
+        StockExportDTO stockExport2 = StockExportDTO.of(stockTwo.toEntity());
+        StockExportDTO stockExport3 = StockExportDTO.of(stockThree.toEntity());
+
+        stockExportDTOListExpected.add(stockExport1);
+        stockExportDTOListExpected.add(stockExport2);
+        stockExportDTOListExpected.add(stockExport3);
     }
 
     @Test
-    void testExporting() throws Exception {
+    void testExportingStockByLocationId() throws Exception {
 
         int locationId = 1;
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String productAsStringDTO = objectMapper.writeValueAsString(stockDTOListExpected);
+        CsvMapper mapper = new CsvMapper();
+        CsvSchema schema = mapper.schemaFor(StockExportDTO.class);
+        StringWriter strW = new StringWriter();
+        SequenceWriter seqW = mapper.writer(schema).writeValues(strW);
+        seqW.write(stockExportDTOListExpected);
+        seqW.close();
 
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.get("/api/stocks/export/" + locationId))
+        String headerOfCsvText = "product,location,quantity" + "\n";
+        String expectedCsvText = headerOfCsvText + strW.toString();
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/stocks/export/" + locationId))
                 .andDo(print())
-                .andExpect(status().isOk());
-              /*   .andExpect(content().contentType("text/csv"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/csv"))
+                .andExpect(MockMvcResultMatchers.content().string(expectedCsvText))
                 .andExpect(content()
-                        .string(equalTo(productAsStringDTO)));*/
+                        .string(equalTo(expectedCsvText)))
+                .andReturn();
 
     }
 }

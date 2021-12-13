@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @NoArgsConstructor
-public class Address {
+public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

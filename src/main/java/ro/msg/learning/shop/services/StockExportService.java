@@ -2,7 +2,6 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.dto.StockExportDTO;
 import ro.msg.learning.shop.repositories.StockRepository;
 
@@ -15,7 +14,7 @@ public class StockExportService {
 
     private final StockRepository stockRepository;
 
-    public List<StockExportDTO> exporting(int locationId) {
+    public List<StockExportDTO> exportingStockByLocationId(int locationId) {
         return stockRepository.findAll().stream()
                 .map(StockExportDTO::new).filter(stockDTO -> stockDTO.getLocationId() == locationId)
                 .collect(Collectors.toList());

@@ -29,4 +29,13 @@ public class StockExportDTO implements Serializable {
         this.locationId = stock.getIdProductLocation().getLocationId();
         this.quantity = stock.getQuantity();
     }
+
+    public static StockExportDTO of(Stock entity) {
+        return StockExportDTO.builder()
+
+                .productId(entity.getProduct().getId())
+                .locationId(entity.getLocation().getId())
+                .quantity(entity.getQuantity())
+                .build();
+    }
 }

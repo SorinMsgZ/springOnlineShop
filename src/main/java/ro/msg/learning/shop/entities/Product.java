@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Entity
 
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

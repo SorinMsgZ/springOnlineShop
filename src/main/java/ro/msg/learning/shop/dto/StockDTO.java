@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @JsonPropertyOrder({"product", "location", "quantity"})
 @Getter
-public class StockDTO implements Serializable{
+public class StockDTO implements Serializable {
     private Product product;
     private Location location;
     private int quantity;

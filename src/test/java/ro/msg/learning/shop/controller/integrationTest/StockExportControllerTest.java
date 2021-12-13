@@ -1,25 +1,22 @@
-/*
 package ro.msg.learning.shop.controller.integrationTest;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.controllers.StockExportController;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.services.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @SpringBootTest
 
@@ -42,6 +39,7 @@ class StockExportControllerTest {
     private OrderService orderService;
     @Autowired
     private StockService stockService;
+    List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
 
     @BeforeEach
     void createProductDTO() {
@@ -138,6 +136,14 @@ class StockExportControllerTest {
         stockService.create(stockTwo);
         stockService.create(stockThree);
         stockService.create(stockFour);
+
+        StockExportDTO stockExport1 = StockExportDTO.of(stockOne.toEntity());
+        StockExportDTO stockExport2 = StockExportDTO.of(stockTwo.toEntity());
+        StockExportDTO stockExport3 = StockExportDTO.of(stockThree.toEntity());
+
+        stockExportDTOListExpected.add(stockExport1);
+        stockExportDTOListExpected.add(stockExport2);
+        stockExportDTOListExpected.add(stockExport3);
     }
 
     @Test
@@ -145,10 +151,11 @@ class StockExportControllerTest {
 
         int locationId = 1;
 
-        List<StockDTO> stockDTOListExpected =
-                stockService.listAll().stream().filter(stockDTO -> stockDTO.getLocation().getId() == locationId)
-                        .collect(Collectors.toList());
-        List<StockDTO> stockDTOListActual = stockExportController.exporting(locationId);
-        Assert.assertEquals(stockDTOListExpected.size(), stockDTOListActual.size());
+        HttpServletResponse httpServletResponse = new MockHttpServletResponse();
+
+        List<StockExportDTO> stockDTOListActual =
+                stockExportController.exportingStockByLocationId(locationId, httpServletResponse);
+        Assert.assertEquals(stockExportDTOListExpected.size(), stockDTOListActual.size());
+        Assert.assertEquals(stockExportDTOListExpected, stockDTOListActual);
     }
-}*/
+}

@@ -26,6 +26,10 @@ public class OrderDetailDTO {
     }
 
     public void copyToEntity(OrderDetail orderDetail) {
+        OrderDetailId idOrderProduct= new OrderDetailId();
+        idOrderProduct.setOrderId(order.getId());
+        idOrderProduct.setProductId(product.getId());
+        orderDetail.setIdOrderProduct(idOrderProduct);
 
         orderDetail.setOrder(order);
         orderDetail.setProduct(product);

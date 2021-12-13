@@ -22,6 +22,7 @@ public class OrderBasket implements SubjectOrderBasket {
     public void setOrderObject(OrderObject orderObject) {
         this.orderObject = orderObject;
         notifyAllObservers();
+        detachAll();
     }
 
     @Override
@@ -34,5 +35,11 @@ public class OrderBasket implements SubjectOrderBasket {
         for (ObserverObject observer : observers) {
             observer.update();
         }
+    }
+
+    @Override
+    public void detachAll() {
+        List<ObserverObject> listOfActualObserver = observers;
+        observers.removeAll(listOfActualObserver);
     }
 }

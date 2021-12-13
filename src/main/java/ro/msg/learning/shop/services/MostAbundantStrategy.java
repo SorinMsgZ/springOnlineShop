@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Product;
-import ro.msg.learning.shop.exceptions.NotFoundException;
+import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class MostAbundantStrategy implements FindLocationStrategy {
                 .stream()
                 .filter(stock -> (stock.getProduct().equals(searchProduct)) && (stock.getQuantity() >= productQty))
                 .max(Comparator.comparing(StockDTO::getQuantity))
-                .orElseThrow(NotFoundException::new)
+                .orElseThrow(NoSuitableLocationsFound::new)
                 .getLocation();
     }
 }

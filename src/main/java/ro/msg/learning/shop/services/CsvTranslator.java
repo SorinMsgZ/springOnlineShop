@@ -32,8 +32,8 @@ public final class CsvTranslator<T> {
             CsvSchema schema = mapper.schemaFor(type).withHeader();
             ObjectWriter writer = mapper.writer(schema.withLineSeparator("\n"));
             writer.writeValue(outputCsvFile, list);
-        } catch (Exception e) {
-//            comment used as workaround for hiding SonarLint-Alert because of empty block
+        } catch (IOException e) {
+            throw new FileNotFoundException();
         }
 
     }

@@ -1,0 +1,43 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+### Database File ###
+/tmp/
+###deleted files
+/src/test/java/ro/msg/learning/shop/SupplierRepositoryTest.java
+/src/main/java/ro/msg/learning/shop/controllers/HelloController.java
+/src/test/java/ro/msg/learning/shop/controller/integrationTest/CreateProductIntegrationTest.java
+/src/test/java/ro/msg/learning/shop/controller/unitTest/ProductControllerWebMvcTest.java
+

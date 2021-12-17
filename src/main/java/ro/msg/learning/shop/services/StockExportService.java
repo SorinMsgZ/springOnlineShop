@@ -15,8 +15,7 @@ public class StockExportService {
     private final StockRepository stockRepository;
 
     public List<StockExportDTO> exportingStockByLocationId(int locationId) {
-        return stockRepository.findAll().stream()
-                .map(StockExportDTO::new).filter(stockDTO -> stockDTO.getLocationId() == locationId)
+        return stockRepository.findByLocation_Id(locationId).stream().map(StockExportDTO::of)
                 .collect(Collectors.toList());
     }
 }

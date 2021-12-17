@@ -17,7 +17,7 @@ import ro.msg.learning.shop.controllers.*;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
-import ro.msg.learning.shop.entities.Supplier;
+
 import ro.msg.learning.shop.services.*;
 
 import java.io.StringWriter;
@@ -59,75 +59,101 @@ class StockExportRestControllerTest {
 
     @BeforeEach
     void createDataBaseForTest() {
-        ProductCategoryDTO productCategoryOne =
-                new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
-        ProductCategoryDTO productCategoryTwo =
-                new ProductCategoryDTO("Drywall & Acoustical (MOB)", "ProdCatDescription2");
+        ProductCategoryDTO productCategoryOne = ProductCategoryDTO.builder()
+                .name("Retaining Wall and Brick Pavers")
+                .description("ProdCatDescription1")
+                .build();
+
+        ProductCategoryDTO productCategoryTwo = ProductCategoryDTO.builder()
+                .name("Drywall & Acoustical (MOB)")
+                .description("ProdCatDescription2")
+                .build();
+
         productCategoryController.create(productCategoryOne);
         productCategoryController.create(productCategoryTwo);
 
-        SupplierDTO supplierOne = new SupplierDTO("Fisher-Huels");
-        SupplierDTO supplierTwo = new SupplierDTO("D Amore, Torp and Kuvalis");
+        SupplierDTO supplierOne = SupplierDTO.builder()
+                .name("Fisher-Huels")
+                .build();
+
+        SupplierDTO supplierTwo = SupplierDTO.builder()
+                .name("D Amore, Torp and Kuvalis")
+                .build();
+
         supplierController.create(supplierOne);
         supplierController.create(supplierTwo);
 
-        ProductDTO productOne = new ProductDTO();
-        productOne.setId(1);
-        productOne.setName("Fimbristylis vahlii (Lam.) Link");
-        productOne.setDescription("quis orci");
-        productOne.setPrice(new BigDecimal("7.4"));
-        productOne.setWeight(100);
-        productOne.setProductCategoryId(1);
-        productOne.setProductCategoryName("Retaining Wall and Brick Pavers");
-        productOne.setProductCategoryDescription("ProdCatDescription1");
-        Supplier sup1 = supplierOne.toEntity();
-        sup1.setId(1);
-        productOne.setSupplier(sup1);
-        productOne.setImageUrl("http://11dummyimage.com/223x100.png/ff4444/ffffff");
+        ProductDTO productOne = ProductDTO.builder()
+                .id(1)
+                .name("Fimbristylis vahlii (Lam.) Link")
+                .description("quis orci")
+                .price(new BigDecimal("7.4"))
+                .weight(100)
+                .productCategoryId(1)
+                .productCategoryName("Retaining Wall and Brick Pavers")
+                .productCategoryDescription("ProdCatDescription1")
+                .imageUrl("http://11dummyimage.com/223x100.png/ff4444/ffffff")
+                .build();
 
-        ProductDTO productTwo = new ProductDTO();
-        productTwo.setId(2);
-        productTwo.setName("Mahonia Nutt., pulvinar");
-        productTwo.setDescription("pulvinar");
-        productTwo.setPrice(new BigDecimal("21.96"));
-        productTwo.setWeight(200.20);
-        productTwo.setProductCategoryId(2);
-        productTwo.setProductCategoryName("Drywall & Acoustical (MOB)");
-        productTwo.setProductCategoryDescription("ProdCatDescription2");
-        Supplier sup2 = supplierTwo.toEntity();
-        sup2.setId(2);
-        productTwo.setSupplier(sup2);
-        productTwo.setImageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff");
+        ProductDTO productTwo = ProductDTO.builder()
+                .id(2)
+                .name("Mahonia Nutt., pulvinar")
+                .description("pulvinar")
+                .price(new BigDecimal("21.96"))
+                .weight(200.20)
+                .productCategoryId(2)
+                .productCategoryName("Drywall & Acoustical (MOB)")
+                .productCategoryDescription("ProdCatDescription2")
+                .imageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff")
+                .build();
 
-        ProductDTO productThree = new ProductDTO();
-        productThree.setId(3);
-        productThree.setName("Three Name");
-        productThree.setDescription("Three pulvinar");
-        productThree.setPrice(new BigDecimal("34"));
-        productThree.setWeight(300);
-        productThree.setProductCategoryId(2);
-        productThree.setProductCategoryName("Drywall & Acoustical (MOB)");
-        productThree.setProductCategoryDescription("ProdCatDescription2");
-        Supplier sup3 = supplierTwo.toEntity();
-        sup3.setId(3);
-        productTwo.setSupplier(sup3);
-        productTwo.setImageUrl("http://33dummyimage.com/104x100.png/ff4444/333");
+        ProductDTO productThree = ProductDTO.builder()
+                .id(3)
+                .name("Three Name")
+                .description("Three pulvinar")
+                .price(new BigDecimal("34"))
+                .weight(300)
+                .productCategoryId(2)
+                .productCategoryName("Drywall & Acoustical (MOB)")
+                .productCategoryDescription("ProdCatDescription2")
+                .imageUrl("http://33dummyimage.com/104x100.png/ff4444/333")
+                .build();
 
         productController.create(productOne);
         productController.create(productTwo);
         productController.create(productThree);
 
-        AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
+        AddressDTO deliveryAddress = AddressDTO.builder()
+                .country("United States")
+                .city("Rochester")
+                .county("New York")
+                .streetAddress("440 Merry Drive")
+                .build();
+
         addressController.create(deliveryAddress);
 
         Address delAddress = deliveryAddress.toEntity();
         delAddress.setId(1);
 
+        LocationDTO locationOne = LocationDTO.builder()
+                .name("cbslocal.com")
+                .address(delAddress)
+                .build();
 
-        LocationDTO locationOne = new LocationDTO("cbslocal.com", delAddress);
-        LocationDTO locationTwo = new LocationDTO("msn.com", delAddress);
-        LocationDTO locationThree = new LocationDTO("sdgsg", delAddress);
-        LocationDTO locationFour = new LocationDTO("jdjtzk", delAddress);
+        LocationDTO locationTwo = LocationDTO.builder()
+                .name("msn.com")
+                .address(delAddress)
+                .build();
+
+        LocationDTO locationThree = LocationDTO.builder()
+                .name("sdgsg")
+                .address(delAddress)
+                .build();
+
+        LocationDTO locationFour = LocationDTO.builder()
+                .name("jdjtzk")
+                .address(delAddress)
+                .build();
 
         locationController.create(locationOne);
         locationController.create(locationTwo);
@@ -143,10 +169,29 @@ class StockExportRestControllerTest {
         Location locFour = locationFour.toEntity();
         locFour.setId(4);
 
-        StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
-        StockDTO stockTwo = new StockDTO(productTwo.toEntity(), locOne, 20);
-        StockDTO stockThree = new StockDTO(productThree.toEntity(), locOne, 11);
-        StockDTO stockFour = new StockDTO(productTwo.toEntity(), locFour, 21);
+        StockDTO stockOne = StockDTO.builder()
+                .product(productOne.toEntity())
+                .location(locOne)
+                .quantity(10)
+                .build();
+
+        StockDTO stockTwo = StockDTO.builder()
+                .product(productTwo.toEntity())
+                .location(locOne)
+                .quantity(20)
+                .build();
+
+        StockDTO stockThree = StockDTO.builder()
+                .product(productThree.toEntity())
+                .location(locOne)
+                .quantity(11)
+                .build();
+
+        StockDTO stockFour = StockDTO.builder()
+                .product(productTwo.toEntity())
+                .location(locFour)
+                .quantity(21)
+                .build();
 
         stockController.create(stockOne);
         stockController.create(stockTwo);

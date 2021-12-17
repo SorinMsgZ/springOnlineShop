@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.service.unitTest;
 
 import org.junit.Assert;
@@ -7,9 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.bind.annotation.RestController;
 import ro.msg.learning.shop.controllers.StockExportController;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
@@ -26,7 +30,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.setMaxLengthForSingleLineDescription;
 import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -60,7 +63,7 @@ class CsvSerializationDeserializationServiceUnitTest {
 
     @BeforeEach
     void createProductDTO() {
-        /*ProductCategoryDTO productCategoryOne =
+ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
                 new ProductCategoryDTO("Drywall & Acoustical (MOB)", "ProdCatDescription2");
@@ -156,7 +159,8 @@ class CsvSerializationDeserializationServiceUnitTest {
 
         StockExportDTO stockExport1 = StockExportDTO.of(stockOne.toEntity());
         StockExportDTO stockExport2 = StockExportDTO.of(stockTwo.toEntity());
-        StockExportDTO stockExport3 = StockExportDTO.of(stockThree.toEntity());*/
+        StockExportDTO stockExport3 = StockExportDTO.of(stockThree.toEntity());
+
 
         Product product1 = new Product();
         Product product2 = new Product();
@@ -172,14 +176,15 @@ class CsvSerializationDeserializationServiceUnitTest {
 
 
 
-       /* StockDTO stock1 = new StockDTO(product1,location1,10);
+ StockDTO stock1 = new StockDTO(product1,location1,10);
         StockDTO stock2 = new StockDTO(product2,location1,20);
         StockDTO stock3 = new StockDTO(product3,location1,30);
 
         stockService=new StockService(stockRepository);
         stockService.create(stock1);
         stockService.create(stock2);
-        stockService.create(stock3);*/
+        stockService.create(stock3);
+
         StockId stockId1 = new StockId(1, 1);
         StockId stockId2 = new StockId(2, 1);
         StockId stockId3 = new StockId(3, 1);
@@ -215,3 +220,4 @@ class CsvSerializationDeserializationServiceUnitTest {
         Assert.assertEquals(stockExportDTOListExpected.size(),stockDTOListActual.size());
     }
 }
+*/

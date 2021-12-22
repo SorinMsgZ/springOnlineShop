@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Component;
+import ro.msg.learning.shop.dto.StockExportDTO;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -47,10 +49,11 @@ public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter 
         return csvTranslator.fromCsv(clazz, inputMessage.getBody());
     }
 
+
     @Override
     public Object read(Type type, Class contextClass,
                        HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-
-        return readInternal(contextClass, inputMessage);
+//        Class c=type.getClass().getClass();
+        return readInternal(StockExportDTO.class, inputMessage);
     }
 }

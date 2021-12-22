@@ -1,5 +1,6 @@
 package ro.msg.learning.shop.controller.integrationTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +22,17 @@ import ro.msg.learning.shop.entities.Location;
 
 import ro.msg.learning.shop.services.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -207,7 +214,7 @@ class StockExportRestControllerTest {
         stockExportDTOListExpected.add(stockExport3);
     }
 
-    @Test
+   /* @Test
     void testExportingStockByLocationId() throws Exception {
 
         int locationId = 1;
@@ -229,6 +236,42 @@ class StockExportRestControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string(expectedCsvText))
                 .andExpect(content()
                         .string(equalTo(expectedCsvText)))
+                .andReturn();
+
+    }*/
+
+    @Test
+    void testImportStocks() throws Exception {
+        StockExportDTO stockInput = StockExportDTO.builder()
+                .productId(3)
+                .locationId(1)
+                .quantity(30)
+                .build();
+
+        stockExportDTOListExpected.add(stockInput);
+
+        CsvMapper mapper = new CsvMapper();
+        CsvSchema schema = mapper.schemaFor(StockExportDTO.class);
+        StringWriter strW = new StringWriter();
+        SequenceWriter seqW = mapper.writer(schema).writeValues(strW);
+        seqW.write(stockExportDTOListExpected);
+        seqW.close();
+
+        String headerOfCsvText = "product,location,quantity" + "\n";
+        String expectedCsvText = headerOfCsvText + strW.toString();
+
+        InputStream inputStream=new ByteArrayInputStream((expectedCsvText.getBytes()));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productAsStringJSON = objectMapper.writeValueAsString(stockExportDTOListExpected);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/stocks/export/")
+                .contentType("text/csv")
+                .content(inputStream.readAllBytes())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(equalTo(productAsStringJSON)))
                 .andReturn();
 
     }

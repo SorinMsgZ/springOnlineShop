@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,15 +27,12 @@ import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.entities.Supplier;
-import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
+import ro.msg.learning.shop.services.CustomerService;
 import ro.msg.learning.shop.services.OrderCreatorService;
 import ro.msg.learning.shop.services.StrategyType;
-import ro.msg.learning.shop.testprofile.OrderJpaConfig;
+import ro.msg.learning.shop.testprofileConfigureSeparateDataSource.OrderJpaConfig;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ShopApplication.class, OrderJpaConfig.class})
-@ActiveProfiles("test")
+@ActiveProfiles("TestProfile1")
 
 @AutoConfigureMockMvc
 
@@ -70,9 +66,18 @@ class FailOrderCreatorRestControllerProfileTest {
     private StockController stockController;
     @Autowired
     private OrderCreatorController orderCreatorController;
+    @Autowired
+    private CustomerService customerService;
 
     @BeforeEach
     public void mockOneProductDTO() {
+        CustomerDTO mockCustomer=CustomerDTO.builder()
+                .firstName("MockCustomerFirstName")
+                .lastName("MockCustomerLastName")
+                .emailAddress("MockCustomerEmailAddress")
+                .build();
+        customerService.create(mockCustomer);
+
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -176,7 +181,15 @@ class FailOrderCreatorRestControllerProfileTest {
         listProductWanted.add(prod2Wanted);
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
-        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+        LocalDateTimeDTO localDateTimeDTO = LocalDateTimeDTO.builder()
+                .year(2021)
+                .month(2)
+                .dayOfMonth(21)
+                .hour(12)
+                .minute(30)
+                .second(0)
+                .build();
+        orderObjectInputDTO.setCreatedAt(localDateTimeDTO);
         AddressDTO deliveryAddress = addressController.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);
@@ -221,7 +234,7 @@ class FailOrderCreatorRestControllerProfileTest {
             idOrderTwo =
                     JsonPath.read(result.getResponse().getContentAsString(), "$.[1]shippedFrom.id");
 
-        } catch (Exception ex) {
+        } catch (AssertionError ex) {
             idOrderOne = 0;
             idOrderTwo = 0;
         }

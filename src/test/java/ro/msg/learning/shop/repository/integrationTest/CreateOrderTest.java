@@ -16,7 +16,7 @@ import ro.msg.learning.shop.repositories.AddressRepository;
 import ro.msg.learning.shop.repositories.CustomerRepository;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.OrderRepository;
-import ro.msg.learning.shop.testprofile.OrderJpaConfig;
+import ro.msg.learning.shop.testprofileConfigureSeparateDataSource.OrderJpaConfig;
 
 import javax.annotation.Resource;
 
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = {
         ShopApplication.class,
         OrderJpaConfig.class})
-@ActiveProfiles("test")
+@ActiveProfiles("TestProfile1")
 
 public class CreateOrderTest {
     @Resource

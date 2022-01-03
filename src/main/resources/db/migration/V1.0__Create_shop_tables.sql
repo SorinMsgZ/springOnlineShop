@@ -24,8 +24,8 @@ name VARCHAR(255),
 description VARCHAR(255),
 price DECIMAL,
 weight DOUBLE,
-category INT NOT NULL REFERENCES Product_Category(id),
-supplier INT NOT NULL REFERENCES Supplier(id),
+category INT NOT NULL REFERENCES Product_Category(id) ON DELETE CASCADE,
+supplier INT NOT NULL REFERENCES Supplier(id) ON DELETE CASCADE,
 image_url VARCHAR(255)
 );
 
@@ -40,26 +40,26 @@ street_address VARCHAR(255) UNIQUE NOT NULL
 CREATE TABLE Location (
 id   INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
-address INT NOT NULL REFERENCES Address(id)
+address INT NOT NULL REFERENCES Address(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Stock(
 product INT  NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
-location INT NOT NULL REFERENCES Location(id),
+location INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE,
 quantity INT,
 CONSTRAINT pk_product_location PRIMARY KEY (product,location)
 );
 
 CREATE TABLE Orders(
 id   INT AUTO_INCREMENT PRIMARY KEY,
-shipped_from INT NOT NULL REFERENCES Location(id),
-customer INT NOT NULL REFERENCES Customer(id),
+shipped_from INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE,
+customer INT NOT NULL REFERENCES Customer(id) ON DELETE CASCADE,
 created_at DATETIME,
-address INT NOT NULL REFERENCES Address(id)
+address INT NOT NULL REFERENCES Address(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Order_Detail(
-orders INT NOT NULL REFERENCES Orders(id),
+orders INT NOT NULL REFERENCES Orders(id) ON DELETE CASCADE,
 product INT NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
 quantity INT,
 CONSTRAINT pk_order_product PRIMARY KEY (orders,product)
@@ -67,7 +67,7 @@ CONSTRAINT pk_order_product PRIMARY KEY (orders,product)
 
 CREATE TABLE Revenue(
 id INT  AUTO_INCREMENT PRIMARY KEY,
-location INT REFERENCES Location(id),
+location INT REFERENCES Location(id) ON DELETE CASCADE,
 local_date DATE,
 sum DECIMAL
 );

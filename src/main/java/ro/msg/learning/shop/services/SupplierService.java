@@ -37,6 +37,9 @@ public class SupplierService {
     public void deleteByName(String name) {
         supplierRepository.deleteByName(name);
     }
+    public void deleteAll() {
+        supplierRepository.deleteAll();
+    }
 
     public SupplierDTO updateByName(String name, SupplierDTO input) {
         Supplier supplier = supplierRepository.findByName(name).orElseThrow(NotFoundException::new);

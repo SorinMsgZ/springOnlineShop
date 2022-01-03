@@ -38,6 +38,9 @@ public class LocationService {
     public void deleteByName(String name) {
         locationRepository.deleteByName(name);
     }
+    public void deleteAll() {
+        locationRepository.deleteAll();
+    }
 
     public LocationDTO updateByName(String name, LocationDTO input) {
         Location location = locationRepository.findByName(name).orElseThrow(NotFoundException::new);

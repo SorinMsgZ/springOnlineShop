@@ -11,8 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@Profile("test")
 @RequiredArgsConstructor
+@Profile("TestProfile2")
 public class ClearPopulateDbController {
 
     private final ProductService productService;
@@ -23,6 +23,22 @@ public class ClearPopulateDbController {
     private final ProductCategoryService productCategoryService;
     private final StockService stockService;
     private final SupplierService supplierService;
+    private final CustomerService customerService;
+
+    @PostMapping("/db/customers")
+    public CustomerDTO createCustomer(@RequestBody CustomerDTO body) {
+        return customerService.create(body);
+    }
+
+    @DeleteMapping("/db/customers/{id}")
+    public void deleteCustomerById(@PathVariable int id) {
+        customerService.deleteById(id);
+    }
+
+    @DeleteMapping("/db/customers")
+    public void deleteAllCustomers() {
+        customerService.deleteAll();
+    }
 
     @PostMapping("/db/products")
     public ProductDTO createProduct(@RequestBody ProductDTO body) {
@@ -32,6 +48,11 @@ public class ClearPopulateDbController {
     @DeleteMapping("/db/products/{id}")
     public void deleteProductById(@PathVariable int id) {
         productService.deleteById(id);
+    }
+
+    @DeleteMapping("/db/products")
+    public void deleteAllProducts() {
+        productService.deleteAll();
     }
 
     @PostMapping("/db/addresses")
@@ -44,6 +65,11 @@ public class ClearPopulateDbController {
         addressService.deleteByStreetAddress(streetAddress);
     }
 
+    @DeleteMapping("/db/addresses")
+    public void deleteAllAddresses() {
+        addressService.deleteAll();
+    }
+
     @PostMapping("/db/locations")
     public LocationDTO createLocation(@RequestBody LocationDTO body) {
         return locationService.create(body);
@@ -54,14 +80,25 @@ public class ClearPopulateDbController {
         locationService.deleteByName(name);
     }
 
+    @DeleteMapping("/db/locations")
+    public void deleteAllLocations() {
+        locationService.deleteAll();
+    }
+
     @PostMapping("/db/orders")
     public List<OrderDTO> createOrder(@RequestBody OrderObjectInputDTO body) {
+
         return orderCreatorService.createOrder(body);
     }
 
     @DeleteMapping("/db/orders/{id}")
     public void deleteOrderById(@PathVariable int id) {
         orderService.deleteById(id);
+    }
+
+    @DeleteMapping("/db/orders")
+    public void deleteAllOrders() {
+        orderService.deleteAll();
     }
 
     @PostMapping("/db/productcategories")
@@ -74,6 +111,11 @@ public class ClearPopulateDbController {
         productCategoryService.deleteByName(name);
     }
 
+    @DeleteMapping("/db/productcategories")
+    public void deleteAllProductCategories() {
+        productCategoryService.deleteAll();
+    }
+
     @PostMapping("/db/stocks")
     public StockDTO createStock(@RequestBody StockDTO body) {
         return stockService.create(body);
@@ -82,6 +124,11 @@ public class ClearPopulateDbController {
     @DeleteMapping("/db/stocks/{id}")
     public void deleteStockById(@PathVariable StockId id) {
         stockService.deleteById(id);
+    }
+
+    @DeleteMapping("/db/stocks")
+    public void deleteAllStocks() {
+        stockService.deleteAll();
     }
 
     @PostMapping("/db/suppliers")
@@ -93,6 +140,9 @@ public class ClearPopulateDbController {
     public void deleteSupplierByName(@PathVariable String name) {
         supplierService.deleteByName(name);
     }
+
+    @DeleteMapping("/db/suppliers")
+    public void deleteAllSuppliers() {
+        supplierService.deleteAll();
+    }
 }
-
-

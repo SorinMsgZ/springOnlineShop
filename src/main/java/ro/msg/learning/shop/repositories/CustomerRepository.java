@@ -3,8 +3,11 @@ package ro.msg.learning.shop.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ro.msg.learning.shop.entities.Customer;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<Customer, String> {
-    List<Customer> findByFirstName(String name);
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+    Optional<Customer> findByFirstName(String name);
+
+    void deleteByFirstName(String name);
+
 }

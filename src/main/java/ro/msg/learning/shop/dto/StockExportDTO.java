@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-//@NoArgsConstructor
+
 @AllArgsConstructor
 @JsonPropertyOrder({"productId", "locationId", "quantity"})
 @Getter
@@ -27,8 +27,7 @@ public class StockExportDTO implements Serializable {
     @JsonProperty("quantity")
     private int quantity;
 
-    public StockExportDTO(){
-//        super();
+    public StockExportDTO() {
     }
 
     public StockExportDTO(Stock stock) {

@@ -51,7 +51,7 @@ public class OrderCreatorService {
 
             new ObserverStock(orderBasket, stockService);
 
-            LocalDateTime createdAtDTO = input.getCreatedAt();
+            LocalDateTime createdAtDTO = input.getCreatedAt().toEntity();
             Address addressDTO = input.getDeliveryAddress();
 
             OrderDTO newOrderDTO = new OrderDTO();

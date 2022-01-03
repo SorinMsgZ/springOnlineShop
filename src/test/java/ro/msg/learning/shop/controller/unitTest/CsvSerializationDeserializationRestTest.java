@@ -1,11 +1,11 @@
 package ro.msg.learning.shop.controller.unitTest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ro.msg.learning.shop.controllers.StockExportController;
 import ro.msg.learning.shop.dto.StockExportDTO;
@@ -23,10 +24,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(controllers = StockExportController.class)
@@ -61,7 +59,7 @@ class CsvSerializationDeserializationRestTest {
         stockExportDTOListExpected.add(stockTwo);
     }
 
-    /*@Test
+    @Test
     void testSerialization() throws Exception {
         int locationId = 1;
 
@@ -77,56 +75,13 @@ class CsvSerializationDeserializationRestTest {
 
         when(stockExportService.exportingStockByLocationId(locationId)).thenReturn(stockExportDTOListExpected);
 
-        mvc.perform(MockMvcRequestBuilders.get("/api/stocks/export/" + locationId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("text/csv"))
-                .andExpect(MockMvcResultMatchers.content().string(expectedCsvText))
-                .andExpect(content()
-                        .string(equalTo(expectedCsvText)))
-                .andReturn();
-    }*/
-
-    @Test
-    void testDeSerialization() throws Exception {
-        StockExportDTO stockInput = StockExportDTO.builder()
-                .productId(3)
-                .locationId(1)
-                .quantity(30)
-                .build();
-
-        stockExportDTOListExpected.add(stockInput);
-
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(StockExportDTO.class);
-        StringWriter strW = new StringWriter();
-        SequenceWriter seqW = mapper.writer(schema).writeValues(strW);
-        seqW.write(stockExportDTOListExpected);
-        seqW.close();
-
-        String headerOfCsvText = "product,location,quantity" + "\n";
-        String expectedCsvText = headerOfCsvText + strW.toString();
-
-//        working
-//        String csvText1="product,location,quantity" + "\n"+"3,1,30";
-//        not working
-//        String csvText2="3,1,30";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String productAsStringJSON = objectMapper.writeValueAsString(stockExportDTOListExpected);
-
-        when(stockExportService.importStocks(any())).thenReturn(stockExportDTOListExpected);
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/stocks/export/")
-                .contentType("text/csv")
-                .content(expectedCsvText))
-//                .accept("text/csv"))
-//                not working
-                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(content().string(equalTo(productAsStringJSON)))
+        MvcResult result = mvc.perform(MockMvcRequestBuilders
+                .get("/api/stocks/export/" + locationId)
+                .accept("text/csv"))
                 .andReturn();
 
+        Assert.assertEquals(200, result.getResponse().getStatus());
+        Assert.assertEquals(expectedCsvText, result.getResponse().getContentAsString());
     }
 
 }

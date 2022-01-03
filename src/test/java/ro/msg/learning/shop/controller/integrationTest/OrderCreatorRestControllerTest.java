@@ -29,9 +29,6 @@ import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +59,18 @@ class OrderCreatorRestControllerTest {
     private StockController stockController;
     @Autowired
     private OrderCreatorController orderCreatorController;
+    @Autowired
+    private CustomerService customerService;
 
     @BeforeEach
     public void mockOneProductDTO() {
+        CustomerDTO mockCustomer = CustomerDTO.builder()
+                .firstName("MockCustomerFirstName")
+                .lastName("MockCustomerLastName")
+                .emailAddress("MockCustomerEmailAddress")
+                .build();
+        customerService.create(mockCustomer);
+
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -168,7 +174,15 @@ class OrderCreatorRestControllerTest {
         listProductWanted.add(prod2Wanted);
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
-        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+        LocalDateTimeDTO localDateTimeDTO = LocalDateTimeDTO.builder()
+                .year(2021)
+                .month(2)
+                .dayOfMonth(21)
+                .hour(12)
+                .minute(30)
+                .second(0)
+                .build();
+        orderObjectInputDTO.setCreatedAt(localDateTimeDTO);
         AddressDTO deliveryAddress = addressController.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);

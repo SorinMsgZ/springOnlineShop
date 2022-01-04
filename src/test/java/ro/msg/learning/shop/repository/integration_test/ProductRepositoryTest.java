@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.repository.integrationTest;
+package ro.msg.learning.shop.repository.integration_test;
 
 import org.junit.Assert;
 import org.junit.Test;

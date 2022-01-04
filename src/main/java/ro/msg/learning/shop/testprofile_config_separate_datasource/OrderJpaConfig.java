@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.testprofileConfigureSeparateDataSource;
+package ro.msg.learning.shop.testprofile_config_separate_datasource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

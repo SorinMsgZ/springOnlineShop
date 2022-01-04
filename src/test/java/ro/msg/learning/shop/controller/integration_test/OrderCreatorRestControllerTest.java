@@ -1,9 +1,10 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,22 +14,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ro.msg.learning.shop.ShopApplication;
 import ro.msg.learning.shop.controllers.*;
+
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.entities.Supplier;
-import ro.msg.learning.shop.services.CustomerService;
-import ro.msg.learning.shop.services.OrderCreatorService;
-import ro.msg.learning.shop.services.StrategyType;
-import ro.msg.learning.shop.testprofileConfigureSeparateDataSource.OrderJpaConfig;
+import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,14 +35,11 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = {
-        ShopApplication.class,
-        OrderJpaConfig.class})
-@ActiveProfiles("TestProfile1")
+@SpringBootTest
 @AutoConfigureMockMvc
-
+@TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderCreatorRestControllerTestProfileTest {
+class OrderCreatorRestControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -69,7 +64,7 @@ class OrderCreatorRestControllerTestProfileTest {
 
     @BeforeEach
     public void mockOneProductDTO() {
-        CustomerDTO mockCustomer=CustomerDTO.builder()
+        CustomerDTO mockCustomer = CustomerDTO.builder()
                 .firstName("MockCustomerFirstName")
                 .lastName("MockCustomerLastName")
                 .emailAddress("MockCustomerEmailAddress")

@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.integrationTest;
+package ro.msg.learning.shop.service.integration_test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

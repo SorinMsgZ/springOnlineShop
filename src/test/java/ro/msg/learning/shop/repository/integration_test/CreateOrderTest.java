@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.repository.integrationTest;
+package ro.msg.learning.shop.repository.integration_test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import ro.msg.learning.shop.repositories.AddressRepository;
 import ro.msg.learning.shop.repositories.CustomerRepository;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.OrderRepository;
-import ro.msg.learning.shop.testprofileConfigureSeparateDataSource.OrderJpaConfig;
+import ro.msg.learning.shop.testprofile_config_separate_datasource.OrderJpaConfig;
 
 import javax.annotation.Resource;
 

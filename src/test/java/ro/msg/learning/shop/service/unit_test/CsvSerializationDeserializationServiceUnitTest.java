@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.unitTest;
+package ro.msg.learning.shop.service.unit_test;
 
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;

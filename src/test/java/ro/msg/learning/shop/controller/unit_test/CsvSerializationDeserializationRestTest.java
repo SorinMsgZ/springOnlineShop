@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.controller.unitTest;
+package ro.msg.learning.shop.controller.unit_test;
 
 import com.fasterxml.jackson.databind.SequenceWriter;
 

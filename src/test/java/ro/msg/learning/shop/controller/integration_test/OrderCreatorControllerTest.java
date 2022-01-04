@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

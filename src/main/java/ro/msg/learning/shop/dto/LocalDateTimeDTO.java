@@ -1,5 +1,6 @@
 package ro.msg.learning.shop.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.time.LocalTime;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class LocalDateTimeDTO {
 
     private int year;
@@ -21,13 +23,8 @@ public class LocalDateTimeDTO {
     private int minute;
     private int second;
 
-    public LocalDateTimeDTO(int year, int month, int dayOfMonth, int hour, int minute, int second) {
-        this.year = year;
-        this.month = month;
-        this.dayOfMonth = dayOfMonth;
-        this.hour = hour;
-        this.minute = minute;
-        this.second = second;
+    public static LocalDateTimeDTO of(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+        return new LocalDateTimeDTO(year,month,dayOfMonth,hour,minute,second);
     }
 
     public LocalDateTime toEntity() {

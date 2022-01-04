@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.unitTest;
+package ro.msg.learning.shop.service.unit_test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;

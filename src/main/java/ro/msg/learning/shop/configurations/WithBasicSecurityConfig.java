@@ -13,25 +13,21 @@ import ro.msg.learning.shop.services.DataBaseUserService;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Profile("with-form")
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Profile("with-basic")
+public class WithBasicSecurityConfig extends WebSecurityConfigurerAdapter {
     private final DataBaseUserService userDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/login").anonymous()
+                .antMatchers("/api").anonymous()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginProcessingUrl("/api/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .and()
-                .logout()
-                .logoutUrl("api/logout")
+                .httpBasic()
+                .realmName("Application Name: OnlineShop with-basic Authentication")
                 .and().csrf().disable();
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

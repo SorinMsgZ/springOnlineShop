@@ -1,6 +1,8 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
@@ -27,12 +29,22 @@ public class OrderCreatorService {
     List<OrderDTO> orderDTOList = new ArrayList<>();
 
     Location location;
+    @Value("${strategy.findLocation}")
+    String locationStrategy;
 
     public List<OrderDTO> createOrder(OrderObjectInputDTO input) {
 
         List<ProdOrdCreatorDTO> listProducts = input.getProduct();
 
         OrderBasket orderBasket = new OrderBasket();
+
+        if (locationStrategy.equals(StrategyType.PROXIMITY_STRATEGY.toString())) {
+            Address deliveryAddress = input.getDeliveryAddress();
+            List<StockDTO> listStocks=stockService.listAll();
+            List<Location> listStocksLocation=listStocks.stream().map(stock->stock.getLocation()).collect(Collectors.toList());
+            List<Address> listStockLocationAddress=listStocksLocation.stream().map(location->location.getAddress()).collect(Collectors.toList());
+            returnProximityResponse();
+        }
 
         for (ProdOrdCreatorDTO product : listProducts) {
             try {
@@ -73,5 +85,13 @@ public class OrderCreatorService {
         }
         return orderDTOList;
     }
+
+    @Bean
+    public ProximityResponseDTO returnProximityResponse(List<Location> listLocationsToBeCompared) {
+        //POST REST API with RestTemplate & Data Form
+
+        return response
+    }
+
 }
 

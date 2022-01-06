@@ -43,7 +43,7 @@ public class OrderCreatorService {
             List<StockDTO> listStocks=stockService.listAll();
             List<Location> listStocksLocation=listStocks.stream().map(stock->stock.getLocation()).collect(Collectors.toList());
             List<Address> listStockLocationAddress=listStocksLocation.stream().map(location->location.getAddress()).collect(Collectors.toList());
-            returnProximityResponse();
+//            returnProximityResponse();
         }
 
         for (ProdOrdCreatorDTO product : listProducts) {
@@ -90,7 +90,7 @@ public class OrderCreatorService {
     public ProximityResponseDTO returnProximityResponse(List<Location> listLocationsToBeCompared) {
         //POST REST API with RestTemplate & Data Form
 
-        return response
+        return null;
     }
 
 }

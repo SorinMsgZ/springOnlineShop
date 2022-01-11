@@ -20,12 +20,14 @@ public class Address implements Serializable {
     private String city;
     private String county;
     private String streetAddress;
+    private String state;
 
-    public Address(int id, String country, String city, String county, String streetAddress) {
+    public Address(int id, String country, String city, String county, String streetAddress, String state) {
         this.id = id;
         this.country = country;
         this.city = city;
         this.county = county;
         this.streetAddress = streetAddress;
+        this.state = state;
     }
 }

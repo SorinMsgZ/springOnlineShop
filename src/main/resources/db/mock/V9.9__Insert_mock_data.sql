@@ -42,9 +42,9 @@ insert into Product (id, name, description, price, weight, category, supplier, i
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (9, 'Carex caroliniana Schwein.', 'interdum', 58.56, 457, 9, 9, 'http://dummyimage.com/192x100.png/cc0000/ffffff');
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (10, 'Scleria eggersiana Boeckeler', 'vel', 83.02, 975, 10, 10, 'http://dummyimage.com/117x100.png/cc0000/ffffff');
 
-insert into Address (id,country, city, county, street_address, state) values (1,'United States', 'Rochester', 'New York', '440 Merry Drive','NY');
-insert into Address (id,country, city, county, street_address, state) values (2,'Romania', 'Bronx', 'Alabama', '93 Drewry Junction','AB');
-insert into Address (id,country, city, county, street_address, state) values (3,'China', 'Pasadena', 'Texas', '0986 Spaight Parkway','CJ');
+insert into Address (id,country, city, county, street_address, state) values (1,'United States', 'Denver', 'Denver', '440 Merry Drive','CO');
+insert into Address (id,country, city, county, street_address, state) values (2,'United States', 'Westminster', 'Westminster', '93 Drewry Junction','CO');
+insert into Address (id,country, city, county, street_address, state) values (3,'United States', 'Boulder', 'Boulder', '0986 Spaight Parkway','CO');
 
 insert into Location (id, name, address) values (1, 'cbslocal.com',1);
 insert into Location (id, name, address) values (2, 'msn.com',2);

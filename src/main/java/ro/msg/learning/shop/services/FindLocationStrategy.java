@@ -1,8 +1,9 @@
 package ro.msg.learning.shop.services;
 
+import ro.msg.learning.shop.dto.OrderObjectInputDTO;
 
-import ro.msg.learning.shop.entities.Location;
+import java.util.HashMap;
 
 public interface FindLocationStrategy {
-    Location findLocationAndTakeProducts(int productId, int productQty);
+    HashMap<Integer, Integer> findLocationAndTakeProducts(OrderObjectInputDTO input);
 }

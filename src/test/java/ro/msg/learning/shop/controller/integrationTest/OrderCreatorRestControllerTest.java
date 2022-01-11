@@ -108,17 +108,65 @@ class OrderCreatorRestControllerTest {
         productController.create(productOne);
         productController.create(productTwo);
 
-        AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
+
+        AddressDTO deliveryAddress = AddressDTO.builder()
+                .country("United States")
+                .city("Boulder")
+                .county("Boulder")
+                .streetAddress("streetAddressX")
+                .state("CO")
+                .build();
+        AddressDTO stockAddress1 = AddressDTO.builder()
+                .country("United States")
+                .city("Westminster")
+                .county("Westminster")
+                .streetAddress("streetAddress1")
+                .state("CO")
+                .build();
+        AddressDTO stockAddress2 = AddressDTO.builder()
+                .country("United States")
+                .city("Denver")
+                .county("Denver")
+                .streetAddress("440 Merry Drive")
+                .state("CO")
+                .build();
+        AddressDTO stockAddress3 = AddressDTO.builder()
+                .country("United States")
+                .city("Portland")
+                .county("Portland")
+                .streetAddress("streetAddress3")
+                .state("OR")
+                .build();
+        AddressDTO stockAddress4 = AddressDTO.builder()
+                .country("United States")
+                .city("Las Vegas")
+                .county("Las Vegas")
+                .streetAddress("streetAddress4")
+                .state("NV")
+                .build();
+
         addressController.create(deliveryAddress);
+        addressController.create(stockAddress1);
+        addressController.create(stockAddress2);
+        addressController.create(stockAddress3);
+        addressController.create(stockAddress4);
 
         Address delAddress = deliveryAddress.toEntity();
-        delAddress.setId(1);
+        Address fromAddress1 = stockAddress1.toEntity();
+        Address fromAddress2 = stockAddress2.toEntity();
+        Address fromAddress3 = stockAddress3.toEntity();
+        Address fromAddress4 = stockAddress4.toEntity();
 
+        delAddress.setId(5);
+        fromAddress1.setId(1);
+        fromAddress2.setId(2);
+        fromAddress3.setId(3);
+        fromAddress4.setId(4);
 
-        LocationDTO locationOne = new LocationDTO("cbslocal.com", delAddress);
-        LocationDTO locationTwo = new LocationDTO("msn.com", delAddress);
-        LocationDTO locationThree = new LocationDTO("sdgsg", delAddress);
-        LocationDTO locationFour = new LocationDTO("jdjtzk", delAddress);
+        LocationDTO locationOne = new LocationDTO("cbslocal.com", fromAddress1);
+        LocationDTO locationTwo = new LocationDTO("msn.com", fromAddress2);
+        LocationDTO locationThree = new LocationDTO("sdgsg", fromAddress3);
+        LocationDTO locationFour = new LocationDTO("jdjtzk", fromAddress4);
 
         locationController.create(locationOne);
         locationController.create(locationTwo);
@@ -171,7 +219,7 @@ class OrderCreatorRestControllerTest {
         orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
         AddressDTO deliveryAddress = addressController.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
-        delAddressInput.setId(1);
+        delAddressInput.setId(5);
         orderObjectInputDTO.setDeliveryAddress(delAddressInput);
         orderObjectInputDTO.setProduct(listProductWanted);
 

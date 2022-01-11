@@ -37,6 +37,9 @@ public class ProductService {
     public void deleteById(int id) {
         productRepository.deleteById(id);
     }
+    public void deleteAll() {
+        productRepository.deleteAll();
+    }
 
     public ProductDTO updateById(int id, ProductDTO input) {
         Product product = productRepository.findById(id).orElseThrow(NotFoundException::new);

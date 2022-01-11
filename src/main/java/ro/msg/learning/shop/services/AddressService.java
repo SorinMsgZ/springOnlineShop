@@ -36,6 +36,9 @@ public class AddressService {
     public void deleteByStreetAddress(String streetAddress) {
         addressRepository.deleteByStreetAddress(streetAddress);
     }
+    public void deleteAll() {
+        addressRepository.deleteAll();
+    }
 
     public AddressDTO updateByStreetAddress(String streetAddress, AddressDTO input) {
         Address address = addressRepository.findByStreetAddress(streetAddress).orElseThrow(NotFoundException::new);

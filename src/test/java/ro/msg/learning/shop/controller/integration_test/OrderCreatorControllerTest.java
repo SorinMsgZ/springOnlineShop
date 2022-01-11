@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +15,6 @@ import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,9 +41,19 @@ class OrderCreatorControllerTest {
     private OrderService orderService;
     @Autowired
     private StockService stockService;
+    @Autowired
+    private CustomerService customerService;
 
     @BeforeEach
     void createProductDTO() {
+
+        CustomerDTO mockCustomer = CustomerDTO.builder()
+                .firstName("MockCustomerFirstName")
+                .lastName("MockCustomerLastName")
+                .emailAddress("MockCustomerEmailAddress")
+                .build();
+        customerService.create(mockCustomer);
+
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -152,7 +159,16 @@ class OrderCreatorControllerTest {
         listProductWanted.add(prod2Wanted);
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
-        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+        LocalDateTimeDTO localDateTimeDTO = LocalDateTimeDTO.builder()
+                .year(2021)
+                .month(2)
+                .dayOfMonth(21)
+                .hour(12)
+                .minute(30)
+                .second(0)
+                .build();
+
+        orderObjectInputDTO.setCreatedAt(localDateTimeDTO);
         AddressDTO deliveryAddress = addressService.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);

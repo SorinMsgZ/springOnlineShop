@@ -2,6 +2,7 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class OrderCreatorService {
     private final OrderRepository orderRepository;
     private final Context context;
@@ -50,7 +51,7 @@ public class OrderCreatorService {
 
             new ObserverStock(orderBasket, stockService);
 
-            LocalDateTime createdAtDTO = input.getCreatedAt();
+            LocalDateTime createdAtDTO = input.getCreatedAt().toEntity();
             Address addressDTO = input.getDeliveryAddress();
 
             OrderDTO newOrderDTO = new OrderDTO();

@@ -14,21 +14,22 @@ public class StrategyFactory {
     private final ProductService productService;
 
     @Autowired
-    public StrategyFactory(@Value("${strategy.findLocation}") String strategyFindLocation,StockService stockService,ProductService productService) {
+    public StrategyFactory(@Value("${strategy.findLocation}") String strategyFindLocation, StockService stockService,
+                           ProductService productService) {
         this.strategyFindLocation = strategyFindLocation;
-        this.stockService=stockService;
-        this.productService=productService;
+        this.stockService = stockService;
+        this.productService = productService;
     }
 
     @Bean
     @Primary
     public FindLocationStrategy getStrategy() {
         if (StrategyType.SINGLE_LOCATION_STRATEGY.toString().equals(strategyFindLocation)) {
-            return new SingleLocationStrategy(stockService,productService);
+            return new SingleLocationStrategy(stockService, productService);
         } else if (StrategyType.MOST_ABUNDANT_STRATEGY.toString().equals(strategyFindLocation)) {
-            return new MostAbundantStrategy(stockService,productService);
+            return new MostAbundantStrategy(stockService, productService);
         }
-        return new SingleLocationStrategy(stockService,productService);
+        return new SingleLocationStrategy(stockService, productService);
     }
 
 }

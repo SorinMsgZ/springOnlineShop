@@ -37,6 +37,9 @@ public class ProductCategoryService {
     public void deleteByName(String name) {
         repository.deleteByName(name);
     }
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 
     public ProductCategoryDTO updateByName(String name, ProductCategoryDTO input) {
         ProductCategory productCategory = repository.findByName(name).orElseThrow(NotFoundException::new);

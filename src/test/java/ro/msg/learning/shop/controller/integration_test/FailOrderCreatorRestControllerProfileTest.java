@@ -1,48 +1,52 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ro.msg.learning.shop.ShopApplication;
 import ro.msg.learning.shop.controllers.*;
-
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.entities.Supplier;
-import ro.msg.learning.shop.services.*;
+import ro.msg.learning.shop.services.CustomerService;
+import ro.msg.learning.shop.services.OrderCreatorService;
+import ro.msg.learning.shop.services.StrategyType;
+import ro.msg.learning.shop.testprofile_config_separate_datasource.OrderJpaConfig;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ShopApplication.class, OrderJpaConfig.class})
+@ActiveProfiles("TestProfile1")
+
 @AutoConfigureMockMvc
-@TestPropertySource("classpath:test.properties")
+
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderCreatorRestControllerTest {
+class FailOrderCreatorRestControllerProfileTest {
     @Autowired
     private MockMvc mvc;
 
@@ -62,9 +66,18 @@ class OrderCreatorRestControllerTest {
     private StockController stockController;
     @Autowired
     private OrderCreatorController orderCreatorController;
+    @Autowired
+    private CustomerService customerService;
 
     @BeforeEach
     public void mockOneProductDTO() {
+        CustomerDTO mockCustomer=CustomerDTO.builder()
+                .firstName("MockCustomerFirstName")
+                .lastName("MockCustomerLastName")
+                .emailAddress("MockCustomerEmailAddress")
+                .build();
+        customerService.create(mockCustomer);
+
         ProductCategoryDTO productCategoryOne =
                 new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
         ProductCategoryDTO productCategoryTwo =
@@ -146,7 +159,7 @@ class OrderCreatorRestControllerTest {
     }
 
     @Test
-    void testCreateOrder(@Value("${strategy.findLocation}") String strategy) throws Exception {
+    void testFailCreateOrderDueMissingStock(@Value("${strategy.findLocation}") String strategy) throws Exception {
         StockId stockId1 = new StockId(1, 1);
         StockId stockId2 = new StockId(2, 2);
         StockId stockId3 = new StockId(1, 3);
@@ -158,7 +171,7 @@ class OrderCreatorRestControllerTest {
         int stock4Prod2Qty = stockController.readById(stockId4).getQuantity();
 
         int testProd1Qty = 10;
-        int testProd2Qty = 20;
+        int testProd2Qty = 22;
 
         ProdOrdCreatorDTO prod1Wanted = new ProdOrdCreatorDTO(1, testProd1Qty);
         ProdOrdCreatorDTO prod2Wanted = new ProdOrdCreatorDTO(2, testProd2Qty);
@@ -168,7 +181,15 @@ class OrderCreatorRestControllerTest {
         listProductWanted.add(prod2Wanted);
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
-        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+        LocalDateTimeDTO localDateTimeDTO = LocalDateTimeDTO.builder()
+                .year(2021)
+                .month(2)
+                .dayOfMonth(21)
+                .hour(12)
+                .minute(30)
+                .second(0)
+                .build();
+        orderObjectInputDTO.setCreatedAt(localDateTimeDTO);
         AddressDTO deliveryAddress = addressController.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);
@@ -195,26 +216,35 @@ class OrderCreatorRestControllerTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         String productAsStringDTO = objectMapper.writeValueAsString(orderObjectInputDTO);
 
-        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/orders/")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(productAsStringDTO)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0]shippedFrom.id").value(expectedOrderLocationId1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[1]shippedFrom.id").value(expectedOrderLocationId2))
-                .andReturn();
+        int idOrderOne;
+        int idOrderTwo;
 
-        int idOrderOne =
-                JsonPath.read(result.getResponse().getContentAsString(), "$.[0]shippedFrom.id");
-        int idOrderTwo =
-                JsonPath.read(result.getResponse().getContentAsString(), "$.[1]shippedFrom.id");
+        try {
+            MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/orders/")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(productAsStringDTO)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.[0]shippedFrom.id").value(expectedOrderLocationId1))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.[1]shippedFrom.id").value(expectedOrderLocationId2))
+                    .andReturn();
+            idOrderOne =
+                    JsonPath.read(result.getResponse().getContentAsString(), "$.[0]shippedFrom.id");
+            idOrderTwo =
+                    JsonPath.read(result.getResponse().getContentAsString(), "$.[1]shippedFrom.id");
+
+        } catch (AssertionError ex) {
+            idOrderOne = 0;
+            idOrderTwo = 0;
+        }
+
 
         int actualOrderNb = orderCreatorController.listAll().size();
 
-        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
-        Assert.assertEquals(expectedOrderLocationId1, idOrderOne);
-        Assert.assertEquals(expectedOrderLocationId2, idOrderTwo);
+        Assert.assertEquals(initialOrderNb, actualOrderNb);
+        Assert.assertNotEquals(expectedOrderLocationId1, idOrderOne);
+        Assert.assertNotEquals(expectedOrderLocationId2, idOrderTwo);
 
         if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
             int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
@@ -223,8 +253,8 @@ class OrderCreatorRestControllerTest {
             int expectUpdateStock2Prod2Qty = stock2Prod2Qty - testProd2Qty;
             int actualStock2Prod2Qty = stockController.readById(stockId2).getQuantity();
 
-            Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
-            Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
+            Assert.assertNotEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
+            Assert.assertNotEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
 
         } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
             int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
@@ -233,8 +263,8 @@ class OrderCreatorRestControllerTest {
             int expectUpdateStock4Prod2Qty = stock4Prod2Qty - testProd2Qty;
             int actualStock4Prod2Qty = stockController.readById(stockId4).getQuantity();
 
-            Assert.assertEquals(expectUpdateStock3Prod1Qty, actualStock3Prod1Qty);
-            Assert.assertEquals(expectUpdateStock4Prod2Qty, actualStock4Prod2Qty);
+            Assert.assertNotEquals(expectUpdateStock3Prod1Qty, actualStock3Prod1Qty);
+            Assert.assertNotEquals(expectUpdateStock4Prod2Qty, actualStock4Prod2Qty);
         }
     }
 }

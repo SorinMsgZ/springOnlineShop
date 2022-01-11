@@ -1,64 +1,49 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
-import com.fasterxml.jackson.databind.SequenceWriter;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ro.msg.learning.shop.controllers.*;
+import ro.msg.learning.shop.controllers.StockExportController;
 import ro.msg.learning.shop.dto.*;
-import ro.msg.learning.shop.entities.Address;
-import ro.msg.learning.shop.entities.Location;
-
+import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.services.*;
 
-import java.io.StringWriter;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
-@AutoConfigureMockMvc
+
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class StockExportRestControllerTest {
+class StockExportControllerTest {
     @Autowired
-    private MockMvc mvc;
+    private StockExportController stockExportController;
     @Autowired
-    ProductCategoryController productCategoryController;
+    ProductCategoryService productCategoryService;
     @Autowired
-    SupplierController supplierController;
+    SupplierService supplierService;
     @Autowired
-    ProductController productController;
+    ProductService productService;
     @Autowired
-    AddressController addressController;
+    AddressService addressService;
     @Autowired
-    LocationController locationController;
+    LocationService locationService;
     @Autowired
-    private StockController stockController;
+    private OrderService orderService;
     @Autowired
-    CsvTranslatorDecorator csvTranslatorDecorator;
-    @Autowired
-    CsvTranslator<StockExportDTO> csvTranslator;
-    @Autowired
-    StockExportController stockExportController;
+    private StockService stockService;
     List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
 
     @BeforeEach
-    void createDataBaseForTest() {
+    void createProductDTO() {
+
         ProductCategoryDTO productCategoryOne = ProductCategoryDTO.builder()
                 .name("Retaining Wall and Brick Pavers")
                 .description("ProdCatDescription1")
@@ -69,8 +54,8 @@ class StockExportRestControllerTest {
                 .description("ProdCatDescription2")
                 .build();
 
-        productCategoryController.create(productCategoryOne);
-        productCategoryController.create(productCategoryTwo);
+        productCategoryService.create(productCategoryOne);
+        productCategoryService.create(productCategoryTwo);
 
         SupplierDTO supplierOne = SupplierDTO.builder()
                 .name("Fisher-Huels")
@@ -80,8 +65,8 @@ class StockExportRestControllerTest {
                 .name("D Amore, Torp and Kuvalis")
                 .build();
 
-        supplierController.create(supplierOne);
-        supplierController.create(supplierTwo);
+        supplierService.create(supplierOne);
+        supplierService.create(supplierTwo);
 
         ProductDTO productOne = ProductDTO.builder()
                 .id(1)
@@ -119,9 +104,9 @@ class StockExportRestControllerTest {
                 .imageUrl("http://33dummyimage.com/104x100.png/ff4444/333")
                 .build();
 
-        productController.create(productOne);
-        productController.create(productTwo);
-        productController.create(productThree);
+        productService.create(productOne);
+        productService.create(productTwo);
+        productService.create(productThree);
 
         AddressDTO deliveryAddress = AddressDTO.builder()
                 .country("United States")
@@ -130,7 +115,7 @@ class StockExportRestControllerTest {
                 .streetAddress("440 Merry Drive")
                 .build();
 
-        addressController.create(deliveryAddress);
+        addressService.create(deliveryAddress);
 
         Address delAddress = deliveryAddress.toEntity();
         delAddress.setId(1);
@@ -155,10 +140,10 @@ class StockExportRestControllerTest {
                 .address(delAddress)
                 .build();
 
-        locationController.create(locationOne);
-        locationController.create(locationTwo);
-        locationController.create(locationThree);
-        locationController.create(locationFour);
+        locationService.create(locationOne);
+        locationService.create(locationTwo);
+        locationService.create(locationThree);
+        locationService.create(locationFour);
 
         Location locOne = locationOne.toEntity();
         locOne.setId(1);
@@ -193,10 +178,10 @@ class StockExportRestControllerTest {
                 .quantity(21)
                 .build();
 
-        stockController.create(stockOne);
-        stockController.create(stockTwo);
-        stockController.create(stockThree);
-        stockController.create(stockFour);
+        stockService.create(stockOne);
+        stockService.create(stockTwo);
+        stockService.create(stockThree);
+        stockService.create(stockFour);
 
         StockExportDTO stockExport1 = StockExportDTO.of(stockOne.toEntity());
         StockExportDTO stockExport2 = StockExportDTO.of(stockTwo.toEntity());
@@ -208,28 +193,15 @@ class StockExportRestControllerTest {
     }
 
     @Test
-    void testExportingStockByLocationId() throws Exception {
+    void testExporting() {
 
         int locationId = 1;
 
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(StockExportDTO.class);
-        StringWriter strW = new StringWriter();
-        SequenceWriter seqW = mapper.writer(schema).writeValues(strW);
-        seqW.write(stockExportDTOListExpected);
-        seqW.close();
+        HttpServletResponse httpServletResponse = new MockHttpServletResponse();
 
-        String headerOfCsvText = "product,location,quantity" + "\n";
-        String expectedCsvText = headerOfCsvText + strW.toString();
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/stocks/export/" + locationId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("text/csv"))
-                .andExpect(MockMvcResultMatchers.content().string(expectedCsvText))
-                .andExpect(content()
-                        .string(equalTo(expectedCsvText)))
-                .andReturn();
-
+        List<StockExportDTO> stockDTOListActual =
+                stockExportController.exportingStockByLocationId(locationId, httpServletResponse);
+        Assert.assertEquals(stockExportDTOListExpected.size(), stockDTOListActual.size());
+        Assert.assertEquals(stockExportDTOListExpected, stockDTOListActual);
     }
 }

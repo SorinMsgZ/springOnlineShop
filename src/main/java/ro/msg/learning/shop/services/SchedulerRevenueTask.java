@@ -19,13 +19,14 @@ import java.util.stream.Collectors;
 public class SchedulerRevenueTask {
     private final OrderDetailRepository orderDetailRepository;
     private final RevenueService revenueService;
-    private List<RevenueDTO> revenueList;
+    private final List<RevenueDTO> revenueList = new ArrayList<>();
     private final LocalDate dateOfCreatingOrder = LocalDate.now();
 
     @Scheduled(cron = "${cron.expression.daily}", zone = "${cron.expression.zone}")
-    public void aggregateSalesRevenues() {
+    public void aggregateAndStoreSalesRevenues() {
         List<OrderDetail> orderDetailFilteredByDateList = orderDetailRepository.findAll().stream()
-                .filter(orderDetail -> orderDetail.getOrder().getCreatedAt().toLocalDate() == dateOfCreatingOrder)
+                .filter(orderDetail -> orderDetail.getOrder().getCreatedAt().toLocalDate().toString()
+                        .equals(dateOfCreatingOrder.toString()))
                 .collect(Collectors.toList());
         List<Location> locationWithRevenueForTodayList = orderDetailFilteredByDateList.stream()
                 .map(orderDetail -> orderDetail.getOrder().getShippedFrom())
@@ -61,5 +62,10 @@ public class SchedulerRevenueTask {
     public void storeRevenuesIntoDatabase(List<RevenueDTO> revenueList) {
         revenueList.forEach(revenueService::create);
     }
+
+    public List<RevenueDTO> getRevenueList() {
+        return revenueList;
+    }
+
 
 }

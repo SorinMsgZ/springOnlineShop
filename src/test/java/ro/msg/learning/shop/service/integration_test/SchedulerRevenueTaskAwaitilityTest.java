@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -18,20 +19,24 @@ import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("TestProfile3")
-public class SchedulerRevenueTaskTest {
+public class SchedulerRevenueTaskAwaitilityTest {
 
-    @Autowired
+    @SpyBean
     private SchedulerRevenueTask schedulerRevenueTask;
     @Autowired
     private LocationService locationService;
@@ -155,11 +160,13 @@ public class SchedulerRevenueTaskTest {
 
 
     @Test
-    public void testAggregateAndStoreSalesRevenues() throws InterruptedException {
-
+    public void testAggregateAndStoreSalesRevenuesUsingAwaitility() throws InterruptedException {
+        
         populateDataBase();
 
-        Thread.sleep(5000);
+       await()
+               .atMost(Duration.ofSeconds(5))
+               .untilAsserted(()->verify(schedulerRevenueTask,atLeast(3)).aggregateAndStoreSalesRevenues());
 
         int nbOfRevenues = schedulerRevenueTask.getRevenueList().size();
         assertThat(nbOfRevenues).isPositive();

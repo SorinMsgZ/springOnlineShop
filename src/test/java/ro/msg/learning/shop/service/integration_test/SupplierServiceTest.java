@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.integrationTest;
+package ro.msg.learning.shop.service.integration_test;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import ro.msg.learning.shop.services.SupplierService;
 @SpringBootTest
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-//test
+
 public class SupplierServiceTest {
     @Autowired
     SupplierService supplierService;

@@ -1,14 +1,15 @@
 package ro.msg.learning.shop.services;
 
+
 import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.entities.StockId;
 
-import javax.transaction.Transactional;
+
 import java.util.stream.Collectors;
 
-@Transactional
+
 public class ObserverStock extends ObserverObject {
 
     StockService stockService;

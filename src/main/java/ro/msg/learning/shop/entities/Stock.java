@@ -1,7 +1,9 @@
 package ro.msg.learning.shop.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Entity(name = "Stock")
 @Table(name = "stock")
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Stock {
     @EmbeddedId
     private StockId idProductLocation;

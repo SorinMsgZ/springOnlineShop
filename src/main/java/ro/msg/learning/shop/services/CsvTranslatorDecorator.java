@@ -47,10 +47,10 @@ public class CsvTranslatorDecorator extends AbstractGenericHttpMessageConverter 
         return csvTranslator.fromCsv(clazz, inputMessage.getBody());
     }
 
+
     @Override
     public Object read(Type type, Class contextClass,
                        HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-
         return readInternal(contextClass, inputMessage);
     }
 }

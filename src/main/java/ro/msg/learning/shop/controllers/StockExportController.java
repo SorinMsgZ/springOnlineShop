@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.StockExportDTO;
 import ro.msg.learning.shop.services.StockExportService;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -20,4 +21,5 @@ public class StockExportController {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=stocks.csv");
         return stockExportService.exportingStockByLocationId(locationId);
     }
+
 }

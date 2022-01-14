@@ -71,3 +71,9 @@ location INT REFERENCES Location(id) ON DELETE CASCADE,
 local_date DATE,
 sum DECIMAL
 );
+
+CREATE TABLE User_Customer (
+username NVARCHAR(64) PRIMARY KEY,
+password NVARCHAR(512)NOT NULL,
+customer_id INT REFERENCES customer(id) ON DELETE CASCADE
+);

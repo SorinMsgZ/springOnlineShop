@@ -12,10 +12,15 @@ public class ProximityLocationDTO {
     private String cityState;
 
 
-    public static ProximityLocationDTO of(Address address){
+    public static ProximityLocationDTO of(Address address) {
+        StringBuilder resultFormat = new StringBuilder();
+        resultFormat.append(address.getCity());
+        resultFormat.append(",");
+        resultFormat.append(" ");
+        resultFormat.append(address.getState());
 
         return ProximityLocationDTO.builder()
-                .cityState(address.getCity()+","+" "+address.getState())
+                .cityState(resultFormat.toString())
                 .build();
     }
 }

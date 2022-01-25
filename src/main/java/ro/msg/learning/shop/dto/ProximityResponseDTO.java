@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import ro.msg.learning.shop.services.MapquestKeyUrl;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,8 @@ public class ProximityResponseDTO {
         this.info = info;
     }
 
-    public static ProximityResponseDTO returnProximityResponse(List<String> listLocationsToBeCompared) {
+    public static ProximityResponseDTO returnProximityResponse(List<String> listLocationsToBeCompared,
+                                                               MapquestKeyUrl mapquestKeyUrl) {
 
         ProximityRequestOptionDTO proximityRequestOptionDTO = ProximityRequestOptionDTO.builder()
                 .manyToOne("false")
@@ -46,7 +48,7 @@ public class ProximityResponseDTO {
 
         HttpHeaders headers = new HttpHeaders();
 
-        headers.set("41rxtk9GH5UBBtaZOo0WDpVyDPWyyslU", "T7fgO25kf7c9dRgz");
+        headers.set(mapquestKeyUrl.getConsumerKey(), mapquestKeyUrl.getConsumerSecret());
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
@@ -54,6 +56,8 @@ public class ProximityResponseDTO {
 
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate
-                .postForObject("http://www.mapquestapi.com/directions/v2/routematrix?key=41rxtk9GH5UBBtaZOo0WDpVyDPWyyslU", request, ProximityResponseDTO.class);
+                .postForObject(
+                        mapquestKeyUrl.getResourceUrl() + "?key=" +
+                                mapquestKeyUrl.getConsumerKey(), request, ProximityResponseDTO.class);
     }
 }

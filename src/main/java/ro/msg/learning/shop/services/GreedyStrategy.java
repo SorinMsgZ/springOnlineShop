@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.Address;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 public class GreedyStrategy implements FindLocationStrategy {
     private final StockService stockService;
     private final ProductService productService;
+    @Autowired
+    private  MapquestKeyUrl mapquestKeyUrl;
 
     private final HashMap<Integer, Integer> productLocation = new HashMap<>();
     private final List<String> cityStateDestinationStockOriginList = new ArrayList<>();
@@ -23,6 +26,7 @@ public class GreedyStrategy implements FindLocationStrategy {
     private List<Integer> customerProductIdList;
     private final Map<Integer, Integer> customerProductIdQuantityMap = new HashMap<>();
     private List<StockDTO> listStocks;
+
 
     @Override
     public HashMap<Integer, Integer> findLocationAndTakeProducts(OrderObjectInputDTO input) {
@@ -39,7 +43,7 @@ public class GreedyStrategy implements FindLocationStrategy {
         customerAndStockLocationList.addAll(distinctStockDTOLocationList);
 
         ProximityResponseDTO proximityResponseDTO =
-                ProximityResponseDTO.returnProximityResponse(cityStateDestinationStockOriginList);
+        ProximityResponseDTO.returnProximityResponse(cityStateDestinationStockOriginList,mapquestKeyUrl);
 
         List<Integer> distanceFromAllStockOriginToDestinationList = proximityResponseDTO.getDistance();
 

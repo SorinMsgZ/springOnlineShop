@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import one.util.streamex.EntryStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.*;
@@ -18,7 +19,7 @@ public class GreedyStrategy implements FindLocationStrategy {
     private final StockService stockService;
     private final ProductService productService;
     @Autowired
-    private  MapquestKeyUrl mapquestKeyUrl;
+    private MapquestKeyUrl mapquestKeyUrl;
 
     private final HashMap<Integer, Integer> productLocation = new HashMap<>();
     private final List<String> cityStateDestinationStockOriginList = new ArrayList<>();
@@ -43,7 +44,7 @@ public class GreedyStrategy implements FindLocationStrategy {
         customerAndStockLocationList.addAll(distinctStockDTOLocationList);
 
         ProximityResponseDTO proximityResponseDTO =
-        ProximityResponseDTO.returnProximityResponse(cityStateDestinationStockOriginList,mapquestKeyUrl);
+                ProximityResponseDTO.returnProximityResponse(cityStateDestinationStockOriginList, mapquestKeyUrl);
 
         List<Integer> distanceFromAllStockOriginToDestinationList = proximityResponseDTO.getDistance();
 
@@ -60,10 +61,9 @@ public class GreedyStrategy implements FindLocationStrategy {
                 input.getProduct().stream().map(ProdOrdCreatorDTO::getProductID).collect(Collectors.toList());
         List<Integer> orderedQuantityList =
                 input.getProduct().stream().map(ProdOrdCreatorDTO::getProductQty).collect(Collectors.toList());
-        for (int iterator = 0; iterator < customerProductIdList.size(); iterator++
-        ) {
-            customerProductIdQuantityMap.put(customerProductIdList.get(iterator), orderedQuantityList.get(iterator));
-        }
+
+        EntryStream.of(customerProductIdList).forKeyValue((index, productId) -> customerProductIdQuantityMap
+                .put(customerProductIdList.get(index), orderedQuantityList.get(index)));
 
         getProductFromNearestStock(distanceFromAllStockOriginToDestinationList, distanceCityStateFromStockOriginToDestinationMap);
 

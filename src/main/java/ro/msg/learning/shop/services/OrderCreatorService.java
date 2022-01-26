@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.msg.learning.shop.dto.*;
@@ -9,8 +10,7 @@ import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
 import ro.msg.learning.shop.repositories.OrderRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,24 +24,30 @@ public class OrderCreatorService {
     private final OrderService orderService;
     private final ProductService productService;
 
-    List<OrderObject> objectStructureList = new ArrayList<>();
-    List<OrderDTO> orderDTOList = new ArrayList<>();
+    private final List<OrderObject> objectStructureList = new ArrayList<>();
+    private final List<OrderDTO> orderDTOList = new ArrayList<>();
 
-    Location location;
+    @Value("${strategy.findLocation}")
+    private String locationStrategy;
 
     public List<OrderDTO> createOrder(OrderObjectInputDTO input) {
 
-        List<ProdOrdCreatorDTO> listProducts = input.getProduct();
+        List<ProdOrdCreatorDTO> customerProductList = input.getProduct();
 
         OrderBasket orderBasket = new OrderBasket();
 
-        for (ProdOrdCreatorDTO product : listProducts) {
-            try {
-                location = context.executeStrategy(product.getProductID(), product.getProductQty());
-
-            } catch (NoSuitableLocationsFound exception) {
-                throw new NoSuitableLocationsFound();
-            }
+        Map<Integer, Integer> productLocationMap;
+        try {
+            productLocationMap = context.executeStrategy(input);
+        } catch (NoSuitableLocationsFound exception) {
+            throw new NoSuitableLocationsFound();
+        }
+        for (ProdOrdCreatorDTO product : customerProductList) {
+            int prodId = product.getProductID();
+            int locId = productLocationMap.get(prodId);
+            Location location = stockService.listAll().stream()
+                    .filter(stock -> (stock.getProduct().getId() == prodId) && (stock.getLocation().getId() == locId))
+                    .map(StockDTO::getLocation).findFirst().orElseThrow(NoSuitableLocationsFound::new);
 
             Product allAttributeProduct = productService.readById(product.getProductID()).toEntity();
 
@@ -70,7 +76,6 @@ public class OrderCreatorService {
             new ObserverOrderDetail(orderBasket, theOrder, orderDetailService);
 
             orderBasket.setOrderObject(object);
-
         }
         return orderDTOList;
     }

@@ -5,7 +5,7 @@ import ro.msg.learning.shop.entities.Address;
 
 import java.util.Optional;
 
-public interface AddressRepository extends JpaRepository<Address, String> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
     Optional<Address> findByStreetAddress(String streetAddress);
     void deleteByStreetAddress(String streetAddress);
 }

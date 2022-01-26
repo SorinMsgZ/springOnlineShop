@@ -10,17 +10,19 @@ import ro.msg.learning.shop.entities.Address;
 @NoArgsConstructor
 public class AddressDTO {
 
-    private  String country;
-    private   String city;
-    private  String county;
+    private String country;
+    private String city;
+    private String county;
     private String streetAddress;
+    private String state;
 
-    public AddressDTO( String country, String city, String county, String streetAddress) {
+    public AddressDTO(String country, String city, String county, String streetAddress, String state) {
 
         this.country = country;
         this.city = city;
         this.county = county;
         this.streetAddress = streetAddress;
+        this.state = state;
     }
 
     public Address toEntity() {
@@ -35,6 +37,7 @@ public class AddressDTO {
         address.setCity(city);
         address.setCounty(county);
         address.setStreetAddress(streetAddress);
+        address.setState(state);
     }
 
     public static AddressDTO of(Address entity) {
@@ -44,6 +47,7 @@ public class AddressDTO {
                 .city(entity.getCity())
                 .county(entity.getCounty())
                 .streetAddress(entity.getStreetAddress())
+                .state(entity.getState())
                 .build();
     }
 }

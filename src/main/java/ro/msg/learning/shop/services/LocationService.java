@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.LocationDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.exceptions.NotFoundException;
+import ro.msg.learning.shop.repositories.AddressRepository;
 import ro.msg.learning.shop.repositories.LocationRepository;
 
 import javax.transaction.Transactional;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LocationService {
     public final LocationRepository locationRepository;
+    public final AddressRepository addressRepository;
 
     public List<LocationDTO> listAll() {
 
@@ -32,6 +34,7 @@ public class LocationService {
 
     public LocationDTO create(LocationDTO input) {
         Location location = input.toEntity();
+        location.setAddress(addressRepository.findById((input.getAddress().getId())).orElseThrow(NotFoundException::new));
         return LocationDTO.of(locationRepository.save(location));
     }
 

@@ -1,5 +1,6 @@
 package ro.msg.learning.shop.entities;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Embeddable
 @Getter
+@Builder
 public class StockId implements Serializable {
     @Column(name = "product")
     private int productId;
@@ -42,6 +44,13 @@ public class StockId implements Serializable {
         return super.equals(obj);
     }
 
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
 }
 
 

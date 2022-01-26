@@ -45,6 +45,10 @@ public class StockService {
         stockRepository.deleteById(id);
     }
 
+    public void deleteAll() {
+        stockRepository.deleteAll();
+    }
+
     public StockDTO updateById(StockId id, StockDTO input) {
         Stock stock = stockRepository.findById(id).orElseThrow(NotFoundException::new);
         input.copyToEntity(stock);

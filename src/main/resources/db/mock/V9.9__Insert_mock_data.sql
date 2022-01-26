@@ -68,3 +68,5 @@ insert into Order_Detail (orders, product, quantity) values (2, 2, 4);
 insert into Revenue (id, location, local_date, sum) values (1, 1, '2021-10-20', 775.62);
 insert into Revenue (id, location, local_date, sum) values (2, 2, '2021-11-21', 853.37);
 insert into Revenue (id, location, local_date, sum) values (3, 3, '2021-12-22', 864.22);
+
+insert into User_Customer (username, password,customer_id) values ('cliff','$2a$12$ewr3FVyJy4/Sd6s2vvQhJ.Iclu80LbDWRv9Do6UZbKsXf835Vnw66',1);

@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.controller.integrationTest;
+package ro.msg.learning.shop.controller.integration_test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,9 +16,6 @@ import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +47,19 @@ class OrderCreatorControllerTest {
     private Location locTwo;
     private Location locThree;
     private Location locDelivery;
+    @Autowired
+    private CustomerService customerService;
 
     @BeforeEach
     void createProductDTO() {
+
+        CustomerDTO mockCustomer = CustomerDTO.builder()
+                .firstName("MockCustomerFirstName")
+                .lastName("MockCustomerLastName")
+                .emailAddress("MockCustomerEmailAddress")
+                .build();
+        customerService.create(mockCustomer);
+
         ProductCategoryDTO productCategoryOne =
                 ProductCategoryDTO.builder()
                         .name("Retaining Wall and Brick Pavers")
@@ -77,7 +84,29 @@ class OrderCreatorControllerTest {
         supplierService.create(supplierOne);
         supplierService.create(supplierTwo);
 
+        ProductDTO productOne = new ProductDTO();
+        productOne.setId(1);
+        productOne.setName("Fimbristylis vahlii (Lam.) Link");
+        productOne.setDescription("quis orci");
+        productOne.setPrice(new BigDecimal("7.4"));
+        productOne.setWeight(100);
+        productOne.setProductCategoryId(1);
+        productOne.setProductCategoryName("Retaining Wall and Brick Pavers");
+        productOne.setProductCategoryDescription("ProdCatDescription1");
         Supplier sup1 = supplierOne.toEntity();
+        sup1.setId(1);
+        productOne.setSupplier(sup1);
+        productOne.setImageUrl("http://11dummyimage.com/223x100.png/ff4444/ffffff");
+
+        ProductDTO productTwo = new ProductDTO();
+        productTwo.setId(2);
+        productTwo.setName("Mahonia Nutt., pulvinar");
+        productTwo.setDescription("pulvinar");
+        productTwo.setPrice(new BigDecimal("21.96"));
+        productTwo.setWeight(200.20);
+        productTwo.setProductCategoryId(2);
+        productTwo.setProductCategoryName("Drywall & Acoustical (MOB)");
+        productTwo.setProductCategoryDescription("ProdCatDescription2");
         Supplier sup2 = supplierTwo.toEntity();
 
         productOne = ProductDTO.builder()
@@ -302,8 +331,17 @@ class OrderCreatorControllerTest {
         listProductWanted.add(prod2Wanted);
 
         OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
-        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
-        AddressDTO deliveryAddress = addressService.listAll().get(3);
+        LocalDateTimeDTO localDateTimeDTO = LocalDateTimeDTO.builder()
+                .year(2021)
+                .month(2)
+                .dayOfMonth(21)
+                .hour(12)
+                .minute(30)
+                .second(0)
+                .build();
+
+        orderObjectInputDTO.setCreatedAt(localDateTimeDTO);
+        AddressDTO deliveryAddress = addressService.listAll().get(0);
         Address delAddressInput = deliveryAddress.toEntity();
         delAddressInput.setId(1);
         orderObjectInputDTO.setDeliveryAddress(delAddressInput);

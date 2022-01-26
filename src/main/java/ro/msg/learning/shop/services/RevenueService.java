@@ -9,6 +9,7 @@ import ro.msg.learning.shop.exceptions.NotFoundException;
 import ro.msg.learning.shop.repositories.RevenueRepository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,12 @@ public class RevenueService {
         return revenueRepository.findByLocation(location)
                 .map(RevenueDTO::of)
                 .orElseThrow(NotFoundException::new);
+    }
+    public List<RevenueDTO> readByDate(LocalDate localDate) {
+        return revenueRepository.findByLocalDate(localDate)
+                .stream()
+                .map(RevenueDTO::of)
+                .collect(Collectors.toList());
     }
 
     public RevenueDTO create(RevenueDTO input) {

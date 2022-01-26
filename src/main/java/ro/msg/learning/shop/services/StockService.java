@@ -6,6 +6,8 @@ import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.entities.StockId;
 import ro.msg.learning.shop.exceptions.NotFoundException;
+import ro.msg.learning.shop.repositories.LocationRepository;
+import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 
 
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockService {
     public final StockRepository stockRepository;
+    public final ProductRepository productRepository;
+    public final LocationRepository locationRepository;
 
     public List<StockDTO> listAll() {
         return stockRepository.findAll().stream()
@@ -31,6 +35,9 @@ public class StockService {
 
     public StockDTO create(StockDTO input) {
         Stock stock = input.toEntity();
+        stock.setProduct(productRepository.findById(input.getProduct().getId()).orElseThrow(NotFoundException::new));
+        stock.setLocation(locationRepository.findById(input.getLocation().getId())
+                .orElseThrow(NotFoundException::new));
         return StockDTO.of(stockRepository.save(stock));
     }
 

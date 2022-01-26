@@ -12,12 +12,12 @@ import org.springframework.test.context.TestPropertySource;
 import ro.msg.learning.shop.controllers.OrderCreatorController;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
+import ro.msg.learning.shop.exceptions.NoSuitableLocationsFound;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,6 +41,12 @@ class OrderCreatorControllerTest {
     private OrderService orderService;
     @Autowired
     private StockService stockService;
+    private ProductDTO productOne;
+    private ProductDTO productTwo;
+    private Location locOne;
+    private Location locTwo;
+    private Location locThree;
+    private Location locDelivery;
     @Autowired
     private CustomerService customerService;
 
@@ -55,14 +61,26 @@ class OrderCreatorControllerTest {
         customerService.create(mockCustomer);
 
         ProductCategoryDTO productCategoryOne =
-                new ProductCategoryDTO("Retaining Wall and Brick Pavers", "ProdCatDescription1");
+                ProductCategoryDTO.builder()
+                        .name("Retaining Wall and Brick Pavers")
+                        .description("ProdCatDescription1")
+                        .build();
+
         ProductCategoryDTO productCategoryTwo =
-                new ProductCategoryDTO("Drywall & Acoustical (MOB)", "ProdCatDescription2");
+                ProductCategoryDTO.builder()
+                        .name("Drywall & Acoustical (MOB)")
+                        .description("ProdCatDescription2")
+                        .build();
+
         productCategoryService.create(productCategoryOne);
         productCategoryService.create(productCategoryTwo);
 
-        SupplierDTO supplierOne = new SupplierDTO("Fisher-Huels");
-        SupplierDTO supplierTwo = new SupplierDTO("D Amore, Torp and Kuvalis");
+        SupplierDTO supplierOne = SupplierDTO.builder()
+                .name("Fisher-Huels")
+                .build();
+        SupplierDTO supplierTwo = SupplierDTO.builder()
+                .name("D Amore, Torp and Kuvalis")
+                .build();
         supplierService.create(supplierOne);
         supplierService.create(supplierTwo);
 
@@ -90,66 +108,220 @@ class OrderCreatorControllerTest {
         productTwo.setProductCategoryName("Drywall & Acoustical (MOB)");
         productTwo.setProductCategoryDescription("ProdCatDescription2");
         Supplier sup2 = supplierTwo.toEntity();
-        sup2.setId(2);
-        productTwo.setSupplier(sup2);
-        productTwo.setImageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff");
 
+        productOne = ProductDTO.builder()
+                .id(1)
+                .name("Fimbristylis vahlii (Lam.) Link")
+                .description("quis orci")
+                .price(new BigDecimal("7.4"))
+                .weight(100)
+                .productCategoryId(1)
+                .productCategoryName("Retaining Wall and Brick Pavers")
+                .productCategoryDescription("ProdCatDescription1")
+                .supplier(sup1)
+                .imageUrl("http://11dummyimage.com/223x100.png/ff4444/ffffff")
+                .build();
+
+        productTwo = ProductDTO.builder()
+                .id(2)
+                .name("Mahonia Nutt., pulvinar")
+                .description("pulvinar")
+                .price(new BigDecimal("21.96"))
+                .weight(200.20)
+                .productCategoryId(2)
+                .productCategoryName("Drywall & Acoustical (MOB)")
+                .productCategoryDescription("ProdCatDescription2")
+                .supplier(sup2)
+                .imageUrl("http://22dummyimage.com/104x100.png/ff4444/ffffff")
+                .build();
 
         productService.create(productOne);
         productService.create(productTwo);
 
-        AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
-        addressService.create(deliveryAddress);
+        AddressDTO stockAddressDTO1 = AddressDTO.builder()
+                .country("United States")
+                .city("Westminster")
+                .county("Westminster")
+                .streetAddress("streetAddress1")
+                .state("CO")
+                .build();
+        addressService.create(stockAddressDTO1);
+        Address stockAddress1 = stockAddressDTO1.toEntity();
+        stockAddress1.setId(1);
 
-        Address delAddress = deliveryAddress.toEntity();
-        delAddress.setId(1);
+        AddressDTO stockAddressDTO2 = AddressDTO.builder()
+                .country("United States")
+                .city("Denver")
+                .county("Denver")
+                .streetAddress("440 Merry Drive")
+                .state("CO")
+                .build();
+        addressService.create(stockAddressDTO2);
+        Address stockAddress2 = stockAddressDTO2.toEntity();
+        stockAddress2.setId(2);
 
+        AddressDTO stockAddressDTO3 = AddressDTO.builder()
+                .country("United States")
+                .city("Portland")
+                .county("Portland")
+                .streetAddress("streetAddress3")
+                .state("OR")
+                .build();
+        addressService.create(stockAddressDTO3);
+        Address stockAddress3 = stockAddressDTO3.toEntity();
+        stockAddress3.setId(3);
 
-        LocationDTO locationOne = new LocationDTO("cbslocal.com", delAddress);
-        LocationDTO locationTwo = new LocationDTO("msn.com", delAddress);
-        LocationDTO locationThree = new LocationDTO("sdgsg", delAddress);
-        LocationDTO locationFour = new LocationDTO("jdjtzk", delAddress);
+        AddressDTO deliveryAddressDTO = AddressDTO.builder()
+                .country("United States")
+                .city("Boulder")
+                .county("Boulder")
+                .streetAddress("streetAddressX")
+                .state("CO")
+                .build();
+        addressService.create(deliveryAddressDTO);
+        Address deliveryAddress = deliveryAddressDTO.toEntity();
+        deliveryAddress.setId(4);
+
+        LocationDTO locationOne = LocationDTO.builder()
+                .name("cbslocal.com")
+                .address(stockAddress1)
+                .build();
+        LocationDTO locationTwo = LocationDTO.builder()
+                .name("msn.com")
+                .address(stockAddress2)
+                .build();
+        LocationDTO locationThree = LocationDTO.builder()
+                .name("sdgsg")
+                .address(stockAddress3)
+                .build();
+        LocationDTO deliveryLocation = LocationDTO.builder()
+                .name("jdjtzk")
+                .address(deliveryAddress)
+                .build();
 
         locationService.create(locationOne);
         locationService.create(locationTwo);
         locationService.create(locationThree);
-        locationService.create(locationFour);
+        locationService.create(deliveryLocation);
 
-        Location locOne = locationOne.toEntity();
+        locOne = locationOne.toEntity();
         locOne.setId(1);
-        Location locTwo = locationTwo.toEntity();
+        locTwo = locationTwo.toEntity();
         locTwo.setId(2);
-        Location locThree = locationThree.toEntity();
+        locThree = locationThree.toEntity();
         locThree.setId(3);
-        Location locFour = locationFour.toEntity();
-        locFour.setId(4);
+        locDelivery = deliveryLocation.toEntity();
+        locDelivery.setId(4);
+    }
 
+    @Test
+    void testCreateOrderSuccessfullyWhenLocationsAreFoundAndHaveAllEnoughStockQuantity(
+            @Value("${strategy.findLocation}") String strategy) {
         StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
-        StockDTO stockTwo = new StockDTO(productTwo.toEntity(), locTwo, 20);
-        StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 11);
-        StockDTO stockFour = new StockDTO(productTwo.toEntity(), locFour, 21);
+        StockDTO stockTwo = new StockDTO(productOne.toEntity(), locTwo, 11);
+        StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 12);
+        StockDTO stockFour = new StockDTO(productTwo.toEntity(), locOne, 10);
+        StockDTO stockFive = new StockDTO(productTwo.toEntity(), locTwo, 11);
 
         stockService.create(stockOne);
         stockService.create(stockTwo);
         stockService.create(stockThree);
         stockService.create(stockFour);
+        stockService.create(stockFive);
+        StockId stockId1 = new StockId(1, 1);
+        StockId stockId2 = new StockId(1, 2);
+        StockId stockId3 = new StockId(1, 3);
+        StockId stockId4 = new StockId(2, 1);
+        StockId stockId5 = new StockId(2, 2);
+
+        int stock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+        int stock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
+        int stock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+        int stock4Prod2Loc1Qty = stockService.readById(stockId4).getQuantity();
+        int stock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
+
+        int testProd1Qty = 10;
+        int testProd2Qty = 10;
+
+        ProdOrdCreatorDTO prod1Wanted = new ProdOrdCreatorDTO(1, testProd1Qty);
+        ProdOrdCreatorDTO prod2Wanted = new ProdOrdCreatorDTO(2, testProd2Qty);
+
+        List<ProdOrdCreatorDTO> listProductWanted = new ArrayList<>();
+        listProductWanted.add(prod1Wanted);
+        listProductWanted.add(prod2Wanted);
+
+        OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
+        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+
+        orderObjectInputDTO.setDeliveryAddress(locDelivery.getAddress());
+        orderObjectInputDTO.setProduct(listProductWanted);
+
+        int initialOrderNb = orderService.listAll().size();
+
+        orderCreatorController.create(orderObjectInputDTO);
+
+        int actualOrderNb = orderService.listAll().size();
+
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
+            int expectUpdateStock1Prod1Loc1Qty = stock1Prod1Loc1Qty - testProd1Qty;
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+
+            int expectUpdateStock4Prod2Loc1Qty = stock4Prod2Loc1Qty - testProd2Qty;
+            int actualStock4Prod2Loc1Qty = stockService.readById(stockId4).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
+            Assert.assertEquals(expectUpdateStock4Prod2Loc1Qty, actualStock4Prod2Loc1Qty);
+
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
+            int expectUpdateStock3Prod1Loc3Qty = stock3Prod1Loc3Qty - testProd1Qty;
+            int actualStock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+
+            int expectUpdateStock5Prod2Loc2Qty = stock5Prod2Loc2Qty - testProd2Qty;
+            int actualStock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock3Prod1Loc3Qty, actualStock3Prod1Loc3Qty);
+            Assert.assertEquals(expectUpdateStock5Prod2Loc2Qty, actualStock5Prod2Loc2Qty);
+        } else if (strategy.equals(StrategyType.PROXIMITY_STRATEGY.toString())) {
+            int expectUpdateStock1Prod1Loc1Qty = stock1Prod1Loc1Qty - testProd1Qty;
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+
+            int expectUpdateStock4Prod2Loc1Qty = stock4Prod2Loc1Qty - testProd2Qty;
+            int actualStock4Prod2Loc1Qty = stockService.readById(stockId4).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
+            Assert.assertEquals(expectUpdateStock4Prod2Loc1Qty, actualStock4Prod2Loc1Qty);
+        }
+        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
     }
 
     @Test
-    void testCreateOrder(@Value("${strategy.findLocation}") String strategy) {
+    void testCreateOrderSuccessfullyWhenLocationsAreFoundButNotAllOfThemWithEnoughStockQuantity(
+            @Value("${strategy.findLocation}") String strategy) {
+        StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
+        StockDTO stockTwo = new StockDTO(productOne.toEntity(), locTwo, 11);
+        StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 12);
+        StockDTO stockFour = new StockDTO(productTwo.toEntity(), locOne, 9);
+        StockDTO stockFive = new StockDTO(productTwo.toEntity(), locTwo, 11);
 
+        stockService.create(stockOne);
+        stockService.create(stockTwo);
+        stockService.create(stockThree);
+        stockService.create(stockFour);
+        stockService.create(stockFive);
         StockId stockId1 = new StockId(1, 1);
-        StockId stockId2 = new StockId(2, 2);
+        StockId stockId2 = new StockId(1, 2);
         StockId stockId3 = new StockId(1, 3);
-        StockId stockId4 = new StockId(2, 4);
+        StockId stockId4 = new StockId(2, 1);
+        StockId stockId5 = new StockId(2, 2);
 
-        int stock1Prod1Qty = stockService.readById(stockId1).getQuantity();
-        int stock2Prod2Qty = stockService.readById(stockId2).getQuantity();
-        int stock3Prod1Qty = stockService.readById(stockId3).getQuantity();
-        int stock4Prod2Qty = stockService.readById(stockId4).getQuantity();
+        int stock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+        int stock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
+        int stock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+        int stock4Prod2Loc1Qty = stockService.readById(stockId4).getQuantity();
+        int stock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
 
         int testProd1Qty = 10;
-        int testProd2Qty = 20;
+        int testProd2Qty = 10;
 
         ProdOrdCreatorDTO prod1Wanted = new ProdOrdCreatorDTO(1, testProd1Qty);
         ProdOrdCreatorDTO prod2Wanted = new ProdOrdCreatorDTO(2, testProd2Qty);
@@ -177,34 +349,172 @@ class OrderCreatorControllerTest {
 
         int initialOrderNb = orderService.listAll().size();
 
-        List<OrderDTO> orderListCreatedDTO = orderCreatorController.create(orderObjectInputDTO);
-        List<Order> orderListCreated =
-                orderListCreatedDTO.stream().map(OrderDTO::toEntity).collect(Collectors.toList());
+        orderCreatorController.create(orderObjectInputDTO);
 
         int actualOrderNb = orderService.listAll().size();
 
         if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
-            int expectUpdateStock1Prod1Qty = stock1Prod1Qty - testProd1Qty;
-            int actualStock1Prod1Qty = stockService.readById(stockId1).getQuantity();
+            int expectUpdateStock2Prod1Loc2Qty = stock2Prod1Loc2Qty - testProd1Qty;
+            int actualStock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
 
-            int expectUpdateStock2Prod2Qty = stock2Prod2Qty - testProd2Qty;
-            int actualStock2Prod2Qty = stockService.readById(stockId2).getQuantity();
+            int expectUpdateStock5Prod2Loc2Qty = stock5Prod2Loc2Qty - testProd2Qty;
+            int actualStock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
 
-            Assert.assertEquals(expectUpdateStock1Prod1Qty, actualStock1Prod1Qty);
-            Assert.assertEquals(expectUpdateStock2Prod2Qty, actualStock2Prod2Qty);
+            Assert.assertEquals(expectUpdateStock2Prod1Loc2Qty, actualStock2Prod1Loc2Qty);
+            Assert.assertEquals(expectUpdateStock5Prod2Loc2Qty, actualStock5Prod2Loc2Qty);
 
         } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
-            int expectUpdateStock3Prod1Qty = stock3Prod1Qty - testProd1Qty;
-            int actualStock3Prod1Qty = stockService.readById(stockId3).getQuantity();
+            int expectUpdateStock3Prod1Loc3Qty = stock3Prod1Loc3Qty - testProd1Qty;
+            int actualStock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
 
-            int expectUpdateStock4Prod2Qty = stock4Prod2Qty - testProd2Qty;
-            int actualStock4Prod2Qty = stockService.readById(stockId4).getQuantity();
+            int expectUpdateStock5Prod2Loc2Qty = stock5Prod2Loc2Qty - testProd2Qty;
+            int actualStock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
 
-            Assert.assertEquals(expectUpdateStock3Prod1Qty, actualStock3Prod1Qty);
-            Assert.assertEquals(expectUpdateStock4Prod2Qty, actualStock4Prod2Qty);
+            Assert.assertEquals(expectUpdateStock3Prod1Loc3Qty, actualStock3Prod1Loc3Qty);
+            Assert.assertEquals(expectUpdateStock5Prod2Loc2Qty, actualStock5Prod2Loc2Qty);
+
+        } else if (strategy.equals(StrategyType.PROXIMITY_STRATEGY.toString())) {
+            int expectUpdateStock1Prod1Loc1Qty = stock1Prod1Loc1Qty - testProd1Qty;
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+
+            int expectUpdateStock5Prod2Loc2Qty = stock5Prod2Loc2Qty - testProd2Qty;
+            int actualStock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
+
+            Assert.assertEquals(expectUpdateStock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
+            Assert.assertEquals(expectUpdateStock5Prod2Loc2Qty, actualStock5Prod2Loc2Qty);
+        }
+        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
+    }
+
+    @Test
+    void testFailCreateOrderWhenLocationsAreFoundButForOneProductNotEnoughStockQuantity(
+            @Value("${strategy.findLocation}") String strategy) {
+        StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
+        StockDTO stockTwo = new StockDTO(productOne.toEntity(), locTwo, 11);
+        StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 12);
+        StockDTO stockFour = new StockDTO(productTwo.toEntity(), locOne, 9);
+        StockDTO stockFive = new StockDTO(productTwo.toEntity(), locTwo, 11);
+
+        stockService.create(stockOne);
+        stockService.create(stockTwo);
+        stockService.create(stockThree);
+        stockService.create(stockFour);
+        stockService.create(stockFive);
+        StockId stockId1 = new StockId(1, 1);
+        StockId stockId2 = new StockId(1, 2);
+        StockId stockId3 = new StockId(1, 3);
+        StockId stockId4 = new StockId(2, 1);
+        StockId stockId5 = new StockId(2, 2);
+
+        int stock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+        int stock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
+        int stock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+        int stock4Prod2Loc1Qty = stockService.readById(stockId4).getQuantity();
+        int stock5Prod2Loc2Qty = stockService.readById(stockId5).getQuantity();
+
+        int testProd1Qty = 10;
+        int testProd2Qty = 100;
+
+        ProdOrdCreatorDTO prod1Wanted = new ProdOrdCreatorDTO(1, testProd1Qty);
+        ProdOrdCreatorDTO prod2Wanted = new ProdOrdCreatorDTO(2, testProd2Qty);
+
+        List<ProdOrdCreatorDTO> listProductWanted = new ArrayList<>();
+        listProductWanted.add(prod1Wanted);
+        listProductWanted.add(prod2Wanted);
+
+        OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
+        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+        AddressDTO deliveryAddress = addressService.listAll().get(3);
+        Address delAddressInput = deliveryAddress.toEntity();
+        delAddressInput.setId(1);
+        orderObjectInputDTO.setDeliveryAddress(delAddressInput);
+        orderObjectInputDTO.setProduct(listProductWanted);
+
+        int initialOrderNb = orderService.listAll().size();
+        int actualOrderNb;
+        try {
+            orderCreatorController.create(orderObjectInputDTO);
+            actualOrderNb = orderService.listAll().size();
+        }
+        catch (NoSuitableLocationsFound ex){
+            actualOrderNb = orderService.listAll().size();
+            Assert.assertEquals(initialOrderNb, actualOrderNb);
+            }
+
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
+            int actualStock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
+            Assert.assertEquals(stock2Prod1Loc2Qty, actualStock2Prod1Loc2Qty);
+
+
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
+            int actualStock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+            Assert.assertEquals(stock3Prod1Loc3Qty, actualStock3Prod1Loc3Qty);
+
+        } else if (strategy.equals(StrategyType.PROXIMITY_STRATEGY.toString())) {
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+            Assert.assertEquals(stock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
+        }
+        Assert.assertEquals(initialOrderNb, actualOrderNb);
+    }
+    @Test
+    void testFailCreateOrderWhenForOneProductNoStockLocationAvailable(
+            @Value("${strategy.findLocation}") String strategy) {
+        StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
+        StockDTO stockTwo = new StockDTO(productOne.toEntity(), locTwo, 11);
+        StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 12);
+
+        stockService.create(stockOne);
+        stockService.create(stockTwo);
+        stockService.create(stockThree);
+
+        StockId stockId1 = new StockId(1, 1);
+        StockId stockId2 = new StockId(1, 2);
+        StockId stockId3 = new StockId(1, 3);
+
+        int stock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+        int stock2Prod1Loc2Qty = stockService.readById(stockId2).getQuantity();
+        int stock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+
+        int testProd1Qty = 10;
+        int testProd2Qty = 10;
+
+        ProdOrdCreatorDTO prod1Wanted = new ProdOrdCreatorDTO(1, testProd1Qty);
+        ProdOrdCreatorDTO prod2Wanted = new ProdOrdCreatorDTO(2, testProd2Qty);
+
+        List<ProdOrdCreatorDTO> listProductWanted = new ArrayList<>();
+        listProductWanted.add(prod1Wanted);
+        listProductWanted.add(prod2Wanted);
+
+        OrderObjectInputDTO orderObjectInputDTO = new OrderObjectInputDTO();
+        orderObjectInputDTO.setCreatedAt(LocalDateTime.of(LocalDate.of(2021, 2, 21), LocalTime.of(12, 30, 0)));
+
+        orderObjectInputDTO.setDeliveryAddress(locDelivery.getAddress());
+        orderObjectInputDTO.setProduct(listProductWanted);
+
+        int initialOrderNb = orderService.listAll().size();
+
+        int actualOrderNb;
+        try {
+            orderCreatorController.create(orderObjectInputDTO);
+            actualOrderNb = orderService.listAll().size();
+        }
+        catch (NoSuitableLocationsFound ex){
+            actualOrderNb = orderService.listAll().size();
+            Assert.assertEquals(initialOrderNb, actualOrderNb);
         }
 
-        Assert.assertEquals(initialOrderNb + 2, actualOrderNb);
+        if (strategy.equals(StrategyType.SINGLE_LOCATION_STRATEGY.toString())) {
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+            Assert.assertEquals(stock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
 
+        } else if (strategy.equals(StrategyType.MOST_ABUNDANT_STRATEGY.toString())) {
+            int actualStock3Prod1Loc3Qty = stockService.readById(stockId3).getQuantity();
+            Assert.assertEquals(stock3Prod1Loc3Qty, actualStock3Prod1Loc3Qty);
+
+        } else if (strategy.equals(StrategyType.PROXIMITY_STRATEGY.toString())) {
+            int actualStock1Prod1Loc1Qty = stockService.readById(stockId1).getQuantity();
+            Assert.assertEquals(stock1Prod1Loc1Qty, actualStock1Prod1Loc1Qty);
+        }
+        Assert.assertEquals(initialOrderNb , actualOrderNb);
     }
 }

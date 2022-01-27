@@ -3,14 +3,17 @@ package ro.msg.learning.shop.controller.integration_test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -26,11 +29,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource("classpath:test.properties")
+@ActiveProfiles("with-base")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ProductRestControllerTest {
+public class ProductRestControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -41,7 +46,7 @@ class ProductRestControllerTest {
 
     private ProductDTO productDTO;
 
-    @BeforeEach
+    @Before
     public void mockOneProductDTO() {
         productController = new ProductController(productService);
         Assert.assertEquals(0, productController.listAll().size());
@@ -68,7 +73,7 @@ class ProductRestControllerTest {
     }
 
     @Test
-    void testListAll() throws Exception {
+    public void testListAll() throws Exception {
         List<ProductDTO> dtoListExpected = productController.listAll();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +88,7 @@ class ProductRestControllerTest {
     }
 
     @Test
-    void testReadById() throws Exception {
+    public void testReadById() throws Exception {
         int testId = 1;
         ObjectMapper objectMapper = new ObjectMapper();
         String productAsStringDTO = objectMapper.writeValueAsString(productController.readById(testId));
@@ -96,7 +101,7 @@ class ProductRestControllerTest {
     }
 
     @Test
-    void testCreate() throws Exception {
+    public void testCreate() throws Exception {
         int id = 2;
         String name = "2TestNameSecondDTO";
         String description = "2Test Product Description";
@@ -130,7 +135,7 @@ class ProductRestControllerTest {
     }
 
     @Test
-    void testDeleteById() throws Exception {
+    public void testDeleteById() throws Exception {
         List<ProductDTO> expectedList = productController.listAll();
         int initialProductNb = expectedList.size();
         int indexOfProduct = expectedList.indexOf(productDTO);
@@ -149,7 +154,7 @@ class ProductRestControllerTest {
     }
 
     @Test
-    void testUpdateById() throws Exception {
+    public void testUpdateById() throws Exception {
 
         int id = 1;
         String name = "3TestNameSecondDTO";

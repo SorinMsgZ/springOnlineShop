@@ -10,10 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.dto.*;
-import ro.msg.learning.shop.entities.Customer;
-import ro.msg.learning.shop.entities.Location;
-import ro.msg.learning.shop.entities.Order;
-import ro.msg.learning.shop.entities.Product;
+import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.*;
 
@@ -55,6 +52,10 @@ public class SchedulerRevenueTaskTest {
     private CustomerService customerService;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private AddressService addressService;
+    @Autowired
+    private AddressRepository  addressRepository;
 
     public void populateDataBase() {
         CustomerDTO customerDTO = CustomerDTO.builder()
@@ -63,11 +64,33 @@ public class SchedulerRevenueTaskTest {
         customerService.create(customerDTO);
         Customer customer = customerRepository.findByFirstName("Ghita").orElseThrow();
 
+        AddressDTO stockAddressDTO1 = AddressDTO.builder()
+                .country("United States")
+                .city("Westminster")
+                .county("Westminster")
+                .streetAddress("streetAddress1")
+                .state("CO")
+                .build();
+        AddressDTO stockAddressDTO2 = AddressDTO.builder()
+                .country("United States")
+                .city("Westminster")
+                .county("Westminster")
+                .streetAddress("streetAddress2")
+                .state("CO")
+                .build();
+        addressService.create(stockAddressDTO1);
+        addressService.create(stockAddressDTO2);
+
+        Address address1 = addressRepository.findById(1).orElseThrow();
+        Address address2 = addressRepository.findById(2).orElseThrow();
+
         LocationDTO locationDTO1 = LocationDTO.builder()
                 .name("location1")
+                .address(address1)
                 .build();
         LocationDTO locationDTO2 = LocationDTO.builder()
                 .name("location2")
+                .address(address2)
                 .build();
         locationService.create(locationDTO1);
         locationService.create(locationDTO2);

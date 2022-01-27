@@ -2,13 +2,15 @@
 package ro.msg.learning.shop.controller.integration_test;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.controllers.ProductController;
 import ro.msg.learning.shop.dto.ProductDTO;
 import ro.msg.learning.shop.entities.Supplier;
@@ -17,11 +19,12 @@ import ro.msg.learning.shop.services.ProductService;
 import java.math.BigDecimal;
 import java.util.List;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ProductControllerTest {
+public class ProductControllerTest {
 
     @Autowired
     private ProductService productService;
@@ -29,7 +32,7 @@ class ProductControllerTest {
     private ProductDTO productDTO;
     private ProductController controller;
 
-    @BeforeEach
+    @Before
     public void createProductDTO() {
 
         Assert.assertEquals(0, productService.listAll().size());
@@ -57,21 +60,21 @@ class ProductControllerTest {
     }
 
     @Test
-    void testListProducts() {
+    public void testListProducts() {
         List<ProductDTO> dtoListExpected = productService.listAll();
         List<ProductDTO> dtoListActual = controller.listAll();
         Assert.assertEquals(dtoListExpected.size(), dtoListActual.size());
     }
 
     @Test
-    void testReadSingleProduct() {
+    public void testReadSingleProduct() {
         int productId = 1;
         ProductDTO actualProductDTO = controller.readById(productId);
         Assert.assertEquals(productDTO.toString(), actualProductDTO.toString());
     }
 
     @Test
-    void testCreateProduct() {
+    public void testCreateProduct() {
         int id = 2;
         String name = "2TestNameSecondDTO";
         String description = "2Test Product Description";
@@ -97,7 +100,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void testDeleteSingleProduct() {
+    public void testDeleteSingleProduct() {
         int initialProductNb = productService.listAll().size();
         int productId = 1;
         controller.deleteById(productId);
@@ -105,7 +108,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void testUpdateSingleProduct() {
+    public void testUpdateSingleProduct() {
         int id = 1;
         String name = "3TestNameSecondDTO";
         String description = "3Test Product Description";

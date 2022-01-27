@@ -1,12 +1,14 @@
 package ro.msg.learning.shop.service.integration_test;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.repositories.*;
@@ -15,11 +17,12 @@ import ro.msg.learning.shop.services.StockService;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class StockServiceTest {
+public class StockServiceTest {
 
     @Autowired
     private StockRepository stockRepository;
@@ -39,7 +42,7 @@ class StockServiceTest {
 
 
     @Test
-    void testUpdateStock() {
+    public void testUpdateStock() {
 
         ProductCategory productCategory = new ProductCategory();
         productCategory.setName("prdCat");

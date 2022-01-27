@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,11 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ShopApplication.class, OrderJpaConfig.class})
 @ActiveProfiles("TestProfile1")
-
 @AutoConfigureMockMvc
-
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class FailOrderCreatorRestControllerProfileTest {
+public class FailOrderCreatorRestControllerProfileTest {
     @Autowired
     private MockMvc mvc;
 
@@ -68,8 +66,10 @@ class FailOrderCreatorRestControllerProfileTest {
     private OrderCreatorController orderCreatorController;
     @Autowired
     private CustomerService customerService;
+    @Value("${strategy.findLocation}")
+    private String strategy;
+    @Before
 
-    @BeforeEach
     public void mockOneProductDTO() {
         CustomerDTO mockCustomer=CustomerDTO.builder()
                 .firstName("MockCustomerFirstName")
@@ -121,7 +121,12 @@ class FailOrderCreatorRestControllerProfileTest {
         productController.create(productOne);
         productController.create(productTwo);
 
-        AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
+        AddressDTO deliveryAddress = AddressDTO.builder()
+                .country("United States")
+                .city("Rochester")
+                .county("New York")
+                .streetAddress("440 Merry Drive")
+                .build();
         addressController.create(deliveryAddress);
 
         Address delAddress = deliveryAddress.toEntity();
@@ -159,7 +164,7 @@ class FailOrderCreatorRestControllerProfileTest {
     }
 
     @Test
-    void testFailCreateOrderDueMissingStock(@Value("${strategy.findLocation}") String strategy) throws Exception {
+    public void testFailCreateOrderDueMissingStock() throws Exception {
         StockId stockId1 = new StockId(1, 1);
         StockId stockId2 = new StockId(2, 2);
         StockId stockId3 = new StockId(1, 3);

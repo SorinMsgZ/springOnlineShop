@@ -6,8 +6,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,20 +32,18 @@ import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.services.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderCreatorRestControllerTest {
+public class OrderCreatorRestControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -70,8 +71,10 @@ class OrderCreatorRestControllerTest {
     private Location locDelivery;
     @Autowired
     private CustomerService customerService;
+    @Value("${strategy.findLocation}")
+    private String strategy;
 
-    @BeforeEach
+    @Before
     public void mockOneProductDTO() {
         CustomerDTO mockCustomer = CustomerDTO.builder()
                 .firstName("MockCustomerFirstName")
@@ -104,30 +107,11 @@ class OrderCreatorRestControllerTest {
         supplierController.create(supplierOne);
         supplierController.create(supplierTwo);
 
-        ProductDTO productOne = new ProductDTO();
-        productOne.setId(1);
-        productOne.setName("Fimbristylis vahlii (Lam.) Link");
-        productOne.setDescription("quis orci");
-        productOne.setPrice(new BigDecimal("7.4"));
-        productOne.setWeight(100);
-        productOne.setProductCategoryId(1);
-        productOne.setProductCategoryName("Retaining Wall and Brick Pavers");
-        productOne.setProductCategoryDescription("ProdCatDescription1");
         Supplier sup1 = supplierOne.toEntity();
         sup1.setId(1);
-        productOne.setSupplier(sup1);
-        productOne.setImageUrl("http://11dummyimage.com/223x100.png/ff4444/ffffff");
 
-        ProductDTO productTwo = new ProductDTO();
-        productTwo.setId(2);
-        productTwo.setName("Mahonia Nutt., pulvinar");
-        productTwo.setDescription("pulvinar");
-        productTwo.setPrice(new BigDecimal("21.96"));
-        productTwo.setWeight(200.20);
-        productTwo.setProductCategoryId(2);
-        productTwo.setProductCategoryName("Drywall & Acoustical (MOB)");
-        productTwo.setProductCategoryDescription("ProdCatDescription2");
         Supplier sup2 = supplierTwo.toEntity();
+        sup2.setId(2);
 
         productOne = ProductDTO.builder()
                 .id(1)
@@ -232,12 +216,10 @@ class OrderCreatorRestControllerTest {
         locThree.setId(3);
         locDelivery = deliveryLocation.toEntity();
         locDelivery.setId(4);
-
     }
 
     @Test
-    void testCreateOrderSuccessfullyWhenLocationsAreFoundAndHaveAllEnoughStockQuantity(
-            @Value("${strategy.findLocation}") String strategy) throws Exception {
+    public void testCreateOrderSuccessfullyWhenLocationsAreFoundAndHaveAllEnoughStockQuantity() throws Exception {
         StockDTO stockOne = new StockDTO(productOne.toEntity(), locOne, 10);
         StockDTO stockTwo = new StockDTO(productOne.toEntity(), locTwo, 11);
         StockDTO stockThree = new StockDTO(productOne.toEntity(), locThree, 12);

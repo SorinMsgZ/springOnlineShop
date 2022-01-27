@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import ro.msg.learning.shop.dto.*;
@@ -19,10 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@ExtendWith(MockitoExtension.class)
-class CsvSerializationDeserializationServiceUnitTest {
+@RunWith(MockitoJUnitRunner.class)
+public class CsvSerializationDeserializationServiceUnitTest {
 
     @MockBean
     private StockExportService stockExportService;
@@ -32,8 +31,8 @@ class CsvSerializationDeserializationServiceUnitTest {
     private final List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
     private String actualCsvText = "";
 
-    @BeforeEach
-    void createProductDTO() {
+    @Before
+    public void createProductDTO() {
 
         StockExportDTO stockOne = StockExportDTO.builder()
                 .productId(1)
@@ -53,7 +52,7 @@ class CsvSerializationDeserializationServiceUnitTest {
     }
 
     @Test
-    void testSerialization() throws Exception {
+    public void testSerialization() throws Exception {
 
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = mapper.schemaFor(StockExportDTO.class);
@@ -93,7 +92,7 @@ class CsvSerializationDeserializationServiceUnitTest {
     }
 
     @Test
-    void testDeSerialization() throws Exception {
+    public void testDeSerialization() throws Exception {
         StockExportDTO stockInput = StockExportDTO.builder()
                 .productId(3)
                 .locationId(1)

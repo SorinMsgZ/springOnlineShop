@@ -3,13 +3,17 @@ package ro.msg.learning.shop.controller.integration_test;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -31,11 +35,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class StockExportRestControllerTest {
+public class StockExportRestControllerTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -58,8 +63,8 @@ class StockExportRestControllerTest {
     StockExportController stockExportController;
     List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
 
-    @BeforeEach
-    void createDataBaseForTest() {
+    @Before
+    public void createDataBaseForTest() {
         ProductCategoryDTO productCategoryOne = ProductCategoryDTO.builder()
                 .name("Retaining Wall and Brick Pavers")
                 .description("ProdCatDescription1")
@@ -209,7 +214,8 @@ class StockExportRestControllerTest {
     }
 
     @Test
-    void testExportingStockByLocationId() throws Exception {
+    @WithMockUser(username = "cutarescu", password = "parola", roles = "rol")
+    public void testExportingStockByLocationId() throws Exception {
 
         int locationId = 1;
 

@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,15 +38,15 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {
         ShopApplication.class,
         OrderJpaConfig.class})
 @ActiveProfiles("TestProfile1")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderCreatorRestControllerTestProfileTest {
+public class OrderCreatorRestControllerTestProfileTest {
     @Autowired
     private MockMvc mvc;
 
@@ -66,10 +68,11 @@ class OrderCreatorRestControllerTestProfileTest {
     private OrderCreatorController orderCreatorController;
     @Autowired
     private CustomerService customerService;
-
-    @BeforeEach
+    @Value("${strategy.findLocation}")
+    private  String strategy;
+    @Before
     public void mockOneProductDTO() {
-        CustomerDTO mockCustomer=CustomerDTO.builder()
+        CustomerDTO mockCustomer = CustomerDTO.builder()
                 .firstName("MockCustomerFirstName")
                 .lastName("MockCustomerLastName")
                 .emailAddress("MockCustomerEmailAddress")
@@ -119,7 +122,12 @@ class OrderCreatorRestControllerTestProfileTest {
         productController.create(productOne);
         productController.create(productTwo);
 
-        AddressDTO deliveryAddress = new AddressDTO("United States", "Rochester", "New York", "440 Merry Drive");
+        AddressDTO deliveryAddress = AddressDTO.builder()
+                .country("United States")
+                .city("Rochester")
+                .county("New York")
+                .streetAddress("440 Merry Drive")
+                .build();
         addressController.create(deliveryAddress);
 
         Address delAddress = deliveryAddress.toEntity();
@@ -157,7 +165,7 @@ class OrderCreatorRestControllerTestProfileTest {
     }
 
     @Test
-    void testCreateOrder(@Value("${strategy.findLocation}") String strategy) throws Exception {
+    public void testCreateOrder() throws Exception {
         StockId stockId1 = new StockId(1, 1);
         StockId stockId2 = new StockId(2, 2);
         StockId stockId3 = new StockId(1, 3);

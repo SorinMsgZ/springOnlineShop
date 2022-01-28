@@ -1,13 +1,17 @@
 package ro.msg.learning.shop.controller.integration_test;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.controllers.StockExportController;
 import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.entities.*;
@@ -18,11 +22,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 
 @TestPropertySource("classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class StockExportControllerTest {
+public class StockExportControllerTest {
     @Autowired
     private StockExportController stockExportController;
     @Autowired
@@ -41,8 +46,8 @@ class StockExportControllerTest {
     private StockService stockService;
     List<StockExportDTO> stockExportDTOListExpected = new ArrayList<>();
 
-    @BeforeEach
-    void createProductDTO() {
+    @Before
+    public void createProductDTO() {
 
         ProductCategoryDTO productCategoryOne = ProductCategoryDTO.builder()
                 .name("Retaining Wall and Brick Pavers")
@@ -193,7 +198,7 @@ class StockExportControllerTest {
     }
 
     @Test
-    void testExporting() {
+    public void testExporting() {
 
         int locationId = 1;
 

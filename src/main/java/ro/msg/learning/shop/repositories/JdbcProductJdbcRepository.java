@@ -31,7 +31,7 @@ public class JdbcProductJdbcRepository implements ProductJdbcRepository {
     @Override
     public Optional<ProductJdbc> findById(int id) {
         List<ProductJdbc> jdbcProducts = jdbcTemplate
-                .query("SELECT * FROM product WHERE id = ?", (resultSet, i) -> new ProductJdbc(resultSet
+                .query("SELECT * FROM product_jdbc WHERE id = ?", (resultSet, i) -> new ProductJdbc(resultSet
                         .getInt("id"), resultSet
                         .getString("name"), resultSet.getString("description"), resultSet
                         .getBigDecimal("price"), resultSet.getDouble("weight"), resultSet
@@ -42,7 +42,7 @@ public class JdbcProductJdbcRepository implements ProductJdbcRepository {
 
     @Override
     public void remove(ProductJdbc productJdbc) {
-        jdbcTemplate.update("DELETE FROM product WHERE id =?", productJdbc.getId());
+        jdbcTemplate.update("DELETE FROM product_jdbc WHERE id =?", productJdbc.getId());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class JdbcProductJdbcRepository implements ProductJdbcRepository {
 
     private int insert(ProductJdbc productJdbc) {
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
-        insert.setTableName("product");
+        insert.setTableName("product_jdbc");
         insert.setGeneratedKeyName("id");
 
         Map<String, Object> data = new HashMap<>();
@@ -73,7 +73,7 @@ public class JdbcProductJdbcRepository implements ProductJdbcRepository {
 
     private void update(ProductJdbc productJdbc) {
         jdbcTemplate
-                .update("UPDATE product SET name = ?,description= ?,price= ?,weight= ?, category= ?, supplier= ?, image_url= ? WHERE id = ?", productJdbc
+                .update("UPDATE product_jdbc SET name = ?,description= ?,price= ?,weight= ?, category= ?, supplier= ?, image_url= ? WHERE id = ?", productJdbc
                         .getName(), productJdbc.getDescription(), productJdbc.getPrice(), productJdbc
                         .getWeight(), productJdbc.getCategory(), productJdbc.getSupplier(), productJdbc.getImageUrl());
     }

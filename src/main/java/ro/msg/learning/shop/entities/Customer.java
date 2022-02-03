@@ -18,4 +18,5 @@ public class Customer {
     private String userName;
     private String password;
     private String emailAddress;
+    private String token;
 }

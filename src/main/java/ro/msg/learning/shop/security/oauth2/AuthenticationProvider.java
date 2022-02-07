@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.security.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,3 +34,4 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with authentication token=" + token));
     }
 }
+*/

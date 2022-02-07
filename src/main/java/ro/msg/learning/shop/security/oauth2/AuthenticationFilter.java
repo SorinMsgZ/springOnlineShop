@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.security.oauth2;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,3 +46,4 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
         chain.doFilter(request, response);
     }
 }
+*/

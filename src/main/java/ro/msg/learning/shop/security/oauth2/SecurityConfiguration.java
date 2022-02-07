@@ -1,3 +1,4 @@
+/*
 package ro.msg.learning.shop.security.oauth2;
 
 import org.springframework.context.annotation.Bean;
@@ -76,3 +77,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
     }
 }
+*/

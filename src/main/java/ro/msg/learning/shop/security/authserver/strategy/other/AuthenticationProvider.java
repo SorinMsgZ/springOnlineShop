@@ -1,7 +1,7 @@
-/*
-package ro.msg.learning.shop.security.oauth2;
+package ro.msg.learning.shop.security.authserver.strategy.other;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.services.CustomerService;
 
 import java.util.Optional;
-
+@Profile("OtherStrategyForAuthorizationServer")
 @Component
 public class AuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
@@ -34,4 +34,3 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
                 .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with authentication token=" + token));
     }
 }
-*/

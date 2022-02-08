@@ -84,11 +84,6 @@ public class CustomerService implements ICustomerService{
 
             return "Bearer " + token;
 
-            /*String token = UUID.randomUUID().toString();
-            Customer custom= customer.get();
-            custom.setToken(token);
-            customerRepository.save(custom);
-            return token;*/
         }
 
         return StringUtils.EMPTY;
@@ -110,5 +105,9 @@ public class CustomerService implements ICustomerService{
     public Customer findById(Integer id) {
         Optional<Customer> customer= customerRepository.findById(id);
         return customer.orElse(null);
+    }
+
+    public String returnHomePageMessageAfterOAuth2Github(){
+        return new HomepageMessage().getMessageOfHomePage();
     }
 }

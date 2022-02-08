@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.security.oauth2.jwt;
+package ro.msg.learning.shop.security.authserver.strategy.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

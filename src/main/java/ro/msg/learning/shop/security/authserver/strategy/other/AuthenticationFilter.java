@@ -1,7 +1,7 @@
-/*
-package ro.msg.learning.shop.security.oauth2;
+package ro.msg.learning.shop.security.authserver.strategy.other;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
+@Profile("OtherStrategyForAuthorizationServer")
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
 
@@ -46,4 +46,3 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
         chain.doFilter(request, response);
     }
 }
-*/

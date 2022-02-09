@@ -22,16 +22,16 @@ insert into Supplier (id, name) values (8, 'Labadie, Schmitt and Schamberger');
 insert into Supplier (id, name) values (9, 'Bednar-Homenick');
 insert into Supplier (id, name) values (10, 'Runte and Sons');
 
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (1, 'Cliff', 'Guerrieri', 'cguerrieri0', 'GSxlFi1MPR', 'cguerrieri0@dropbox.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (2, 'Teador', 'Killimister', 'tkillimister1', '7nyGik58A', 'tkillimister1@kickstarter.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (3, 'Paola', 'Don', 'pdon2', 'dD2YgY9xTN5', 'pdon2@parallels.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (4, 'Lyon', 'Slowly', 'lslowly3', 'aycVxb', 'lslowly3@vkontakte.ru');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (5, 'Dill', 'Tretwell', 'dtretwell4', '76HboYtg', 'dtretwell4@hugedomains.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (6, 'Vincent', 'Bizley', 'vbizley5', 'a3o1ygD5wKaN', 'vbizley5@artisteer.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (7, 'Ralf', 'Kairns', 'rkairns6', 'zOC8xT', 'rkairns6@merriam-webster.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (8, 'Arv', 'Fullylove', 'afullylove7', 'T99zUDdxDa', 'afullylove7@t.co');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (9, 'Milli', 'Whistlecroft', 'mwhistlecroft8', 'ERgaU09j', 'mwhistlecroft8@istockphoto.com');
-insert into Customer (id, first_name, last_name, user_name, password, email_address) values (10, 'Tamarah', 'Coogan', 'tcoogan9', 'j05aBBs', 'tcoogan9@fastcompany.com');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (1, 'Cliff', 'Guerrieri', 'cguerrieri0', 'GSxlFi1MPR', 'cguerrieri0@dropbox.com','token1');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (2, 'Teador', 'Killimister', 'tkillimister1', '7nyGik58A', 'tkillimister1@kickstarter.com','token2');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (3, 'Paola', 'Don', 'pdon2', 'dD2YgY9xTN5', 'pdon2@parallels.com','token3');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (4, 'Lyon', 'Slowly', 'lslowly3', 'aycVxb', 'lslowly3@vkontakte.ru','token4');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (5, 'Dill', 'Tretwell', 'dtretwell4', '76HboYtg', 'dtretwell4@hugedomains.com','token5');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (6, 'Vincent', 'Bizley', 'vbizley5', 'a3o1ygD5wKaN', 'vbizley5@artisteer.com','token6');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (7, 'Ralf', 'Kairns', 'rkairns6', 'zOC8xT', 'rkairns6@merriam-webster.com','token7');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (8, 'Arv', 'Fullylove', 'afullylove7', 'T99zUDdxDa', 'afullylove7@t.co','token8');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (9, 'Milli', 'Whistlecroft', 'mwhistlecroft8', 'ERgaU09j', 'mwhistlecroft8@istockphoto.com','token9');
+insert into Customer (id, first_name, last_name, user_name, password, email_address, token) values (10, 'Tamarah', 'Coogan', 'tcoogan9', 'j05aBBs', 'tcoogan9@fastcompany.com','token10');
 
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (1, 'Fimbristylis vahlii (Lam.) Link', 'quis orci', 7.58, 779, 1, 1, 'http://dummyimage.com/223x100.png/ff4444/ffffff');
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (2, 'Mahonia Nutt.', 'pulvinar', 21.96, 97, 2, 2, 'http://dummyimage.com/104x100.png/ff4444/ffffff');

@@ -21,7 +21,8 @@ first_name VARCHAR(255),
 last_name VARCHAR(255),
 user_name VARCHAR(255),
 password VARCHAR(255),
-email_address VARCHAR(255)
+email_address VARCHAR(255),
+token VARCHAR(255)
 );
 
 CREATE TABLE Product(

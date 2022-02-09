@@ -9,6 +9,8 @@ insert into Product_Category (id, name, description) values (8, 'EIFS', 'augue v
 insert into Product_Category (id, name, description) values (9, 'Termite Control', 'orci luctus et ultrices');
 insert into Product_Category (id, name, description) values (10, 'Sitework & Site Utilities', 'neque aenean auctor gravida');
 
+insert into Product_Category_Jdbc (id, name, description) values (1, 'Retaining Wall and Brick Pavers', 'nullam varius nulla');
+
 insert into Supplier (id, name) values (1, 'Fisher-Huels');
 insert into Supplier (id, name) values (2, 'D''Amore, Torp and Kuvalis');
 insert into Supplier (id, name) values (3, 'Williamson-Marvin');
@@ -41,6 +43,8 @@ insert into Product (id, name, description, price, weight, category, supplier, i
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (8, 'Camissonia brevipes (A. Gray) P.H. Raven ssp. arizonica (P.H. Raven) P.H. Raven', 'justo sit', 37.71, 553, 8, 8, 'http://dummyimage.com/138x100.png/ff4444/ffffff');
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (9, 'Carex caroliniana Schwein.', 'interdum', 58.56, 457, 9, 9, 'http://dummyimage.com/192x100.png/cc0000/ffffff');
 insert into Product (id, name, description, price, weight, category, supplier, image_url) values (10, 'Scleria eggersiana Boeckeler', 'vel', 83.02, 975, 10, 10, 'http://dummyimage.com/117x100.png/cc0000/ffffff');
+
+insert into Product_Jdbc (id, name, description, price, weight, category, supplier, image_url) values (1, 'Fimbristylis vahlii (Lam.) Link', 'quis orci', 7.58, 779, 1, 1, 'http://dummyimage.com/223x100.png/ff4444/ffffff');
 
 insert into Address (id,country, city, county, street_address, state) values (1,'United States', 'Denver', 'Denver', '440 Merry Drive','CO');
 insert into Address (id,country, city, county, street_address, state) values (2,'United States', 'Westminster', 'Westminster', '93 Drewry Junction','CO');

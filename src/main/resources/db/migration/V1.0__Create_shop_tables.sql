@@ -4,6 +4,12 @@ name VARCHAR(255),
 description VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS Product_Category_Jdbc(
+id  INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255),
+description VARCHAR(255)
+);
+
 CREATE TABLE Supplier(
 id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255)
@@ -26,6 +32,17 @@ description VARCHAR(255),
 price DECIMAL,
 weight DOUBLE,
 category INT NOT NULL REFERENCES Product_Category(id) ON DELETE CASCADE,
+supplier INT NOT NULL REFERENCES Supplier(id) ON DELETE CASCADE,
+image_url VARCHAR(255)
+);
+
+CREATE TABLE Product_Jdbc(
+id   INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255),
+description VARCHAR(255),
+price DECIMAL,
+weight DOUBLE,
+category INT NOT NULL REFERENCES Product_Category_Jdbc(id) ON DELETE CASCADE,
 supplier INT NOT NULL REFERENCES Supplier(id) ON DELETE CASCADE,
 image_url VARCHAR(255)
 );

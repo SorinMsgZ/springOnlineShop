@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JPAEDMMappingModel xmlns="http://www.apache.org/olingo/odata2/jpa/processor/api/model/mapping">
+    <PersistenceUnit name="local">
+        <JPAEntityTypes>
+            <JPAEntityType name="Order">
+                <EDMEntityType>Order</EDMEntityType>
+                <EDMEntitySet>Orders</EDMEntitySet>
+                <JPAAttributes>
+                    <JPAAttribute name="CreatedAt" exclude="true"/>
+                </JPAAttributes>
+                <JPARelationships/>
+            </JPAEntityType>
+            <JPAEntityType name="Revenue">
+                <EDMEntityType>Revenue</EDMEntityType>
+                <EDMEntitySet>Revenues</EDMEntitySet>
+                <JPAAttributes>
+                    <JPAAttribute name="LocalDate" exclude="true"/>
+                </JPAAttributes>
+                <JPARelationships/>
+            </JPAEntityType>
+            <!--JPAEntityType name="Address" exclude="true">
+                <EDMEntityType>Address</EDMEntityType>
+                <EDMEntitySet>Addresses</EDMEntitySet>
+                <JPAAttributes/>
+                <JPARelationships/>
+            </JPAEntityType-->
+        </JPAEntityTypes>
+        <JPAEmbeddableTypes/>
+    </PersistenceUnit>
+</JPAEDMMappingModel>

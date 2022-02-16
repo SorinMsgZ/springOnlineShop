@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Shop</title>
+</head>
+<body>
+<div th:switch="${orderDetails}">
+    <h2 th:case="null">No users yet!</h2>
+    <div th:case="*">
+        <h2>OrderDetails - Cart View</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Order Detail - Order ID</th>
+                <th>Orde Detail - Product ID</th>
+                <th>Order Detail - Quantity</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderDetail : ${orderDetails}">
+                <td th:text="${orderDetail.order.id}"></td>
+                <td th:text="${orderDetail.product.id}"></td>
+                <td th:text="${orderDetail.quantity}"></td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/index">Back to shopping</a></p>
+    <p><a href="/submitOrder">Submit Order</a></p>
+    <p><a href="/signup">Logout</a></p>
+</div>
+</body>
+</html>

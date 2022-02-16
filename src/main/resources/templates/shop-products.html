@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Shop</title>
+</head>
+<body>
+<div th:switch="${products}">
+    <h2 th:case="null">No users yet!</h2>
+    <div th:case="*">
+        <h2>Products</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product Description</th>
+                <th>Add to cart</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.description}"></td>
+                <td><a th:href="@{/addOrderDetail/{id}(id=${product.id})}">add to cart</a></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/viewCart">View cart</a> <span Th:text="${itemNumber}" /> actual items in cart</p>
+    <p><a href="/signup">Logout</a></p>
+</div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ro.msg.learning.shop.entities.ProductMongoDb;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @SpringBootTest
 @TestPropertySource("classpath:test.properties")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@ActiveProfiles("mongodb")
 public class ProductMongoDbRepositoryTest {
 
     @Autowired

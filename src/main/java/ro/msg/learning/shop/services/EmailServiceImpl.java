@@ -6,10 +6,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-
+@Service
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
@@ -33,7 +34,6 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
 
     }
-
 
     @Override
     public void sendHtmlMessage(String to, String subject, String text) throws MessagingException {

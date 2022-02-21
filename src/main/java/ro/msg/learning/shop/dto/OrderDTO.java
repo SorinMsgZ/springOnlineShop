@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.entities.Address;
+import ro.msg.learning.shop.entities.Customer;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Order;
 
@@ -17,12 +18,14 @@ public class OrderDTO {
     private Location shippedFrom;
     private LocalDateTime createdAt;
     private Address address;
+    private Customer customer;
 
-    public OrderDTO( Location shippedFrom, LocalDateTime createdAt, Address address) {
+    public OrderDTO(Location shippedFrom, LocalDateTime createdAt, Address address, Customer customer) {
 
         this.shippedFrom = shippedFrom;
         this.createdAt = createdAt;
         this.address = address;
+        this.customer = customer;
     }
 
     public Order toEntity() {
@@ -36,6 +39,7 @@ public class OrderDTO {
         order.setShippedFrom(shippedFrom);
         order.setCreatedAt(createdAt);
         order.setAddress(address);
+        order.setCustomer(customer);
     }
 
     public static OrderDTO of(Order entity) {
@@ -44,6 +48,7 @@ public class OrderDTO {
                 .shippedFrom(entity.getShippedFrom())
                 .createdAt(entity.getCreatedAt())
                 .address(entity.getAddress())
+                .customer(entity.getCustomer())
                 .build();
     }
 }

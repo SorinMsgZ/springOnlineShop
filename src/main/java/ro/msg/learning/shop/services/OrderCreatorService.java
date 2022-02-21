@@ -23,6 +23,8 @@ public class OrderCreatorService {
     private final OrderDetailService orderDetailService;
     private final OrderService orderService;
     private final ProductService productService;
+    private final CustomerService customerService;
+    private final EmailServiceImpl emailService;
 
     private final List<OrderObject> objectStructureList = new ArrayList<>();
     private final List<OrderDTO> orderDTOList = new ArrayList<>();
@@ -59,11 +61,13 @@ public class OrderCreatorService {
 
             LocalDateTime createdAtDTO = input.getCreatedAt().toEntity();
             Address addressDTO = input.getDeliveryAddress();
+            Customer customerDTO = customerService.findById(1);
 
             OrderDTO newOrderDTO = new OrderDTO();
             newOrderDTO.setShippedFrom(location);
             newOrderDTO.setCreatedAt(createdAtDTO);
             newOrderDTO.setAddress(addressDTO);
+            newOrderDTO.setCustomer(customerDTO);
 
             orderService.create(newOrderDTO);
             orderDTOList.add(newOrderDTO);
@@ -76,6 +80,11 @@ public class OrderCreatorService {
             new ObserverOrderDetail(orderBasket, theOrder, orderDetailService);
 
             orderBasket.setOrderObject(object);
+
+
+            String emailOfCustomer = newOrderDTO.getCustomer().getEmailAddress();
+            emailService.addOrderIdToEmailBody();
+            emailService.sendPlainTextSimpleMessage(emailOfCustomer);
         }
         return orderDTOList;
     }

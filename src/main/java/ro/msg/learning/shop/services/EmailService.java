@@ -3,20 +3,11 @@ package ro.msg.learning.shop.services;
 import javax.mail.MessagingException;
 
 public interface EmailService {
-    void sendPlainTextSimpleMessage(String to,
-                           String subject,
-                           String text);
+    void sendPlainTextSimpleMessage(String to);
 
-    void sendSimpleMessageUsingTemplate(String to,
-                                        String subject,
-                                        String... templateModel);
+    void sendSimpleMessageUsingTemplate(String to, String... templateModel);
 
-    void sendHtmlMessage(String to,
-                                   String subject,
-                                   String text) throws MessagingException;
+    void sendHtmlMessage(String to) throws MessagingException;
 
-    void sendPlainTextMessageWithAttachment(String to,
-                                       String subject,
-                                       String text,
-                                       String pathToAttachment) throws MessagingException;
+    void sendPlainTextMessageWithAttachment(String to, String pathToAttachment) throws MessagingException;
 }
